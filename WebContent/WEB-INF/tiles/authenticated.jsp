@@ -1,0 +1,1 @@
+Available only for authenticated users

@@ -9,6 +9,7 @@
 	<configs>
 		<config>src/config/dao-context.xml</config>
 		<config>WebContent/WEB-INF/hippocrates-servlet.xml</config>
+		<config>src/config/security-context.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

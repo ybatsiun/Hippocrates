@@ -7,20 +7,22 @@
 	<definition name="hippocrates.base" template="/WEB-INF/templates/default.jsp">
 
 		<put-attribute name="title" value=""></put-attribute>
-		<put-attribute name="header"
-			value="/WEB-INF/tiles/header.jsp"></put-attribute>
+		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp"></put-attribute>
 		<put-attribute name="content" value=""></put-attribute>
-		<put-attribute name="footer"
-			value="/WEB-INF/tiles/footer.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"></put-attribute>
 
 	</definition>
 
 	<definition name="home" extends="hippocrates.base">
-
-		<put-attribute name="content"
-			value="/WEB-INF/tiles/home.jsp"></put-attribute>
-
+		<put-attribute name="content" value="/WEB-INF/tiles/home.jsp"></put-attribute>
 	</definition>
-
+	
+	<definition name="login" extends="hippocrates.base">
+		<put-attribute name="content" value="/WEB-INF/tiles/login.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="authenticated" extends="hippocrates.base">
+		<put-attribute name="content" value="/WEB-INF/tiles/authenticated.jsp"></put-attribute>
+	</definition>
 
 </tiles-definitions>
