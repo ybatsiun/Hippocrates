@@ -16,13 +16,32 @@
 	<definition name="home" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/home.jsp"></put-attribute>
 	</definition>
-	
+
 	<definition name="login" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/login.jsp"></put-attribute>
 	</definition>
-	
+
 	<definition name="authenticated" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/authenticated.jsp"></put-attribute>
 	</definition>
 
+	<definition name="logout" extends="hippocrates.base">
+		<put-attribute name="content" value="/WEB-INF/tiles/logout.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="denied" extends="hippocrates.base">
+		<put-attribute name="content" value="/WEB-INF/tiles/denied.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="adminsPage" extends="hippocrates.base">
+		<put-attribute name="content" value="/WEB-INF/tiles/adminsPage.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="doctorsPage" extends="hippocrates.base">
+		<put-attribute name="content" value="/WEB-INF/tiles/doctorsPage.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="patientsPage" extends="hippocrates.base">
+		<put-attribute name="content" value="/WEB-INF/tiles/patientsPage.jsp"></put-attribute>
+	</definition>
 </tiles-definitions>
