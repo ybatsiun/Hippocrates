@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -19,18 +20,22 @@
 
 	</security:authentication-manager>
 	<security:http use-expressions="true">
-		<security:intercept-url pattern="/authenticated" access="isAuthenticated()" />
+		
 		<security:intercept-url pattern="/adminsPage" access="hasRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/doctorsPage" access="hasRole('ROLE_DOCTOR')" />
 		<security:intercept-url pattern="/patientsPage" access="hasRole('ROLE_PATIENT')" />
-		<security:intercept-url pattern="/" access="permitAll" />
+	   
+	    <security:intercept-url pattern="/" access="permitAll" />
 		<security:intercept-url pattern="/login" access="permitAll" />
 		<security:intercept-url pattern="/logout" access="permitAll" />
 		<security:intercept-url pattern="/denied" access="permitAll" />
+		<security:intercept-url pattern="/authenticated" access="permitAll" />
 		
 		<security:intercept-url pattern="/**" access="denyAll" />
 
-		<security:form-login login-page="/login" authentication-failure-url="/login?error=true"/>
+		<security:form-login login-page="/login" authentication-failure-url="/login?error=true" 
+		authentication-success-handler-ref="CustomAuthenticationSuccessHandler" />
+		
 		<security:logout logout-success-url="/logout" />
 		<security:access-denied-handler error-page="/denied"/>
 		<security:remember-me key="HippocratesApp"
@@ -38,4 +43,7 @@
 	</security:http>
 
 
+	<bean id="CustomAuthenticationSuccessHandler"
+		class="securityrelated.CustomAuthenticationSuccessHandler">
+	</bean>
 </beans>

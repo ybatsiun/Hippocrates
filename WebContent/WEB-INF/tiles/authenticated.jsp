@@ -1,1 +1,1 @@
-Available only for authenticated users
+You are now logged in.

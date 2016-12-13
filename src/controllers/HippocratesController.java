@@ -11,4 +11,6 @@ public class HippocratesController {
 		
 		return "authenticated";
 	}
+	
+	
 }
