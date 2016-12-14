@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<view-state id="adminsPage">
+
+		<transition on="show-list-of-doctors" to="list-of-doctors"></transition>
+		<transition on="show-list-of-patients" to="list-of-patients"></transition>
+	</view-state>
+
+
+
+	<view-state id="list-of-doctors">
+
+	</view-state>
+
+	<view-state id="list-of-patients">
+
+	</view-state>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</flow>

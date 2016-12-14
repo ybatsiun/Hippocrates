@@ -34,8 +34,17 @@
 	<webflow-config:flow-registry id="AfterLogInFlowRegistry"
 		base-path="WEB-INF/flows"
 		flow-builder-services="flowBuilderServices">
-		<webflow-config:flow-location path="AfterrLoginInFlow.xml"
-			id="notImplemented">
+		<webflow-config:flow-location path="admin-flow.xml"
+			id="adminsPage">
+		</webflow-config:flow-location>
+		<webflow-config:flow-location path="doctor-flow.xml"
+			id="doctorsPage">
+		</webflow-config:flow-location>
+		<webflow-config:flow-location path="patient-flow.xml"
+			id="patientsPage">
+		</webflow-config:flow-location>
+		<webflow-config:flow-location path="registration-flow.xml"
+			id="create-new-account">
 		</webflow-config:flow-location>
 	</webflow-config:flow-registry>
 	<webflow-config:flow-executor

@@ -43,6 +43,11 @@
 		<td> <input type='checkbox' name='_spring_security_remember_me'
 				checked="checked" /></td>
 		</tr>
+		
+		<tr>
+		<td>If you don't have an account-<a href="${pageContext.request.contextPath}/create-new-account">register</a></td>
+		
+	</tr>
 	</table>
 
 

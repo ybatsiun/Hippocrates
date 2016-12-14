@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<view-state id="create-new-account">
+
+		<transition on="go-to-doctors-registration-form" to="doctors-registration-form"></transition>
+
+		<transition on="go-to-patients-registration-form" to="patients-registration-form"></transition>
+
+	</view-state>
+
+
+
+	<view-state id="doctors-registration-form">
+
+		<transition on="choose-schedule" to="choose-schedule"></transition>
+
+	</view-state>
+	
+	<view-state id="choose-schedule">
+
+		<transition on="schedule-is-choosen" to="registration-completed"></transition>
+
+	</view-state>
+	
+	
+
+
+	<view-state id="patients-registration-form">
+
+		<transition on="submit-registration" to="registration-completed"></transition>
+
+
+	</view-state>
+
+	<view-state id="registration-completed">
+
+
+
+	</view-state>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</flow>

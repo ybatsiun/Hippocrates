@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TestRolesController {
 
 	
-	@RequestMapping("/adminsPage")
+	/*@RequestMapping("/adminsPage")
 	public String showAdminsPage() {
 		return "adminsPage";
-	}
+	}*/
 	
-	@RequestMapping("/doctorsPage")
+	/*@RequestMapping("/doctorsPage")
 	public String showDoctorsPage() {
 		return "doctorsPage";
-	}
+	}*/
 	
-	@RequestMapping("/patientsPage")
+	/*@RequestMapping("/patientsPage")
 	public String showPatientsPage() {
 		return "patientsPage";
-	}
+	}*/
 }
