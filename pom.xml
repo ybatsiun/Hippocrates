@@ -4,6 +4,18 @@
   <artifactId>BookingSystem</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  
+  <properties>
+	
+	<!-- Spring -->
+    <spring-framework.version>4.0.3.RELEASE</spring-framework.version>
+    
+    <!-- Hibernate -->
+    <hibernate-framework.version>4.3.5.Final</hibernate-framework.version>
+	
+	</properties>
+  
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -29,22 +41,22 @@
   	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-core</artifactId>
-  		<version>4.3.1.RELEASE</version>
+  		<version>${spring-framework.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-webmvc</artifactId>
-  		<version>4.3.1.RELEASE</version>
+  		<version>${spring-framework.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-web</artifactId>
-  		<version>4.3.1.RELEASE</version>
+  		<version>${spring-framework.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-context</artifactId>
-  		<version>4.3.1.RELEASE</version>
+  		<version>${spring-framework.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
@@ -54,7 +66,7 @@
   	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-beans</artifactId>
-  		<version>4.3.1.RELEASE</version>
+  		<version>${spring-framework.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.tiles</groupId>
@@ -123,14 +135,29 @@
   		<version>3.1.4.RELEASE</version>
   	</dependency>
   	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-orm</artifactId>
-  		<version>4.3.2.RELEASE</version>
-  	</dependency>
-  	<dependency>
   		<groupId>org.springframework.webflow</groupId>
   		<artifactId>spring-webflow</artifactId>
   		<version>2.4.4.RELEASE</version>
   	</dependency>
+  	
+  	<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-orm</artifactId>
+    <version>${spring-framework.version}</version>
+</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-framework.version}</version>
+        </dependency>
+
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-validator</artifactId>
+        	<version>5.0.2.Final</version>
+        </dependency>
   </dependencies>
 </project>
