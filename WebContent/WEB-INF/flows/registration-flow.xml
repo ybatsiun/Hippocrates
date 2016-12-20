@@ -5,6 +5,11 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
+
+	<var name="patient" class="dao.Patient" />
+
+	<var name="patientsService" class="service.PatientsService" />
+
 	<view-state id="create-new-account">
 
 		<transition on="go-to-doctors-registration-form" to="doctors-registration-form"></transition>
@@ -20,26 +25,29 @@
 		<transition on="choose-schedule" to="choose-schedule"></transition>
 
 	</view-state>
-	
+
 	<view-state id="choose-schedule">
 
 		<transition on="schedule-is-choosen" to="registration-completed"></transition>
 
 	</view-state>
-	
-	
 
 
-	<view-state id="patients-registration-form">
 
-		<transition on="submit-registration" to="registration-completed"></transition>
 
+	<view-state id="patients-registration-form" model="patient">
+
+		<transition on="submit-registration" to="creatingPatient"></transition>
 
 	</view-state>
 
+	<action-state id="creatingPatient">
+		<evaluate expression="patientsService.createPatient(patient)"></evaluate>
+		<transition to="registration-completed"></transition>
+	</action-state>
+
+
 	<view-state id="registration-completed">
-
-
 
 	</view-state>
 

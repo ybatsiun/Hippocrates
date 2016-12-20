@@ -12,17 +12,12 @@ import javax.persistence.Table;
 public class User implements Serializable {
 
 	
-	
-	
-
-	@Id
+    @Id
 	private String username;
-	private boolean enabled = false;
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-
+	
+	private boolean enabled ;
+	
+	
 	private String password;
 	
 	private  String authority;
@@ -45,6 +40,19 @@ public class User implements Serializable {
 
 	public String getAuthority() {
 		return authority;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	
+	public User() {
+		super();
 	}
 
 	public void setAuthority(String authority) {

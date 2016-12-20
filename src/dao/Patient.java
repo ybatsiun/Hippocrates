@@ -6,27 +6,33 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 
 @Entity
 @Table(name = "patients")
 public class Patient  implements Serializable {
 
-	private String firstName;
+	public String firstName;
 
-	private String lastName;
+	public String lastName;
 
-	private int phoneNumber;
+	public int phoneNumber;
 	
-	private String email;
+	public String email;
 	
+	private static final long serialVersionUID = 1L;
+	
+	@NotBlank
 	@Id
-	private String username;
+	public String username;
 
 	public Patient() {
 	}
 
-	private static final long serialVersionUID = 1L;
+	
 
 	public Patient(String username, String firstName, String lastName,
 			int phoneNumber, String email) {
