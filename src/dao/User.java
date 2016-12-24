@@ -13,14 +13,14 @@ public class User implements Serializable {
 
 	
     @Id
-	private String username;
+	public String username;
 	
-	private boolean enabled ;
+    public boolean enabled ;
 	
 	
-	private String password;
+    public String password;
 	
-	private  String authority;
+    public  String authority;
 
 	public String getUsername() {
 		return username;

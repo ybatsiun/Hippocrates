@@ -31,8 +31,10 @@ public class PatientDao extends UserDao implements Serializable  {
 	}
 	
 	public void createPatient(Patient patient){
+		
 		session().save(patient);
 		System.out.println("Patient registered");
+		session().save(((User) patient));
 	}
 	
 }

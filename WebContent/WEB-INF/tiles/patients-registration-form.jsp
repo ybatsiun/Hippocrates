@@ -9,11 +9,14 @@ Patients's registration form
 <sf:form  
 	action="${flowExecutionUrl}&_eventId=submit-registration"
 	commandName="patient">
+	
+	<sf:input type="hidden" name="authority" path="authority" value="ROLE_PATIENT" />
+	<sf:input type="hidden" name="enabled" path="enabled" value="1" />
 
 	  <table class="formtable">
 	 	<tr>
 			<td class="label">Username:</td>
-			<td> <input class="control" path="username" name="username" type="text" /><br /> <!-- Removed sf tag  -->
+			<td> <sf:input class="control" path="username" name="username" type="text" /><br /> <!-- Removed sf tag  -->
 				</td>
 		</tr>
 		<tr>
@@ -43,18 +46,18 @@ Patients's registration form
 				</td>
 		</tr> 
 		
-	<%--	<tr>
-			<td class="label">Password:</td>
-			<td><sf:input  class="control" path="password"
-					 type="password" />
-				</td>
-		</tr>  
 		 <tr>
-			<td class="label">Confirm Password:</td>
-			<td><input id="confirmpass" class="control" name="confirmpass"
-				type="password" />
+			<td class="label">password:</td>
+			<td><sf:input  class="control" path="password"
+					 type="number" />
 				</td>
-		</tr> --%>
+		</tr>
+		
+		
+		
+		  
+	
+	
 	 <tr>
 			<td class="label"></td>
 			<td><input class="control" value="Create account" type="submit" /></td>

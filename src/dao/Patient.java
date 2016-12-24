@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "patients")
-public class Patient  implements Serializable {
+public class Patient extends User implements Serializable {
 
 	public String firstName;
 
