@@ -12,9 +12,14 @@
 				authorities-by-username-query='select username, authority from users where binary username = ?'
 				users-by-username-query='select username, password, enabled from users where binary username = ?'
 				id="jdbcUserService" />
-
-			
-			
+		</security:authentication-provider>
+		
+		<security:authentication-provider>
+			<security:jdbc-user-service
+				data-source-ref="datasource"
+				authorities-by-username-query='select username, authority from patients where binary username = ?'
+				users-by-username-query='select username, password, enabled from patients where binary username = ?'
+				id="jdbcUserService" />
 		</security:authentication-provider>
 
 

@@ -2,61 +2,106 @@ package dao;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
+   
+	
+	@GeneratedValue
+	@Column(name="id")
+	public int id ;
+	
+	
+	@Column(name="authority")
+	public  String authority;
+
+	@Column(name="password")
+	public String password;
+
+	@Column(name="enabled")
+	public int enabled ;
+
+	@Id
+	@Column(name="username")
+		public String username;
 
 	
-    @Id
-	private String username;
-	
-	private boolean enabled ;
 	
 	
-	private String password;
 	
-	private  String authority;
+	
+    public int getId() {
+		return id;
+	}
 
+
+	public int getEnabled() {
+		return enabled;
+	}
+	
+	
+	
+	/*@OneToOne(cascade = CascadeType.ALL)*/
 	public String getUsername() {
 		return username;
 	}
+	
+	
+	public String getPassword() {
+		return password;
+	}
+
+	
+	public String getAuthority() {
+		return authority;
+	}
+
+	/*public void setId(int id) {
+		this.id = id;
+	}*/
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	public String getAuthority() {
-		return authority;
+	public void setAuthority(String authority) {
+		this.authority = authority;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(int enabled) {
 		this.enabled = enabled;
 	}
 	
-	public boolean isEnabled() {
+	public int isEnabled() {
 		return enabled;
 	}
 
 	
-	public User() {
+	public User(String username, int enabled, String password, String authority) {
 		super();
+		this.username = username;
+		this.enabled = enabled;
+		this.password = password;
+		this.authority = authority;
 	}
 
-	public void setAuthority(String authority) {
-		this.authority = authority;
+	public User() {
+		super();
 	}
 
 	@Override
@@ -82,12 +127,4 @@ public class User implements Serializable {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
-	}
-
-	public User(String username, boolean enabled, String authority) {
-		super();
-		this.username = username;
-		this.enabled = enabled;
-		this.authority = authority;
-	}
-}
+	}}

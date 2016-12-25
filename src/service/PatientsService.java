@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dao.Patient;
 import dao.PatientDao;
+import dao.User;
 
 @Transactional
 @Service("PatientsService")

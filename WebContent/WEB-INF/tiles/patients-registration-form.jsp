@@ -9,6 +9,8 @@ Patients's registration form
 <sf:form  
 	action="${flowExecutionUrl}&_eventId=submit-registration"
 	commandName="patient">
+	
+	
 
 	  <table class="formtable">
 	 	<tr>
@@ -16,45 +18,41 @@ Patients's registration form
 			<td> <input class="control" path="username" name="username" type="text" /><br /> <!-- Removed sf tag  -->
 				</td>
 		</tr>
-		<tr>
+		 <tr>
 			<td class="label">firstName:</td>
-			<td><sf:input class="control" path="firstName" name="firstName" type="text" /><br />
+			<td><input class="control" path="firstName" name="firstName" type="text" /><br />
 				</td>
 		</tr> 
 		
 		 <tr>
 			<td class="label">lastName:</td>
-			<td><sf:input class="control" path="lastName" 
+			<td><input class="control" name="lastName" path="lastName" 
 					type="text" /><br />
 				</td>
 		</tr>
 		
 		<tr>
 			<td class="label">Email:</td>
-			<td><sf:input class="control" path="email" 
+			<td><input class="control" name="email" path="email" 
 					type="text" />
 				</td>
 		</tr>
 		
 	 <tr>
 			<td class="label">phoneNumber:</td>
-			<td><sf:input  class="control" path="phoneNumber"
+			<td><input  class="control" path="phoneNumber" name="phoneNumber"
 					 type="number" />
 				</td>
-		</tr> 
+		</tr>  
 		
-	<%--	<tr>
-			<td class="label">Password:</td>
-			<td><sf:input  class="control" path="password"
+		 <tr>
+			<td class="label">password:</td>
+			<td><input  class="control" path="password" name="password"
 					 type="password" />
 				</td>
-		</tr>  
-		 <tr>
-			<td class="label">Confirm Password:</td>
-			<td><input id="confirmpass" class="control" name="confirmpass"
-				type="password" />
-				</td>
-		</tr> --%>
+		</tr>
+		
+		
 	 <tr>
 			<td class="label"></td>
 			<td><input class="control" value="Create account" type="submit" /></td>
@@ -63,5 +61,3 @@ Patients's registration form
 
 </sf:form>
 
-<%-- <a href="${flowExecutionUrl}&_eventId=submit-registration"><input
-	type="submit" name="submit-registration" value="submit registration" /></a> --%>

@@ -5,9 +5,9 @@ public class Doctor extends User {
 	
 	
 	private static final long serialVersionUID = 1L;
-	public Doctor(String username, boolean enabled, String authority) {
+	/*public Doctor(String username, boolean enabled, String authority) {
 		super(username, enabled, authority);
-	}
+	}*/
 	private String firstName;
 	private String lastName;
 	
@@ -44,7 +44,7 @@ public class Doctor extends User {
 	public void setField(String field) {
 		this.field = field;
 	}
-	public Doctor(String username, boolean enabled, String authority, String firstName, String lastName,
+	/*public Doctor(String username, boolean enabled, String authority, String firstName, String lastName,
 			int phoneNumber, String email, String field) {
 		super(username, enabled, authority);
 		this.firstName = firstName;
@@ -52,5 +52,5 @@ public class Doctor extends User {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.field = field;
-	}
+	}*/
 }
