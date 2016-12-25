@@ -1,19 +1,52 @@
 package dao;
 
-public class Doctor extends User {
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="doctors")
+public class Doctor  implements Serializable {
 
 	
 	
 	private static final long serialVersionUID = 1L;
-	/*public Doctor(String username, boolean enabled, String authority) {
-		super(username, enabled, authority);
-	}*/
-	private String firstName;
-	private String lastName;
 	
-	private int phoneNumber;
-	private String email;
-	private String field;
+	@Id
+	public String username;
+	public String authority="ROLE_DOCTOR";
+	public int enabled=1;
+	public String firstName;
+	public String lastName;
+	public int phoneNumber;
+	public String email;
+	public String field;
+	public String password;
+	
+	
+	
+	
+	public Doctor() {
+		super();
+	}
+	
+	
+	public Doctor(String username, String authority, int enabled, String firstName, String lastName, int phoneNumber,
+			String email, String field, String password) {
+		this.username = username;
+		this.authority = authority;
+		this.enabled = enabled;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.field = field;
+		this.password = password;
+	}
+
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -44,13 +77,5 @@ public class Doctor extends User {
 	public void setField(String field) {
 		this.field = field;
 	}
-	/*public Doctor(String username, boolean enabled, String authority, String firstName, String lastName,
-			int phoneNumber, String email, String field) {
-		super(username, enabled, authority);
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.field = field;
-	}*/
+	
 }

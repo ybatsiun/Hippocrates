@@ -9,6 +9,10 @@
 	<var name="patient" class="dao.Patient" />
 
 	<var name="patientsService" class="service.PatientsService" />
+	
+	<var name="doctor" class="dao.Doctor" />
+
+	<var name="doctorsService" class="service.DoctorsService" />
 
 	<view-state id="create-new-account">
 
@@ -20,11 +24,16 @@
 
 
 
-	<view-state id="doctors-registration-form">
+	<view-state id="doctors-registration-form" model="doctor">
 
-		<transition on="choose-schedule" to="choose-schedule"></transition>
+		<transition on="submit-registration" to="creatingDoctor"></transition>
 
 	</view-state>
+	
+	<action-state id="creatingDoctor">
+		<evaluate expression="doctorsService.createDoctor(doctor)"></evaluate>
+		<transition to="choose-schedule"></transition>
+	</action-state>
 
 	<view-state id="choose-schedule">
 
