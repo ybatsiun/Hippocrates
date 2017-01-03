@@ -5,34 +5,41 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+
+
 	<security:authentication-manager>
-		<security:authentication-provider>
+	 <security:authentication-provider>
 			<security:jdbc-user-service
 				data-source-ref="datasource"
 				authorities-by-username-query='select username, authority from doctors where binary username = ?'
 				users-by-username-query='select username, password, enabled from doctors where binary username = ?'
-				id="jdbcUserService" />
-		</security:authentication-provider>
+		id="doctorsUserService"  />
+		</security:authentication-provider> 
 		
-	
-
-
-	</security:authentication-manager>
-	
-	
-	<security:authentication-manager>
-		
-		
-		<security:authentication-provider>
+	<security:authentication-provider>
 			<security:jdbc-user-service
 				data-source-ref="datasource"
 				authorities-by-username-query='select username, authority from patients where binary username = ?'
 				users-by-username-query='select username, password, enabled from patients where binary username = ?'
-				id="jdbcUserService" />
+		id="patientsUserService"	 />
 		</security:authentication-provider>
 
-
 	</security:authentication-manager>
+	
+	
+	<bean id="delegateUds"
+		class="securityrelated.DelegatingUserDetailsService">
+     <constructor-arg>
+         <list>
+             <ref bean="doctorsUserService"/>
+             <ref bean="patientsUserService"/>
+         </list>
+     </constructor-arg>
+</bean>
+
+
+
+
 	<security:http use-expressions="true">
 		
 		<security:intercept-url pattern="/adminsPage" access="hasRole('ROLE_ADMIN')" />
@@ -66,8 +73,9 @@
 		
 		<security:logout logout-success-url="/logout" />
 		<security:access-denied-handler error-page="/denied"/>
-		<security:remember-me key="HippocratesApp"
-			user-service-ref="jdbcUserService" />
+		
+ 		<security:remember-me key="HippocratesApp"
+			user-service-ref="delegateUds"  /> 
 	</security:http>
 
 
