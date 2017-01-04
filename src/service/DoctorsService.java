@@ -30,4 +30,8 @@ public class DoctorsService implements Serializable{
 	public void createDoctor(Doctor doctor){
 		doctorDao.createDoctor(doctor);
 	}
+	
+	/*public void createSchedule(Doctor doctor,boolean mn_10,boolean mn_11,boolean mn_12){
+		doctorDao.createSchedule(doctor, mn_10, mn_11, mn_12);
+	}*/
 }

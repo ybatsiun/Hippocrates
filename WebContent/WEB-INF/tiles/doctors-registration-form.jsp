@@ -1,11 +1,12 @@
 
 
-Doctor's registration form
+
 
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
 	pageEncoding="US-ASCII"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 Doctor's registration form
 <br/>
@@ -62,6 +63,11 @@ Doctor's registration form
 					 type="password" />
 				</td>
 		</tr>
+		
+		<%-- <tr>
+			<td>Monday 11-12 : </td>
+			<td><form:checkbox path="Mn_11" name="Mn_11" /> </td>
+		</tr> --%>
 		
 		
 	 <tr>
