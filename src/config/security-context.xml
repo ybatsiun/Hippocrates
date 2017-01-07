@@ -47,7 +47,7 @@
 		<security:intercept-url pattern="/list-of-patients" access="hasRole('ROLE_ADMIN')" />
 		
 		<security:intercept-url pattern="/doctorsPage" access="hasRole('ROLE_DOCTOR')" />
-	    <security:intercept-url pattern="/doctors-schedule" access="hasRole('ROLE_DOCTOR','ROLE_PATIENT')" />
+	    <security:intercept-url pattern="/doctors-schedule" access="hasRole('ROLE_DOCTOR')" />
 	    <security:intercept-url pattern="/patients-info" access="hasRole('ROLE_DOCTOR')" />
 		
 		

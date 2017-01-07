@@ -1,8 +1,10 @@
 package service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +33,9 @@ public class DoctorsService implements Serializable{
 		doctorDao.createDoctor(doctor);
 	}
 	
-	/*public void createSchedule(Doctor doctor,boolean mn_10,boolean mn_11,boolean mn_12){
-		doctorDao.createSchedule(doctor, mn_10, mn_11, mn_12);
-	}*/
+public List<Doctor> showSchedule (String username){
+		System.out.println("Service:redirecting to DAO... ");
+		List <Doctor> schedule = doctorDao.showSchedule(username);
+		return schedule;
+	}
 }

@@ -53,9 +53,9 @@
 		<put-attribute name="content" value="/WEB-INF/tiles/list-of-patients.jsp"></put-attribute>
 	</definition>
 	
-	<definition name="doctors-schedule" extends="hippocrates.base">
+	<!-- <definition name="doctors-schedule" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/doctors-schedule.jsp"></put-attribute>
-	</definition>
+	</definition> -->
 	
 	<definition name="patients-info" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/patients-info.jsp"></put-attribute>

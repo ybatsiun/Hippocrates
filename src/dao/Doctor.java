@@ -27,9 +27,9 @@ public class Doctor  implements Serializable {
 	public boolean Mn_10;
 	public boolean Mn_11;
 	public boolean Mn_12;
-	public String Mn_10_Text;
-	public String Mn_11_Text;
-	public String Mn_12_Text;
+	public String Mn_10_text;
+	public String Mn_11_text;
+	public String Mn_12_text;
 	
 	
 	public boolean isMn_10() {
@@ -38,8 +38,8 @@ public class Doctor  implements Serializable {
 
 
 	public Doctor(String username, String authority, int enabled, String firstName, String lastName, int phoneNumber,
-			String email, String field, String password, boolean mn_10, boolean mn_11, boolean mn_12, String mn_10_Text,
-			String mn_11_Text, String mn_12_Text) {
+			String email, String field, String password, boolean mn_10, boolean mn_11, boolean mn_12, String mn_10_text,
+			String mn_11_text, String mn_12_text) {
 		super();
 		this.username = username;
 		this.authority = authority;
@@ -53,9 +53,9 @@ public class Doctor  implements Serializable {
 		Mn_10 = mn_10;
 		Mn_11 = mn_11;
 		Mn_12 = mn_12;
-		Mn_10_Text = mn_10_Text;
-		Mn_11_Text = mn_11_Text;
-		Mn_12_Text = mn_12_Text;
+		Mn_10_text = mn_10_text;
+		Mn_11_text = mn_11_text;
+		Mn_12_text = mn_12_text;
 	}
 
 
@@ -84,33 +84,33 @@ public class Doctor  implements Serializable {
 	}
 
 
-	public String getMn_10_Text() {
-		return Mn_10_Text;
+	public String getMn_10_text() {
+		return Mn_10_text;
 	}
 
 
-	public void setMn_10_Text(String mn_10_Text) {
-		Mn_10_Text = mn_10_Text;
+	public void setMn_10_text(String mn_10_text) {
+		Mn_10_text = mn_10_text;
 	}
 
 
-	public String getMn_11_Text() {
-		return Mn_11_Text;
+	public String getMn_11_text() {
+		return Mn_11_text;
 	}
 
 
-	public void setMn_11_Text(String mn_11_Text) {
-		Mn_11_Text = mn_11_Text;
+	public void setMn_11_text(String mn_11_text) {
+		Mn_11_text = mn_11_text;
 	}
 
 
-	public String getMn_12_Text() {
-		return Mn_12_Text;
+	public String getMn_12_text() {
+		return Mn_12_text;
 	}
 
 
-	public void setMn_12_Text(String mn_12_Text) {
-		Mn_12_Text = mn_12_Text;
+	public void setMn_12_text(String mn_12_text) {
+		Mn_12_text = mn_12_text;
 	}
 
 

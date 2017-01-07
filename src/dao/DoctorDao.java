@@ -1,11 +1,13 @@
 package dao;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Repository
 @Transactional
@@ -20,15 +22,24 @@ public class DoctorDao extends UserDao implements Serializable {
 		session().save(doctor);
 		System.out.println("Doctor registered");
 	}
-	
-	public void createSchedule(Doctor doctor,boolean mn_10,boolean mn_11,boolean mn_12){
-		doctor.setMn_10(mn_10);
-		doctor.setMn_10(mn_11);
-		doctor.setMn_10(mn_12);
-		
-		
-		session().update(doctor);
-		//think about transaktions at this place. see http://www.journaldev.com/3481/hibernate-session-merge-vs-update-save-saveorupdate-persist-example
+
+	@SuppressWarnings("unchecked")
+	public List<Doctor> showSchedule(String username) {
+		System.out.println("Starting in DAO...");
+		Criteria crit = session().createCriteria(Doctor.class);
+		System.out.println("Criteria created");
+		crit.add(Restrictions.eq("username", username));
+		System.out.println("Got username" + username);
+		for (int i = 10; i < 13; i++) {
+			crit.add(Restrictions.eq("Mn_" + i, true));
+			System.out.println("Restriction added for Mn_" + i);
+		}
+
+		for (int i = 10; i < 13; i++) {
+			crit.add(Restrictions.isNotNull("Mn_" + i + "_text"));
+			System.out.println("Restriction added for Mn_" + i + "_text");
+		}
+		return crit.list();
 	}
 
 }
