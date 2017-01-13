@@ -29,14 +29,14 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(value="/doctors-schedule", method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/getDoctors-schedule", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public Map<String, Object> ShowDoctorsSchedule(Principal principal){
 	
 		List<Doctor> schedule = null;
-		
+		List<Doctor> scheduleBool = null;
 		if (principal==null){
-			schedule = new ArrayList<Doctor>();
+			scheduleBool = new ArrayList<Doctor>();
 		}
 		
 		else {
@@ -45,11 +45,12 @@ public class HomeController {
 			/*doctorService.showSchedule(username);*/
 			schedule=doctorDao.showSchedule(username);
 			System.out.println("Finished running doctorService.showSchedule(username)");
-			
+		//	 scheduleBool=schedule.;
 		}
-		
 		Map<String, Object> data = new HashMap<String, Object>();
-		
+		/*for (int i=10;i<13;i++){
+			scheduleBool.put(schedule.('"Mn_"+i'));
+		}*/
 		data.put("schedule",schedule);
 		System.out.println("Placed list schedule list in Map");
 		
