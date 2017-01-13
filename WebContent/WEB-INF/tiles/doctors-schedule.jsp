@@ -6,56 +6,56 @@
 <html>
 
 Doctor's schedule
-<div id="schedule">
-
-</div>
-<br/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" >
-
+<div id="schedule"></div>
+<br />
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
 <!--
-
 	function showSchedule(data) {
-		
+
 		$("div#schedule").html("");
 
 		var doctor = data.schedule[0];
 
 		var scheduleDiv = document.createElement("div");
 		scheduleDiv.setAttribute("class", "doctor");
-		
+
 		var timeSpan = document.createElement("span");
-		timeSpan.appendChild(document.createTextNode(doctor.username));
+		timeSpan.appendChild(document.createTextNode(doctor.username+":"));
 
 		scheduleDiv.appendChild(timeSpan);
-		
-		for (var i=10;i<13;i++){
-			const abc= ['mn_'+i];
-			if (doctor[abc]==true){
-				alert( 'is true0');
+
+		for (var i = 10; i < 13; i++) {
+			const day = [ 'mn_' + i ];
+			const text = [ 'mn_' + i + '_text' ]
+			if (doctor[day] == true) {
+				var a = document.createElement("span");
+			 	a.appendChild(document.createTextNode([day]+"/"));
+				scheduleDiv.appendChild(a);   
+				
+				var b = document.createElement("span");
+				b.appendChild(document.createTextNode(doctor[text]+"***"));
+				scheduleDiv.appendChild(b); 
+			} else {
+			
 			}
-			else {alert('error')}
 		}
 
 		$("div#schedule").append(scheduleDiv);
 	}
-	
+
 	function updatePage() {
 		$.getJSON("<c:url value="/getDoctors-schedule"/>", showSchedule);
 	}
-	
+
 	function onLoad() {
 
 		updatePage();
-		
+
 	}
-	
-	 $(document).ready(onLoad); 
-/* 	window.onload = onload(); */
- 
- /* $(document).ready ( function(){
-   alert('ok');
-}); */
+
+	$(document).ready(onLoad);
 //-->
 </script>
 
@@ -66,5 +66,5 @@ Doctor's schedule
 
 <a href="${flowExecutionUrl}&_eventId=enter-complaint"><input
 	type="submit" name="enter-complaint" value="enter your complaint" /></a>
-	
-	</html>
+
+</html>

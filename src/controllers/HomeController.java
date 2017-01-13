@@ -18,7 +18,7 @@ import service.DoctorsService;
 
 @Controller
 public class HomeController {
-
+	@Autowired
 	private DoctorsService doctorService; 
 	@Autowired
 	private DoctorDao doctorDao;
@@ -34,23 +34,19 @@ public class HomeController {
 	public Map<String, Object> ShowDoctorsSchedule(Principal principal){
 	
 		List<Doctor> schedule = null;
-		List<Doctor> scheduleBool = null;
 		if (principal==null){
-			scheduleBool = new ArrayList<Doctor>();
+			schedule = new ArrayList<Doctor>();
 		}
 		
 		else {
 			String username = principal.getName();
 			System.out.println("Got username at controller:"+username);
-			/*doctorService.showSchedule(username);*/
-			schedule=doctorDao.showSchedule(username);
+			schedule=doctorService.showSchedule(username);
+			/*schedule=doctorDao.showSchedule(username);*/
 			System.out.println("Finished running doctorService.showSchedule(username)");
-		//	 scheduleBool=schedule.;
 		}
 		Map<String, Object> data = new HashMap<String, Object>();
-		/*for (int i=10;i<13;i++){
-			scheduleBool.put(schedule.('"Mn_"+i'));
-		}*/
+		
 		data.put("schedule",schedule);
 		System.out.println("Placed list schedule list in Map");
 		

@@ -8,8 +8,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd"
-		>
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
 
 
@@ -48,11 +47,12 @@
 			<property name="sessionFactory" ref="sessionFactory" />
 		</bean>
 		<tx:annotation-driven />
-		
+		<bean id="doctorsService" class="service.DoctorsService"></bean>
 
 	</beans>
 
 
 
+	
 	
 </beans>
