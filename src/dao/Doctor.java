@@ -36,11 +36,70 @@ public class Doctor  implements Serializable {
 	public boolean mn_10;
 	public boolean mn_11;
 	public boolean mn_12;
+	
 	public String mn_10_text;
 	public String mn_11_text;
 	public String mn_12_text;
+	public boolean mn_10_isbusy;
+	public boolean mn_11_isbusy;
+	public boolean mn_12_isbusy;
+	public String mn_10_username;
+	public String mn_11_username;
+	public String mn_12_username;
 	
 	
+	public boolean isMn_10_isbusy() {
+		return mn_10_isbusy;
+	}
+
+	public void setmn_10_isbusy(boolean mn_10_isbusy) { //Changed method name
+		this.mn_10_isbusy = mn_10_isbusy;
+	}
+
+	public boolean isMn_11_isbusy() {
+		return mn_11_isbusy;
+	}
+
+	public void setmn_11_isbusy(boolean mn_11_isbusy) {//Changed method name
+		this.mn_11_isbusy = mn_11_isbusy;
+	}
+
+	public boolean isMn_12_isbusy() {
+		return mn_12_isbusy;
+	}
+
+	public void setmn_12_isbusy(boolean mn_12_isbusy) {//Changed method name
+		this.mn_12_isbusy = mn_12_isbusy;
+	}
+
+	public String getMn_10_username() {
+		return mn_10_username;
+	}
+
+	public void setMn_10_username(String mn_10_username) {
+		this.mn_10_username = mn_10_username;
+	}
+
+	public String getMn_11_username() {
+		return mn_11_username;
+	}
+
+	public void setMn_11_username(String mn_11_username) {
+		this.mn_11_username = mn_11_username;
+	}
+
+	public String getMn_12_username() {
+		return mn_12_username;
+	}
+
+	public void setMn_12_username(String mn_12_username) {
+		this.mn_12_username = mn_12_username;
+	}
+
+	public void setEnabled(int enabled) {
+		this.enabled = enabled;
+	}
+
 	public Doctor(String username, String authority, int enabled, String firstName, String lastName, int phoneNumber,
 			String email, String field, String password, boolean mn_10, boolean mn_11, boolean mn_12, String mn_10_text,
 			String mn_11_text, String mn_12_text) {

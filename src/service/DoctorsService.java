@@ -13,29 +13,34 @@ import dao.DoctorDao;
 
 @Transactional
 @Service("DoctorsService")
-public class DoctorsService implements Serializable{
+public class DoctorsService implements Serializable {
 
-	
+	private static final long serialVersionUID = 1L;
+	@Autowired
+	public DoctorDao doctorDao;
 
-		
-		private static final long serialVersionUID = 1L;
-		@Autowired
-		public DoctorDao doctorDao;
+	@Autowired
+	public void setDoctorDao(DoctorDao doctorDao) {
+		this.doctorDao = doctorDao;
+	}
 
-		
-		
-		@Autowired
-		public void setDoctorDao(DoctorDao doctorDao) {
-			this.doctorDao = doctorDao;
-		}
-
-	public void createDoctor(Doctor doctor){
+	public void createDoctor(Doctor doctor) {
 		doctorDao.createDoctor(doctor);
 	}
-	
-public List<Doctor> showSchedule (String username){
+
+	public List<Doctor> showSchedule(String username) {
 		System.out.println("Service:redirecting to DAO... ");
-		List <Doctor> schedule = doctorDao.showSchedule(username);
+		List<Doctor> schedule = doctorDao.showSchedule(username);
 		return schedule;
+	}
+
+	public List<Doctor> showDoctorsList() {
+		List<Doctor> doctorsList = doctorDao.showDoctors();
+		return doctorsList;
+	}
+
+	public void bookAnAppointment(String doctorsUsername, String patientUsername, String dayAndTime) {
+		doctorDao.bookAnAppointment(doctorsUsername, patientUsername, dayAndTime);
+		
 	}
 }

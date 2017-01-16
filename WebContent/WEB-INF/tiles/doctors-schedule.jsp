@@ -22,23 +22,33 @@ Doctor's schedule
 		scheduleDiv.setAttribute("class", "doctor");
 
 		var timeSpan = document.createElement("span");
-		timeSpan.appendChild(document.createTextNode(doctor.username+":"));
+		timeSpan.appendChild(document.createTextNode(doctor.username + ":"));
 
 		scheduleDiv.appendChild(timeSpan);
 
 		for (var i = 10; i < 13; i++) {
-			const day = [ 'mn_' + i ];
-			const text = [ 'mn_' + i + '_text' ]
+			const
+			day = [ 'mn_' + i ];
+			const
+			text = [ 'mn_' + i + '_text' ]
 			if (doctor[day] == true) {
 				var a = document.createElement("span");
-			 	a.appendChild(document.createTextNode([day]+"/"));
-				scheduleDiv.appendChild(a);   
-				
+				a.appendChild(document.createTextNode([ day ] + "/"));
+				scheduleDiv.appendChild(a);
+
 				var b = document.createElement("span");
-				b.appendChild(document.createTextNode(doctor[text]+"***"));
-				scheduleDiv.appendChild(b); 
+				if (doctor[text] == null) {
+					b
+							.appendChild(document
+									.createTextNode("There is no appointment for this time."));
+				} else {
+					b
+							.appendChild(document.createTextNode(doctor[text]
+									+ "***"));
+				}
+				scheduleDiv.appendChild(b);
 			} else {
-			
+
 			}
 		}
 

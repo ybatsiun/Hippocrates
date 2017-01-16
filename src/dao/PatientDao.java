@@ -3,8 +3,10 @@ package dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,6 @@ public class PatientDao extends UserDao implements Serializable  {
 
 	@SuppressWarnings("unchecked")
 	public  List<Patient> getAllPatients (){
-		//тут надо написать JOIN. соеденить patients с users,когда в users authority=ROLE_PATIENT
 		return session().createQuery("from Patient").list() ;
 		
 	}
@@ -34,5 +35,6 @@ public class PatientDao extends UserDao implements Serializable  {
 		session().save(patient);
 		System.out.println("Patient registered");
 	}
+	
 	
 }
