@@ -11,10 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import dao.Doctor;
-import dao.DoctorDao;
 import service.DoctorsService;
 
 @Controller
@@ -67,13 +67,13 @@ public class HomeController {
 
 		return data;
 	}
-
-	@RequestMapping(value = " /bookingAppointment/{doctorsUsername}{dayAndTime}", method = RequestMethod.GET)
-	public void bookAnAppointment(@PathVariable("doctorsUsername") String doctorsUsername,
-			@PathVariable("dayAndTime") String dayAndTime, Principal principal) {
-
+	@ResponseBody
+	@RequestMapping(value = "/bookingAppointment", method = RequestMethod.POST)
+	public void bookAnAppointment(@RequestParam("doctorUsername") String doctorUsername,
+			@RequestParam("dayAndTime") String dayAndTime, Principal principal) {
+		System.out.println("I am bookAnAppointment Controller with"+doctorUsername+" and " + dayAndTime);
 		String patientUsername = principal.getName();
 
-		doctorService.bookAnAppointment(doctorsUsername, patientUsername, dayAndTime);
+		doctorService.bookAnAppointment(doctorUsername, patientUsername, dayAndTime);
 	}
 }

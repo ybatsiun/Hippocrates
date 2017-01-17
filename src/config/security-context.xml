@@ -55,6 +55,7 @@
 		<security:intercept-url pattern="/doctors-list-for-patient" access="hasRole('ROLE_PATIENT')" />
 		<security:intercept-url pattern="/complaint-form" access="hasRole('ROLE_PATIENT')" />
 	    <security:intercept-url pattern="/getDoctors-list" access="hasRole('ROLE_PATIENT')" />
+	    <security:intercept-url pattern="/bookingAppointment" access="hasRole('ROLE_PATIENT')" />
 	  
 	    <security:intercept-url pattern="/" access="permitAll" />
 		<security:intercept-url pattern="/login" access="permitAll" />

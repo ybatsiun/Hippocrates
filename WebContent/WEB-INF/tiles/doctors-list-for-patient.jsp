@@ -1,3 +1,5 @@
+
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -42,16 +44,29 @@ I will put here a short info of doctor that is useful for a patient.
 			/*///////////////// Schedule module ///////////////// */
 			
 			for (var i = 10; i < 13; i++) {
-				const
+				
+			const username=doctor.username;	
+			
+			const
 				dayAndTime = [ 'mn_' + i ];
 				const
 				text = [ 'mn_' + i + '_text' ]
 				if (doctor[dayAndTime] == true) {
+				
+					/* alert(doctor.username); */
 					
 					var linkToBook=document.createElement("a");
 					linkToBook.setAttribute("class", "replylink");
 					linkToBook.setAttribute("href", "#");
-					linkToBook.setAttribute("onclick", "     ");
+					linkToBook.setAttribute("data-docusername",doctor.username);
+					
+					linkToBook.setAttribute("data-dayandtime",dayAndTime);
+					
+					const du=linkToBook.dataset.docusername;
+					const dat=linkToBook.dataset.dayandtime;
+					linkToBook.setAttribute("onclick","BookAnAppointment(dataset.docusername,dataset.dayandtime)");
+					
+					
 					linkToBook.appendChild(document.createTextNode([ dayAndTime ] + "/"));
 					
 					
@@ -82,12 +97,32 @@ I will put here a short info of doctor that is useful for a patient.
 		}
 	}
 
-    function BookAnAppointment( doctorsUsername,dayAndTime){
+
+
+
+
+
+
+
+ function BookAnAppointment( doctorUsername,dayAndTime){
+	 alert('Booking with '+ doctorUsername+ ' and ' + dayAndTime);
+    	var data = { 
+    			doctorUsername : doctorUsername,
+    			dayAndTime : dayAndTime
+    		}
     	
-    	/* $.get('http://localhost:8080/Hippocrates/bookingAppointment?'); */
-    	alert('Booking with '+ doctorsUsername+ ' and ' + dayAndTime);
-    	
-    }
+    	$.ajax({
+            type: "POST",
+            url: "bookingAppointment",
+            data: data,
+            success: function (result) {
+                alert('success');
+            },
+            error: function (result) {
+            	alert('error');
+            }
+        });
+    } 
     
 	function updatePage() {
 		$.getJSON("<c:url value="/getDoctors-list"/>", showDoctorsList);

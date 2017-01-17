@@ -52,10 +52,10 @@ public class DoctorDao extends UserDao implements Serializable {
 		java.lang.reflect.Method method=null;
 		
 		try {
-			  method = doctor.getClass().getMethod("set"+dayAndTime+"isbusy", boolean.class);
+			  method = doctor.getClass().getMethod("set"+dayAndTime+"_isbusy", boolean.class);
 			} catch (SecurityException e) {  }
 			  catch (NoSuchMethodException e) {  }
-		
+		System.out.println("set"+dayAndTime+"_isbusy");
 		try {
 			  method.invoke(doctor, true);
 			} catch (IllegalArgumentException e) {  }
