@@ -42,7 +42,6 @@ public class HomeController {
 			String username = principal.getName();
 			System.out.println("Got username at controller:" + username);
 			schedule = doctorService.showSchedule(username);
-			/* schedule=doctorDao.showSchedule(username); */
 			System.out.println("Finished running doctorService.showSchedule(username)");
 		}
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -70,10 +69,11 @@ public class HomeController {
 	@ResponseBody
 	@RequestMapping(value = "/bookingAppointment", method = RequestMethod.POST)
 	public void bookAnAppointment(@RequestParam("doctorUsername") String doctorUsername,
-			@RequestParam("dayAndTime") String dayAndTime, Principal principal) {
-		System.out.println("I am bookAnAppointment Controller with"+doctorUsername+" and " + dayAndTime);
+			@RequestParam("dayAndTime") String dayAndTime,@RequestParam("complain") String complain,
+			Principal principal) {
+		System.out.println("I am bookAnAppointment Controller with"+doctorUsername+" and " + dayAndTime+"and"+complain);
 		String patientUsername = principal.getName();
 
-		doctorService.bookAnAppointment(doctorUsername, patientUsername, dayAndTime);
+		doctorService.bookAnAppointment(doctorUsername, patientUsername, dayAndTime,complain);
 	}
 }

@@ -20,110 +20,142 @@ I will put here a short info of doctor that is useful for a patient.
 <script type="text/javascript">
 <!--
 	function showDoctorsList(data) {
-
 		$("div#doctor").html("");
-
 		for (n = 0; n < data.doctorsList.length; n++) {
 			var doctor = data.doctorsList[n];
-
 			var doctorDiv = document.createElement("div");
 			doctorDiv.setAttribute("class", "doctor");
-       
+			doctorDiv.setAttribute("id", n);
 			var firstName = document.createElement("span");
-			firstName.appendChild(document.createTextNode("First name: "+doctor.firstName));
+			firstName.appendChild(document.createTextNode("First name: "
+					+ doctor.firstName));
 			doctorDiv.appendChild(firstName);
-			
+
 			var lastName = document.createElement("span");
-			lastName.appendChild(document.createTextNode(". Last name: "+doctor.lastName));
+			lastName.appendChild(document.createTextNode(". Last name: "
+					+ doctor.lastName));
 			doctorDiv.appendChild(lastName);
-			
+
 			var field = document.createElement("span");
-			field.appendChild(document.createTextNode(". Field: "+doctor.field));
+			field.appendChild(document.createTextNode(". Field: "
+					+ doctor.field));
 			doctorDiv.appendChild(field);
-			
-			/*///////////////// Schedule module ///////////////// */
-			
+
+			/*////////////////////////////////// Schedule module /////////////////////////////////////////////////// */
+
 			for (var i = 10; i < 13; i++) {
-				
-			const username=doctor.username;	
-			
-			const
+
+				const
 				dayAndTime = [ 'mn_' + i ];
 				const
-				text = [ 'mn_' + i + '_text' ]
+				isbusy = [ 'mn_' + i + '_isbusy' ]
 				if (doctor[dayAndTime] == true) {
+
+					
 				
-					/* alert(doctor.username); */
-					
-					var linkToBook=document.createElement("a");
-					linkToBook.setAttribute("class", "replylink");
+					var linkToBook = document.createElement("a");
 					linkToBook.setAttribute("href", "#");
-					linkToBook.setAttribute("data-docusername",doctor.username);
-					
-					linkToBook.setAttribute("data-dayandtime",dayAndTime);
-					
-					const du=linkToBook.dataset.docusername;
-					const dat=linkToBook.dataset.dayandtime;
-					linkToBook.setAttribute("onclick","BookAnAppointment(dataset.docusername,dataset.dayandtime)");
-					
-					
-					linkToBook.appendChild(document.createTextNode([ dayAndTime ] + "/"));
-					
-					
+					linkToBook.setAttribute("id", n);
+					linkToBook
+							.setAttribute("onclick", "showReply(" + i + ",this.id)");
+					linkToBook.appendChild(document
+							.createTextNode([ dayAndTime ] + "/"));
+
 					var a = document.createElement("span");
-					a.appendChild(document.createTextNode([ dayAndTime ] + "/"));
-					
+
 					a.appendChild(linkToBook);
 					doctorDiv.appendChild(a);
 
-					
-					
 					var b = document.createElement("span");
-					if (doctor[text] == null) {
+					if (doctor[isbusy] == false) {
 						b
 								.appendChild(document
 										.createTextNode("There is no appointment for this time."));
 					} else {
-						b.appendChild(document.createTextNode( "This appointment is already booked"));
+						b
+								.appendChild(document
+										.createTextNode("This appointment is already booked"));
 					}
 					doctorDiv.appendChild(b);
 				} else {
 
 				}
-				/*//////////////////////////////////////////////////////////////////*/
+
+				var c = document.createElement("span");
+				var complainForm = document.createElement("form");
+				complainForm.setAttribute("class", "replyform");
+				complainForm.setAttribute("id", "form" + i+n);
+
+				var textarea = document.createElement("textarea");
+				textarea.setAttribute("id","area" + i+n);
+				var bookButton = document.createElement("input");
+				
+				bookButton.setAttribute("type", "button");
+				bookButton.setAttribute("value", "Book an appointment");
+				bookButton.setAttribute("data-textarea",textarea);
+				bookButton.setAttribute("data-i",i);
+				bookButton.setAttribute("data-n",n);
+				bookButton.setAttribute("data-docusername", doctor.username);
+			
+				bookButton.setAttribute("data-dayandtime", dayAndTime);
+				bookButton
+						.setAttribute("onClick",
+								"BookAnAppointment(dataset.docusername,dataset.dayandtime,test(dataset.n,dataset.i))");		
+								
+
+				complainForm.appendChild(textarea);
+				complainForm.appendChild(bookButton);
+
+				c.appendChild(complainForm);
+				doctorDiv.appendChild(c);
+
+				/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
 			}
 
 			$("div#doctor").append(doctorDiv);
 		}
 	}
 
+	function showReply(i, n) {
+		console.log("#form" + i +n);
+		$("#form" + i +n).toggle();
+	}
 
+	function test(n,i){
+		 console.log("#area" + i + n);
+		
+		
+		var text=$("#area" + i + n).val(); 
+		
+		
+		return text;
+	}
+	
+	
+	function BookAnAppointment(doctorUsername, dayAndTime,complain) {
+		var data = {
+			doctorUsername : doctorUsername,
+			dayAndTime : dayAndTime,
+			complain : complain
+		}
+		
+		
 
+		$.ajax({
+			type : "POST",
+			url : "bookingAppointment",
+			data : data,
+			success : function(result) {
+				alert('Booking with ' + doctorUsername + ' and ' + dayAndTime+ 'and'+ complain
+						+ " performed successfully");
+			},
+			error : function(result) {
+				alert('error');
+			}
+		});
+		updatePage();
+	}
 
-
-
-
-
- function BookAnAppointment( doctorUsername,dayAndTime){
-	 alert('Booking with '+ doctorUsername+ ' and ' + dayAndTime);
-    	var data = { 
-    			doctorUsername : doctorUsername,
-    			dayAndTime : dayAndTime
-    		}
-    	
-    	$.ajax({
-            type: "POST",
-            url: "bookingAppointment",
-            data: data,
-            success: function (result) {
-                alert('success');
-            },
-            error: function (result) {
-            	alert('error');
-            }
-        });
-    } 
-    
 	function updatePage() {
 		$.getJSON("<c:url value="/getDoctors-list"/>", showDoctorsList);
 	}

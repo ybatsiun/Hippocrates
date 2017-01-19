@@ -49,10 +49,12 @@ public class Doctor  implements Serializable {
 	
 	
 	public boolean isMn_10_isbusy() {
+		
 		return mn_10_isbusy;
 	}
 
 	public void setmn_10_isbusy(boolean mn_10_isbusy) { //Changed method name
+		System.out.println("running setmn_10_isbusy" );
 		this.mn_10_isbusy = mn_10_isbusy;
 	}
 
@@ -76,7 +78,8 @@ public class Doctor  implements Serializable {
 		return mn_10_username;
 	}
 
-	public void setMn_10_username(String mn_10_username) {
+	public void setmn_10_username(String mn_10_username) {
+		System.out.println("running setmn_10_username" );
 		this.mn_10_username = mn_10_username;
 	}
 
@@ -84,7 +87,7 @@ public class Doctor  implements Serializable {
 		return mn_11_username;
 	}
 
-	public void setMn_11_username(String mn_11_username) {
+	public void setmn_11_username(String mn_11_username) {
 		this.mn_11_username = mn_11_username;
 	}
 
@@ -92,7 +95,7 @@ public class Doctor  implements Serializable {
 		return mn_12_username;
 	}
 
-	public void setMn_12_username(String mn_12_username) {
+	public void setmn_12_username(String mn_12_username) {
 		this.mn_12_username = mn_12_username;
 	}
 
@@ -158,7 +161,8 @@ public class Doctor  implements Serializable {
 		return mn_10_text;
 	}
 
-	public void setMn_10_text(String mn_10_text) {
+	public void setmn_10_text(String mn_10_text) {
+		System.out.println("running setmn_10_text" );
 		this.mn_10_text = mn_10_text;
 	}
 
@@ -166,7 +170,7 @@ public class Doctor  implements Serializable {
 		return mn_11_text;
 	}
 
-	public void setMn_11_text(String mn_11_text) {
+	public void setmn_11_text(String mn_11_text) {
 		this.mn_11_text = mn_11_text;
 	}
 
@@ -174,7 +178,7 @@ public class Doctor  implements Serializable {
 		return mn_12_text;
 	}
 
-	public void setMn_12_text(String mn_12_text) {
+	public void setmn_12_text(String mn_12_text) {
 		this.mn_12_text = mn_12_text;
 	}
 

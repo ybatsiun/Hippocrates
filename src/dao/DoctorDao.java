@@ -46,7 +46,7 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 	
-	public void bookAnAppointment(String doctorUsername,String patientUsername,String dayAndTime/*,String complain*/){
+	public void bookAnAppointment(String doctorUsername,String patientUsername,String dayAndTime,String complain){
 		Doctor doctor=(Doctor) session().get(Doctor.class, doctorUsername);
 		
 		java.lang.reflect.Method method=null;
@@ -60,7 +60,38 @@ public class DoctorDao extends UserDao implements Serializable {
 			  method.invoke(doctor, true);
 			} catch (IllegalArgumentException e) {  }
 			  catch (IllegalAccessException e) {  }
+			  catch (InvocationTargetException e) {  };
+		
+		
+		
+		try {
+			  method = doctor.getClass().getMethod("set"+dayAndTime+"_text", String.class);
+			} catch (SecurityException e) {  }
+			  catch (NoSuchMethodException e) {  }
+		System.out.println("set"+dayAndTime+"_text");
+		try {
+			  method.invoke(doctor, complain);
+			} catch (IllegalArgumentException e) {  }
+			  catch (IllegalAccessException e) {  }
+			  catch (InvocationTargetException e) {  };
+		
+		
+		
+		try {
+			  method = doctor.getClass().getMethod("set"+dayAndTime+"_username", String.class);
+			} catch (SecurityException e) {  }
+			  catch (NoSuchMethodException e) {  }
+		System.out.println("set"+dayAndTime+"_username");
+		try {
+			  method.invoke(doctor, patientUsername);
+			} catch (IllegalArgumentException e) {  }
+			  catch (IllegalAccessException e) {  }
 			  catch (InvocationTargetException e) {  }
+		
+		
+		
+		
+		System.out.println("bookAnAppointment: "+doctorUsername+" and "+ patientUsername+" and "+ dayAndTime+" and "+complain);
 	}
-
+	
 }

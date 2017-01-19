@@ -3,7 +3,16 @@
 
 
 <p> Header goes hear...</p> 
+<style>
+body {
+    background-color: linen;
+}
 
+form.replyform {
+	padding: 20px;
+	display: none;
+} 
+</style>
 <sec:authorize access='!isAuthenticated()'>
 
 <a href="<c:url value='/login'/>"> Log in </a>
