@@ -47,7 +47,91 @@ public class Doctor  implements Serializable {
 	public String mn_11_username;
 	public String mn_12_username;
 	
+	public String mn_10_firstname;
+	public String mn_11_firstname;
+	public String mn_12_firstname;
 	
+	public String mn_10_lastname;
+	public String mn_11_lastname;
+	public String mn_12_lastname;
+	
+	public int mn_10_phonenumber;
+	public int mn_11_phonenumber;
+	public int mn_12_phonenumber;
+	
+	
+	public String getmn_10_firstname() {
+		return mn_10_firstname;
+	}
+
+	public void setmn_10_firstname(String mn_10_firstname) {
+		this.mn_10_firstname = mn_10_firstname;
+	}
+
+	public String getmn_11_firstname() {
+		return mn_11_firstname;
+	}
+
+	public void setmn_11_firstname(String mn_11_firstname) {
+		this.mn_11_firstname = mn_11_firstname;
+	}
+
+	public String getmn_12_firstname() {
+		return mn_12_firstname;
+	}
+
+	public void setmn_12_firstname(String mn_12_firstname) {
+		this.mn_12_firstname = mn_12_firstname;
+	}
+
+	public String getmn_10_lastname() {
+		return mn_10_lastname;
+	}
+
+	public void setmn_10_lastname(String mn_10_lastname) {
+		this.mn_10_lastname = mn_10_lastname;
+	}
+
+	public String getmn_11_lastname() {
+		return mn_11_lastname;
+	}
+
+	public void setmn_11_lastname(String mn_11_lastname) {
+		this.mn_11_lastname = mn_11_lastname;
+	}
+
+	public String getmn_12_lastname() {
+		return mn_12_lastname;
+	}
+
+	public void setmn_12_lastname(String mn_12_lastname) {
+		this.mn_12_lastname = mn_12_lastname;
+	}
+
+	public int getmn_10_phonenumber() {
+		return mn_10_phonenumber;
+	}
+
+	public void setmn_10_phonenumber(int mn_10_phonenumber ) {
+		this.mn_10_phonenumber = mn_10_phonenumber;
+	}
+
+	public int getmn_11_phonenumber() {
+		return mn_11_phonenumber;
+	}
+
+	public void setmn_11_phonenumber(int mn_11_phonenumber) {
+		this.mn_11_phonenumber = mn_11_phonenumber;
+	}
+
+	public int getmn_12_phonenumber() {
+		return mn_12_phonenumber;
+	}
+
+	public void setmn_12_phonenumber(int mn_12_phonenumber) {
+		this.mn_12_phonenumber = mn_12_phonenumber;
+	}
+
 	public boolean isMn_10_isbusy() {
 		
 		return mn_10_isbusy;
@@ -79,7 +163,6 @@ public class Doctor  implements Serializable {
 	}
 
 	public void setmn_10_username(String mn_10_username) {
-		System.out.println("running setmn_10_username" );
 		this.mn_10_username = mn_10_username;
 	}
 

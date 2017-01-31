@@ -14,7 +14,15 @@
 
 
 	<view-state id="list-of-doctors">
-
+    
+    <transition on="show-doctors-schedule" to="doctors-schedule"></transition>
+ 
+	</view-state>
+	
+	<view-state id="doctors-schedule">
+	
+		
+	
 	</view-state>
 
 	<view-state id="list-of-patients">

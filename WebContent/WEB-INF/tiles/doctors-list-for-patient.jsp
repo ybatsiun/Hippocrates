@@ -169,3 +169,7 @@ I will put here a short info of doctor that is useful for a patient.
 	$(document).ready(onLoad);
 //-->
 </script>
+
+
+
+	

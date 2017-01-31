@@ -81,6 +81,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/tiles/doctors-registration-form.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="admins-registration-form" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/admins-registration-form.jsp"></put-attribute>
+	</definition>
 
 	<definition name="choose-schedule" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/choose-schedule.jsp"></put-attribute>

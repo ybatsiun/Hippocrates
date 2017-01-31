@@ -48,7 +48,7 @@
 		</bean>
 		<tx:annotation-driven />
 		<bean id="doctorsService" class="service.DoctorsService"></bean>
-
+		<bean id="patientDao" class="dao.PatientDao"></bean>
 	</beans>
 
 

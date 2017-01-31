@@ -6,6 +6,11 @@
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
 
+
+    <var name="admin" class="dao.Admin" />
+
+	<var name="adminsService" class="service.AdminsService" />
+
 	<var name="patient" class="dao.Patient" />
 
 	<var name="patientsService" class="service.PatientsService" />
@@ -19,9 +24,21 @@
 		<transition on="go-to-doctors-registration-form" to="doctors-registration-form"></transition>
 
 		<transition on="go-to-patients-registration-form" to="patients-registration-form"></transition>
+		
+		<transition on="go-to-admins-registration-form" to="admins-registration-form"></transition>
 
 	</view-state>
 
+     <view-state id="admins-registration-form" model="admin">
+
+		<transition on="submit-registration" to="creatingAdmin"></transition>
+
+	</view-state>
+	
+	<action-state id="creatingAdmin">
+		<evaluate expression="adminsService.createAdmin(admin)"></evaluate>
+		<transition to="registration-completed"></transition>
+	</action-state>
 
 
 	<view-state id="doctors-registration-form" model="doctor">
@@ -32,7 +49,6 @@
 	
 	<action-state id="creatingDoctor">
 		<evaluate expression="doctorsService.createDoctor(doctor)"></evaluate>
-		<!-- <evaluate expression="doctorsService.createDoctor(doctor)"></evaluate> -->
 		<transition to="registration-completed"></transition>
 	</action-state>
 

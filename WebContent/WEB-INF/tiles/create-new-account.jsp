@@ -6,3 +6,6 @@ Choose your role:
 
 <a href="${flowExecutionUrl}&_eventId=go-to-patients-registration-form"><input
 	type="submit" name="go-to-patients-registration-form" value="patient" /></a>
+	
+<a href="${flowExecutionUrl}&_eventId=go-to-admins-registration-form"><input
+	type="submit" name="go-to-admins-registration-form" value="admin" /></a>

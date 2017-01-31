@@ -2,13 +2,18 @@ package controllers;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +36,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/getDoctors-schedule", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public Map<String, Object> ShowDoctorsSchedule(Principal principal) {
+	public Map<String, Object> ShowDoctorsSchedule(Principal principal, Authentication a) {
 
 		List<Doctor> schedule = null;
 		if (principal == null) {
@@ -39,10 +44,22 @@ public class HomeController {
 		}
 
 		else {
-			String username = principal.getName();
-			System.out.println("Got username at controller:" + username);
-			schedule = doctorService.showSchedule(username);
-			System.out.println("Finished running doctorService.showSchedule(username)");
+			for (GrantedAuthority grantedAuthority : a.getAuthorities()) {
+			System.out.println("Authority is "+grantedAuthority );
+				if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")  ) {
+					System.out.println("This is admin");
+					schedule = doctorService.showSchedules();
+				}
+
+				else {
+					String username = principal.getName();
+					System.out.println("Got username at controller:" + username);
+					schedule = doctorService.showSchedule(username);
+					System.out.println("Finished running doctorService.showSchedule(username)");
+
+				}
+			}
+
 		}
 		Map<String, Object> data = new HashMap<String, Object>();
 
@@ -66,14 +83,33 @@ public class HomeController {
 
 		return data;
 	}
+
 	@ResponseBody
 	@RequestMapping(value = "/bookingAppointment", method = RequestMethod.POST)
 	public void bookAnAppointment(@RequestParam("doctorUsername") String doctorUsername,
-			@RequestParam("dayAndTime") String dayAndTime,@RequestParam("complain") String complain,
+			@RequestParam("dayAndTime") String dayAndTime, @RequestParam("complain") String complain,
 			Principal principal) {
-		System.out.println("I am bookAnAppointment Controller with"+doctorUsername+" and " + dayAndTime+"and"+complain);
+		System.out.println(
+				"I am bookAnAppointment Controller with" + doctorUsername + " and " + dayAndTime + " and " + complain);
 		String patientUsername = principal.getName();
 
-		doctorService.bookAnAppointment(doctorUsername, patientUsername, dayAndTime,complain);
+		System.out.println("Going to doctorService in bookAnAppointment");
+		doctorService.bookAnAppointment(doctorUsername, patientUsername, dayAndTime, complain);
 	}
+
+	@RequestMapping(value = "/getDoctors-list-for-admin", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> ShowDoctorsForAdmin() {
+
+		List<Doctor> doctorsList = null;
+
+		doctorsList = doctorService.showDoctorsListForAdmin();
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("doctorsList", doctorsList);
+
+		return data;
+	}
+
 }

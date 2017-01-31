@@ -15,8 +15,8 @@ Doctor's schedule
 	function showSchedule(data) {
 
 		$("div#schedule").html("");
-
-		var doctor = data.schedule[0];
+for(var j=0;j<data.schedule.length;j++){
+		var doctor = data.schedule[j];
 
 		var scheduleDiv = document.createElement("div");
 		scheduleDiv.setAttribute("class", "doctor");
@@ -27,24 +27,38 @@ Doctor's schedule
 		scheduleDiv.appendChild(timeSpan);
 
 		for (var i = 10; i < 13; i++) {
-			const
-			day = [ 'mn_' + i ];
-			const
-			text = [ 'mn_' + i + '_text' ]
+			
+			const patientFirstName=['mn_'+i+"_firstname"];
+			const patientLastName=['mn_'+i+"_lastname"];
+			const patientPhoneNumber=['mn_'+i+"_phonenumber"];
+			
+			const day = [ 'mn_' + i ];
+			const text = [ 'mn_' + i + '_text' ];
+			const isBusy= ['mn_'+i+'_isbusy'];
+			
 			if (doctor[day] == true) {
 				var a = document.createElement("span");
 				a.appendChild(document.createTextNode([ day ] + "/"));
 				scheduleDiv.appendChild(a);
 
 				var b = document.createElement("span");
-				if (doctor[text] == null) {
-					b
-							.appendChild(document
-									.createTextNode("There is no appointment for this time."));
+				if (doctor[isBusy] == false) {
+					
+					b.appendChild(document.createTextNode("There is no appointment for this time."));
+					
+					
 				} else {
-					b
-							.appendChild(document.createTextNode(doctor[text]
-									+ "***"));
+					b.appendChild(document.createTextNode(doctor[patientFirstName]
+									+ " "));
+					
+					b.appendChild(document.createTextNode(doctor[patientLastName]
+							+ " "));
+					
+					b.appendChild(document.createTextNode(doctor[patientPhoneNumber]
+							+ ";"));
+					
+					b.appendChild(document.createTextNode(doctor[text]
+					+ ";"));
 				}
 				scheduleDiv.appendChild(b);
 			} else {
@@ -53,7 +67,7 @@ Doctor's schedule
 		}
 
 		$("div#schedule").append(scheduleDiv);
-	}
+	}}
 
 	function updatePage() {
 		$.getJSON("<c:url value="/getDoctors-schedule"/>", showSchedule);

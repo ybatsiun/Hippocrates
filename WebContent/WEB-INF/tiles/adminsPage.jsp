@@ -15,7 +15,5 @@ Welcome! You are logged in as admin.
 	type="submit" name="show-list-of-patients" value="list of patients" /></a>
 
 
-<%-- <input type="hidden" name="_flowExecutionKey"
-		value="${flowExecutionKey}" />
-	<input type="submit" name="_eventId_show-list-of-doctors" value="show-list-of doctors" /> --%>
+
 

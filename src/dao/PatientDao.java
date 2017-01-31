@@ -36,5 +36,12 @@ public class PatientDao extends UserDao implements Serializable  {
 		System.out.println("Patient registered");
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List <Patient> getPatientByUsername(String username){
+		Criteria crit = session().createCriteria(Patient.class);
+		crit.add(Restrictions.eq("username",username));
+		
+		return crit.list();
+	}
 	
 }
