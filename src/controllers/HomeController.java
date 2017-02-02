@@ -2,7 +2,6 @@ package controllers;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +9,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,12 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import dao.Doctor;
+import dao.Patient;
 import service.DoctorsService;
+import service.PatientsService;
 
 @Controller
 public class HomeController {
 	@Autowired
 	private DoctorsService doctorService;
+	
+	@Autowired
+	private PatientsService patientService;
 
 	@RequestMapping("/")
 	public String showHome() {
@@ -48,7 +49,7 @@ public class HomeController {
 			System.out.println("Authority is "+grantedAuthority );
 				if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")  ) {
 					System.out.println("This is admin");
-					schedule = doctorService.showSchedules();
+					schedule = doctorService.showSchedules();//!!!
 				}
 
 				else {
@@ -83,6 +84,8 @@ public class HomeController {
 
 		return data;
 	}
+	
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/bookingAppointment", method = RequestMethod.POST)
@@ -108,6 +111,21 @@ public class HomeController {
 		Map<String, Object> data = new HashMap<String, Object>();
 
 		data.put("doctorsList", doctorsList);
+
+		return data;
+	}
+	
+	@RequestMapping(value = "/getPatients-list-for-admin", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> ShowPatientsForAdmin() {
+
+		List<Patient> patientsList = null;
+
+		patientsList = patientService.showPatientsListForAdmin();
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("patientsList", patientsList);
 
 		return data;
 	}

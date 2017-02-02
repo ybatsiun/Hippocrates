@@ -43,5 +43,13 @@ public class PatientDao extends UserDao implements Serializable  {
 		
 		return crit.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Patient> showDoctorsForAdmin() {
+       Criteria crit = session().createCriteria(Patient.class);
+		
+		return crit.list();
+		
+	}
 	
 }
