@@ -31,7 +31,7 @@ public class HomeController {
 	@RequestMapping("/")
 	public String showHome() {
 		System.out.println("I am showHome() controller ! ");
-
+doctorService.testCalendar();
 		return "home";
 	}
 

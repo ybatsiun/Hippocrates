@@ -53,4 +53,9 @@ public class DoctorsService implements Serializable {
 		List<Doctor> scheduleForAdmin = doctorDao.showSchedules();
 		return scheduleForAdmin;
 	}
+
+	public void testCalendar() {
+		doctorDao.testCalendar();
+		
+	}
 }
