@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -14,7 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name="calendar")
-public class Calendar {
+public class Calendar implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	public int Id;
 

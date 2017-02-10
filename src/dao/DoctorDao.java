@@ -170,7 +170,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 	public void testCalendar() {
 
-		for (int i = 1; i < 367; i++) {
+		/*for (int i = 1; i < 367; i++) {
 
 			for (int a = 9; a < 18; a++) {
 
@@ -188,7 +188,7 @@ public class DoctorDao extends UserDao implements Serializable {
 					session().save(calendar);
 				}
 			}
-		}
+		}*/
 
 	}
 

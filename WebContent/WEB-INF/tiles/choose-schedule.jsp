@@ -6,39 +6,79 @@
 
 Choose a schedule you want
 
-<sf:form action="${flowExecutionUrl}&_eventId=schedule-is-choosen"
-	commandName="doctor">
+<sf:form id=form action="${flowExecutionUrl}&_eventId=schedule-is-choosen"
+	commandName="schedule">
 
-	<table class=formatable>
+	<table id=table class=formatable>
 
-		<tr>
-			<td>Monday 10-11 :</td>
-			<td><form:checkbox path="Mn_10" name="Mn_10" /></td>
-		</tr>
 
-		<tr>
-			<td>Monday 11-12 :</td>
-			<td><form:checkbox path="Mn_11" name="Mn_11" /></td>
-	</tr>
-
-		<tr>
-			<td>Monday 12-13 :</td>
-			<td><form:checkbox path="Mn_12" name="Mn_12" /></td>
-	</tr>
+		
 
 		<tr>
 			<td colspan="2"><input class="control" type="submit"
 				value="Finish registration" /></td></tr>
 	</table>
 
-
-
-
-
-
-
 </sf:form>
 
-<%-- <a href="${flowExecutionUrl}&_eventId=schedule-is-choosen"><input
-	type="submit" name="schedule-is-choosen"
-	value="confirm choosen schedule" /></a>  --%>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+<!--
+	function showSchedule() {
+	var days = ["Monday", "Tuesday", "Wednesday","Thursday","Friday"];
+	var f = document.createElement("form");
+	var tbl = document.createElement('table');
+	
+	
+	for (var i=0;i<5;i++){
+		for (var a=8;a<18;a++){
+			for (var b=0;b<60;b+=15){
+				
+				var time = new Date(17, 2, 8, a, b, 0, 0);
+				
+				var tr = document.createElement('tr');
+				var td0 = document.createElement('td');
+				var td1 = document.createElement('td');
+				
+				td0.appendChild(document.createTextNode("Day: "+days[i]+" .Time: "+ time.getTime()));
+				
+				var i = document.createElement("input"); 
+				i.setAttribute('type',"checkbox");
+				i.setAttribute('name',schedule <days[i],time.getTime());
+				i.setAttribute('path',schedule <days[i],time.getTime());
+				td1.appendChild(i);
+				
+				tr.appendChild(td0);
+				tr.appendChild(td1);
+				
+				table.appendChild(tr);
+				
+			}
+		}
+		
+	}
+	
+	var tr0 = document.createElement('tr');
+	var td3 = document.createElement('td');
+	var i0 = document.createElement("input"); 
+	i0.setAttribute('type',"submit");
+	i0.setAttribute('name',"Finish registration");
+	td3.appendChild(i0);
+	tr0.appendChild(td3);
+	table.appendChild(tr0);
+	
+		
+	}
+
+	
+
+	function onLoad() {
+
+		showSchedule();
+
+	}
+
+	$(document).ready(onLoad);
+//-->
+</script>

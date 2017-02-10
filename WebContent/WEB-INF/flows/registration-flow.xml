@@ -9,15 +9,17 @@
 
     <var name="admin" class="dao.Admin" />
 
-	<var name="adminsService" class="service.AdminsService" />
+	 <var name="adminsService" class="service.AdminsService" />
 
 	<var name="patient" class="dao.Patient" />
 
-	<var name="patientsService" class="service.PatientsService" />
+ 	<var name="patientsService" class="service.PatientsService" />
 	
 	<var name="doctor" class="dao.Doctor" />
+	
+	 <var name="schedule" class="dao.Schedule" />
 
-	<var name="doctorsService" class="service.DoctorsService" />
+     <var name="doctorsService" class="service.DoctorsService" />   
 
 	<view-state id="create-new-account">
 
@@ -48,11 +50,11 @@
 	</view-state>
 	
 	<action-state id="creatingDoctor">
-		<evaluate expression="doctorsService.createDoctor(doctor)"></evaluate>
+		<!-- <evaluate expression="doctorsService.createDoctor(doctor,schedule)"></evaluate> -->
 		<transition to="registration-completed"></transition>
 	</action-state>
 
-	<view-state id="choose-schedule" model="doctor">
+	<view-state id="choose-schedule" model="schedule">
 
 		<transition on="schedule-is-choosen" to="creatingDoctor"></transition>
 
