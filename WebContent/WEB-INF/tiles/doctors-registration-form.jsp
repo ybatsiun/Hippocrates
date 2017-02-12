@@ -64,10 +64,7 @@ Doctor's registration form
 				</td>
 		</tr>
 		
-		<%-- <tr>
-			<td>Monday 11-12 : </td>
-			<td><form:checkbox path="Mn_11" name="Mn_11" /> </td>
-		</tr> --%>
+		
 		
 		
 	 <tr>

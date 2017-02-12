@@ -6,17 +6,11 @@
 
 Choose a schedule you want
 
-<sf:form id=form action="${flowExecutionUrl}&_eventId=schedule-is-choosen"
+<sf:form id="form" action="javascript: formJSON();"
 	commandName="schedule">
 
-	<table id=table class=formatable>
+	<table id="table" class=formatable>
 
-
-		
-
-		<tr>
-			<td colspan="2"><input class="control" type="submit"
-				value="Finish registration" /></td></tr>
 	</table>
 
 </sf:form>
@@ -26,33 +20,40 @@ Choose a schedule you want
 <script type="text/javascript">
 <!--
 	function showSchedule() {
+	
+	var i;
 	var days = ["Monday", "Tuesday", "Wednesday","Thursday","Friday"];
-	var f = document.createElement("form");
-	var tbl = document.createElement('table');
 	
+
 	
-	for (var i=0;i<5;i++){
+	for ( i=0;i<5;i++){
+		
 		for (var a=8;a<18;a++){
 			for (var b=0;b<60;b+=15){
-				
-				var time = new Date(17, 2, 8, a, b, 0, 0);
+				(function(i){var time = new Date(17, 1, 8, a, b, 0, 0);
 				
 				var tr = document.createElement('tr');
 				var td0 = document.createElement('td');
 				var td1 = document.createElement('td');
 				
-				td0.appendChild(document.createTextNode("Day: "+days[i]+" .Time: "+ time.getTime()));
+				td0.appendChild(document.createTextNode("Day: "+days[i]+" .Time: "+ time.toLocaleTimeString()));
+				
+				/* console.log("Variable i is "+i+". Day is "+days[i]+" .Time:"+time.toLocaleString()) */ 
 				
 				var i = document.createElement("input"); 
 				i.setAttribute('type',"checkbox");
-				i.setAttribute('name',schedule <days[i],time.getTime());
-				i.setAttribute('path',schedule <days[i],time.getTime());
+				i.setAttribute('data-time',time.toLocaleString()); 
+				i.setAttribute('data-day',days[i]); 
+			 	i.setAttribute('name',"monday" ); 
+			/* 	i.setAttribute('path',"monday" ); */
 				td1.appendChild(i);
 				
 				tr.appendChild(td0);
 				tr.appendChild(td1);
 				
-				table.appendChild(tr);
+				table.appendChild(tr)})(i);
+				
+				
 				
 			}
 		}
@@ -63,20 +64,50 @@ Choose a schedule you want
 	var td3 = document.createElement('td');
 	var i0 = document.createElement("input"); 
 	i0.setAttribute('type',"submit");
-	i0.setAttribute('name',"Finish registration");
+	i0.setAttribute('value',"Finish registration");
 	td3.appendChild(i0);
 	tr0.appendChild(td3);
 	table.appendChild(tr0);
+	table.appendChild(tr0)
+	form.appendChild(table);
+	form.appendChild(i0);
 	
 		
 	}
 
-	
+	 
 
 	function onLoad() {
 
 		showSchedule();
+	
 
+	}
+	
+	function formJSON(){
+		var fields = {};
+		$("#form").find(":checkbox").each(function() {
+		   
+		    fields[this.input] = $(this).val();
+		    console.log($(this).val());
+		    fields[this.day] = $(this).day;
+		    console.log($(this).day);
+		    fields[this.time] = $(this).time;
+		    console.log($(this).time);
+		});
+		console.log("JSON formed");
+		
+		$.ajax({
+			type : "POST",
+			url : "testingJSON",
+			data : fields,
+			success : function(result) {
+				alert(" performed successfully");
+			},
+			error : function(result) {
+				alert('error');
+			}
+		});
 	}
 
 	$(document).ready(onLoad);

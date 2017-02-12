@@ -6,12 +6,10 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.sql.DataSource;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,7 @@ public class DoctorDao extends UserDao implements Serializable {
 	/**
 	 * 
 	 */
-	private NamedParameterJdbcTemplate jdbc;
+	
 	@Autowired
 	private PatientDao patientDao;
 	/*
@@ -32,10 +30,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Autowired
-	public void setDataSource(DataSource jdbc) {
-		this.jdbc = new NamedParameterJdbcTemplate(jdbc);
-	}
+	
 
 	public void createDoctor(Doctor doctor) {
 		session().save(doctor);

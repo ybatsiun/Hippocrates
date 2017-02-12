@@ -49,16 +49,18 @@
 
 	</view-state>
 	
-	<action-state id="creatingDoctor">
-		<!-- <evaluate expression="doctorsService.createDoctor(doctor,schedule)"></evaluate> -->
-		<transition to="registration-completed"></transition>
-	</action-state>
-
-	<view-state id="choose-schedule" model="schedule">
+	<view-state id="choose-schedule"    >
 
 		<transition on="schedule-is-choosen" to="creatingDoctor"></transition>
 
 	</view-state>
+	
+	<action-state id="creatingDoctor">
+		 <evaluate expression="doctorsService.createDoctor(doctor,schedule)"></evaluate> 
+		<transition to="registration-completed"></transition>
+	</action-state>
+
+	
 
 
 
