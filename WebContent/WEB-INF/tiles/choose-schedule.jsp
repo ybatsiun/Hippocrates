@@ -6,7 +6,7 @@
 
 Choose a schedule you want
 
-<sf:form id="form" action="javascript: formJSON();"
+<sf:form id="form" action="${flowExecutionUrl}&_eventId=schedule-is-choosen" 
 	commandName="schedule">
 
 	<table id="table" class=formatable>
@@ -42,11 +42,12 @@ Choose a schedule you want
 				
 				var i = document.createElement("input"); 
 				i.setAttribute('type',"checkbox");
-				i.setAttribute('data-time',time.toLocaleString()); 
-				i.setAttribute('data-day',days[i]); 
+				/* i.setAttribute('data-time',time.toLocaleString()); 
+				i.setAttribute('data-day',days[i]);  */
 			 	i.setAttribute('name',"monday" ); 
-			/* 	i.setAttribute('path',"monday" ); */
-				td1.appendChild(i);
+			 	i.setAttribute('path',"monday" ); 
+			    form.appendChild(i);
+			 	td1.appendChild(i);
 				
 				tr.appendChild(td0);
 				tr.appendChild(td1);

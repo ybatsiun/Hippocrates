@@ -319,6 +319,12 @@ public class Doctor implements Serializable {
 		this.email = email;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getField() {
 		return field;
 	}
