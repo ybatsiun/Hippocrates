@@ -1,6 +1,8 @@
 package dao;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -12,6 +14,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "doctors")
 public class Doctor implements Serializable {
+
+	
+	public HashMap<String, LocalDateTime> schedule;
+	
+	public HashMap<String, LocalDateTime> getSchedule() {
+		return schedule;
+	}
+	public void setSchedule(HashMap<String, LocalDateTime> schedule) {
+		this.schedule = schedule;
+	}
 
 	public String username;
 
@@ -34,10 +46,16 @@ public class Doctor implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public List<Calendar> calendar;
-
+	public List<Calendar> items;
 	/**/
 	
 
+	public List<Calendar> getItems() {
+		return items;
+	}
+	public void setItems(List<Calendar> items) {
+		this.items = items;
+	}
 	@Id
 	public String getUsername() {
 		return username;

@@ -34,6 +34,12 @@ public class Calendar implements Serializable {
 	
 	public Timestamp dateTime ;
 	
+	public Calendar(Timestamp dateTime, String day) {
+		super();
+		this.dateTime = dateTime;
+		this.day = day;
+	}
+
 	public String day;
 	
 	public boolean isScheduled = false;
@@ -44,6 +50,7 @@ public class Calendar implements Serializable {
 	public int patientPhoneNumber;
 	public String patientEmail = null;
 	public String complain = null;
+	
 	@Column(name="isScheduled")
 	public boolean isScheduled() {
 		return isScheduled;
