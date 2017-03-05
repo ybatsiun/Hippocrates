@@ -12,7 +12,7 @@ Doctor's registration form
 <br/>
 
 <sf:form  
-	action="${flowExecutionUrl}&_eventId=submit-registration"
+	action="${pageContext.request.contextPath}/choose-schedule"
 	commandName="doctor">
 	
 	
@@ -64,10 +64,11 @@ Doctor's registration form
 				</td>
 		</tr>
 		
-		<%-- <tr>
-			<td>Monday 11-12 : </td>
-			<td><form:checkbox path="Mn_11" name="Mn_11" /> </td>
-		</tr> --%>
+		<tr>
+				<td>Pick up the time you want to work:</td>
+				<td><form:checkboxes path="items" items="${items}"  /> 
+				</td>
+			</tr>
 		
 		
 	 <tr>

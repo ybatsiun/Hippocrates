@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dao.Doctor;
 import dao.DoctorDao;
+import dao.Schedule;
 
 @Transactional
 @Service("DoctorsService")
@@ -24,7 +24,17 @@ public class DoctorsService implements Serializable {
 		this.doctorDao = doctorDao;
 	}
 
-	public void createDoctor(Doctor doctor) {
+	public void createDoctor(Doctor doctor,Schedule schedule) {
+		System.out.println("CreateDoctor(Doctor,Schedule) in Service ! ");
+		
+		System.out.println("Lenght of monday array is "+schedule.monday);
+		/*for (int i=0;i<schedule.monday.length;i++){
+			System.out.println("MONDAY: "+ schedule.monday[i]);
+		}*/
+		
+		
+		
+		
 		doctorDao.createDoctor(doctor);
 	}
 

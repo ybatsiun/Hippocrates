@@ -1,6 +1,7 @@
 package controllers;
 
 import java.security.Principal;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -128,6 +129,16 @@ doctorService.testCalendar();
 		data.put("patientsList", patientsList);
 
 		return data;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/testingJSON", method = RequestMethod.POST)
+	public void test(@RequestParam("input") String isScheduled,
+			@RequestParam("day") String day, @RequestParam("time") LocalTime time) {
+		
+System.out.println("Hello");		
+		
+		
 	}
 
 }

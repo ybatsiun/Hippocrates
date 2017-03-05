@@ -14,7 +14,7 @@
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename"
-			value="/BookingSystem/src/messages/messages.properties">
+			value="/Hippocrates/src/messages">
 		</property>
 	</bean>
 	<bean id="tilesViewResolver"

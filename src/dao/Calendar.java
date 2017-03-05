@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -14,7 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name="calendar")
-public class Calendar {
+public class Calendar implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	public int Id;
 
@@ -27,6 +34,12 @@ public class Calendar {
 	
 	public Timestamp dateTime ;
 	
+	public Calendar(Timestamp dateTime, String day) {
+		super();
+		this.dateTime = dateTime;
+		this.day = day;
+	}
+
 	public String day;
 	
 	public boolean isScheduled = false;
@@ -37,6 +50,7 @@ public class Calendar {
 	public int patientPhoneNumber;
 	public String patientEmail = null;
 	public String complain = null;
+	
 	@Column(name="isScheduled")
 	public boolean isScheduled() {
 		return isScheduled;
