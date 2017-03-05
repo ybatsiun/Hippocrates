@@ -1,6 +1,8 @@
 package dao;
 
 import java.io.Serializable;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -8,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "doctors")
@@ -34,9 +37,24 @@ public class Doctor implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public List<Calendar> calendar;
-
+	
 	/**/
 	
+	public ArrayList <LocalTime> monday;
+	@Transient
+	public ArrayList<LocalTime> getMonday() {
+		return monday;
+	}
+	public void setMonday(ArrayList<LocalTime> monday) {
+		this.monday = monday;
+	}
+
+/*	public ArrayList <Calendar> tuesday;
+	public ArrayList <Calendar> wednesday;
+	public ArrayList <Calendar> thursday;
+	public ArrayList <Calendar> friday;*/
+	
+
 
 	@Id
 	public String getUsername() {
