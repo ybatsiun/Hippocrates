@@ -2,6 +2,7 @@ package dao;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,7 +49,14 @@ public class Calendar implements Serializable {
 	public boolean isScheduled() {
 		return isScheduled;
 	}
-
+	/*public Calendar(Timestamp dateTime, String day) {
+		super();
+		this.dateTime = dateTime;
+		this.day = day;
+	}*/
+	public String showDateTimeAndDay() {
+		return "Calendar [dateTime=" + dateTime + ", day=" + day + "]";
+	}
 	public void setScheduled(boolean isScheduled) {
 		this.isScheduled = isScheduled;
 	}

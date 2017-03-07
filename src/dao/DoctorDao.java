@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -21,7 +22,7 @@ public class DoctorDao extends UserDao implements Serializable {
 	/**
 	 * 
 	 */
-	
+
 	@Autowired
 	private PatientDao patientDao;
 	/*
@@ -30,13 +31,60 @@ public class DoctorDao extends UserDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
-
 	public void createDoctor(Doctor doctor) {
+		
 		session().save(doctor);
+		
+	/*	for (LocalTime time : doctor.getMonday()) {
 		System.out.println("Monday time is "+ time);
 		
 		}*/
+		
+		
+		System.out.println("Creating calendar table...");
+		
+		for (int i = 1; i < 30; i++) {
+			LocalDateTime localDateTime = LocalDateTime.now().plusDays(i);
+			
+			if (localDateTime.getDayOfWeek().toString()== "SATURDAY" || localDateTime.getDayOfWeek().toString()== "SUNDAY" ) {
+				continue;
+			}
+			
+			
+			for (int a = 8; a < 18; a++) {
+
+				for (int b = 0; b < 60; b += 15) {
+
+					
+					 localDateTime = LocalDateTime.now().plusDays(i).withHour(a).withMinute(b)
+							.withSecond(0);
+					Calendar calendar = new Calendar(doctor);
+					calendar.setDateTime(Timestamp.valueOf(localDateTime));
+
+					calendar.doctor.setUsername(doctor.getUsername());
+
+					calendar.setDay(localDateTime.getDayOfWeek().toString().toString());
+					
+					
+
+				//	System.out.println("Checking timetable hits...");
+					if (calendar.getDay() == "MONDAY") {
+						for (LocalTime time : doctor.getMonday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+								/*System.out.println("For date "+ calendar.getDateTime() );
+								System.out.println("Hours check: " + calendar.getDateTime().getHours()+ " and "+ time.getHour());
+								System.out.println("Minutes check: " + calendar.getDateTime().getMinutes()+ " and "+ time.getMinute());*/
+							}
+						}
+					}
+					session().save(calendar);
+				}
+			}
+		}
+
+		
 		System.out.println("Doctor registered");
 	}
 
@@ -168,25 +216,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 	public void testCalendar() {
 
-		/*for (int i = 1; i < 367; i++) {
-
-			for (int a = 9; a < 18; a++) {
-
-				for (int b = 0; b < 60; b += 15) {
-					LocalDateTime localDateTime = LocalDateTime.now().plusDays(i).withHour(a).withMinute(b)
-							.withSecond(0);
-					Doctor doctor = new Doctor();
-					Calendar calendar = new Calendar(doctor);
-					calendar.setDateTime(Timestamp.valueOf(localDateTime));
-
-					calendar.doctor.setUsername("doc");
-
-					calendar.setDay(localDateTime.getDayOfWeek().toString().toString());
-
-					session().save(calendar);
-				}
-			}
-		}*/
+		/**/
 
 	}
 
