@@ -65,10 +65,13 @@ Doctor's registration form
 		</tr>
 		
 		<tr>
-				<td>Pick up the time you want to work:</td>
-				<td><form:checkboxes path="items" items="${items}"  /> 
+				<td>Pick up the time you want to work on Monday:</td>
+				<td><form:checkboxes path="monday" items="${monday}"  /> 
 				</td>
 			</tr>
+		
+		
+	 <tr>
 		
 		
 	 <tr>
