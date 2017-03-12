@@ -101,4 +101,9 @@
 			value="/WEB-INF/tiles/registration-completed.jsp"></put-attribute>
 	</definition>
 
+    <definition name="edit-schedule" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/edit-schedule.jsp"></put-attribute>
+	</definition>
+
 </tiles-definitions>

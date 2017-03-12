@@ -27,8 +27,8 @@ public class Calendar implements Serializable {
 	public int Id;
 
 
-	/*@ManyToOne
-	@JoinColumn(name="username")*/
+	/*@ManyToOne*/
+	@JoinColumn(name="username")
 	@Autowired
 	public Doctor doctor;
 	
@@ -37,7 +37,7 @@ public class Calendar implements Serializable {
 	
 	public String day;
 	
-	public boolean isScheduled = false;
+	public boolean isScheduled ;
 	public boolean isBusy = false;
 
 	public String patientFirstName = null;

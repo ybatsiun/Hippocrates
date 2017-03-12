@@ -3,12 +3,15 @@ package dao;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,50 +35,54 @@ public class DoctorDao extends UserDao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public void createDoctor(Doctor doctor) {
-		
+
 		session().save(doctor);
-		
-	/*	for (LocalTime time : doctor.getMonday()) {
-		System.out.println("Monday time is "+ time);
-		
-		}*/
-		
-		
+
+		/*
+		 * for (LocalTime time : doctor.getMonday()) {
+		 * System.out.println("Monday time is "+ time);
+		 * 
+		 * }
+		 */
+
 		System.out.println("Creating calendar table...");
-		
+
 		for (int i = 1; i < 30; i++) {
 			LocalDateTime localDateTime = LocalDateTime.now().plusDays(i);
-			
-			if (localDateTime.getDayOfWeek().toString()== "SATURDAY" || localDateTime.getDayOfWeek().toString()== "SUNDAY" ) {
+
+			if (localDateTime.getDayOfWeek().toString() == "SATURDAY"
+					|| localDateTime.getDayOfWeek().toString() == "SUNDAY") {
 				continue;
 			}
-			
-			
+
 			for (int a = 8; a < 18; a++) {
 
 				for (int b = 0; b < 60; b += 15) {
 
-					
-					 localDateTime = LocalDateTime.now().plusDays(i).withHour(a).withMinute(b)
-							.withSecond(0);
+					localDateTime = LocalDateTime.now().plusDays(i).withHour(a).withMinute(b).withSecond(0);
 					Calendar calendar = new Calendar(doctor);
 					calendar.setDateTime(Timestamp.valueOf(localDateTime));
 
 					calendar.doctor.setUsername(doctor.getUsername());
 
 					calendar.setDay(localDateTime.getDayOfWeek().toString().toString());
-					
-					
 
-				//	System.out.println("Checking timetable hits...");
+					// System.out.println("Checking timetable hits...");
 					if (calendar.getDay() == "MONDAY") {
 						for (LocalTime time : doctor.getMonday()) {
 							if (calendar.getDateTime().getHours() == time.getHour()
 									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
 								calendar.setScheduled(true);
-								/*System.out.println("For date "+ calendar.getDateTime() );
-								System.out.println("Hours check: " + calendar.getDateTime().getHours()+ " and "+ time.getHour());
-								System.out.println("Minutes check: " + calendar.getDateTime().getMinutes()+ " and "+ time.getMinute());*/
+								/*
+								 * System.out.println("For date "+
+								 * calendar.getDateTime() );
+								 * System.out.println("Hours check: " +
+								 * calendar.getDateTime().getHours()+ " and "+
+								 * time.getHour());
+								 * System.out.println("Minutes check: " +
+								 * calendar.getDateTime().getMinutes()+ " and "+
+								 * time.getMinute());
+								 */
 							}
 						}
 					}
@@ -84,17 +91,41 @@ public class DoctorDao extends UserDao implements Serializable {
 			}
 		}
 
-		
 		System.out.println("Doctor registered");
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Doctor> showSchedule(String username) {
-		System.out.println("Starting in DAO...");
-		Criteria crit = session().createCriteria(Doctor.class);
-		crit.add(Restrictions.eq("username", username));
+	public String showSchedule(String username) {
+	//	System.out.println("showSchedule in DAO");
 
-		return crit.list();
+		// Finding the closest Monday
+
+		LocalDate today = LocalDate.now();
+	//	System.out.println("Today is: " + today);
+		
+		do {
+			int i = 1;
+			today = today.plusDays(i);
+		} while (today.getDayOfWeek().toString() != "MONDAY");
+	//	System.out.println("The closest monday is:" + today);
+
+		Date date = java.sql.Date.valueOf(today);
+		//Taking all scheduled time sets from the closest week
+		
+		
+		
+		Query crit = session().createSQLQuery(
+				"select dateTime,day,doctors.username from doctors  "
+				+ "left outer join calendar on doctors.username = calendar.username "
+				+ "where isScheduled=true and doctors.username='" +username
+				+ "' and DATE_FORMAT(`dateTime`, '%d')="+date.getDate()
+ );
+				
+				
+		
+	
+		
+		return  crit.list().toString();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -214,11 +245,7 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
-	public void testCalendar() {
-
-		/**/
-
-	}
+	
 
 	public Doctor getDoctorByUsername(String username) {
 		return (Doctor) session().get(Doctor.class, username);

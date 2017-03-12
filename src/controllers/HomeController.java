@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import dao.Calendar;
 import dao.Doctor;
 import dao.Patient;
 import service.DoctorsService;
@@ -32,7 +33,7 @@ public class HomeController {
 	@RequestMapping("/")
 	public String showHome() {
 		System.out.println("I am showHome() controller ! ");
-doctorService.testCalendar();
+
 		return "home";
 	}
 
@@ -50,7 +51,7 @@ doctorService.testCalendar();
 			System.out.println("Authority is "+grantedAuthority );
 				if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")  ) {
 					System.out.println("This is admin");
-					schedule = doctorService.showSchedules();//!!!
+				//	schedule = doctorService.showSchedules();//!!!
 				}
 
 				else {

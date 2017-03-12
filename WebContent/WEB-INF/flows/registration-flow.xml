@@ -45,20 +45,16 @@
 
 	<view-state id="doctors-registration-form" model="doctor">
 
-		<transition on="submit-registration" to="choose-schedule"></transition>
-
-	</view-state>
-	
-	<view-state id="choose-schedule"    >
-
-		<transition on="schedule-is-choosen" to="creatingDoctor"></transition>
+		<transition on="submit-registration" to="creatingDoctor"></transition>
 
 	</view-state>
 	
 	<action-state id="creatingDoctor">
-		 <evaluate expression="doctorsService.createDoctor(doctor,schedule)"></evaluate> 
+		<evaluate expression="doctorsService.createDoctor(doctor)"></evaluate>
 		<transition to="registration-completed"></transition>
 	</action-state>
+	
+	
 
 	
 

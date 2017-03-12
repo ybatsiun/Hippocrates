@@ -1,13 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-<html>
+<%@ page language="java" contentType="text/html; charset=US-ASCII"
+	pageEncoding="US-ASCII"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-Doctor's schedule
-<div id="schedule"></div>
-<br />
+
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
@@ -82,14 +79,33 @@ for(var j=0;j<data.schedule.length;j++){
 	$(document).ready(onLoad);
 //-->
 </script>
+Here you are able to change your schedule
+<br/>
 
-<a href="${pageContext.request.contextPath}/edit-schedule"><input
-	type="submit" name="show-patients-info" value="edit your schedule" /></a>
+<sf:form  
+	action="${flowExecutionUrl}&_eventId=submit-changes"
+	commandName="doctor">
+	
+	
 
-<a href="${flowExecutionUrl}&_eventId=show-patients-info"><input
-	type="submit" name="show-patients-info" value="patient's info" /></a>
+	  <table class="formtable">
+	 	
+		<tr>
+				<td>Edit the time you want to work on Monday:</td>
+				<td><form:checkboxes path="monday" items="${monday}"  /> 
+				</td>
+			</tr>
+		
+		
+	
+		
+		
+	 <tr>
+			<td class="label"></td>
+			<td><input class="control" value="submit changes and watch your new schedule" type="submit" /></td>
+		</tr> 
+	</table>
 
-<a href="${flowExecutionUrl}&_eventId=enter-complaint"><input
-	type="submit" name="enter-complaint" value="enter your complaint" /></a>
+</sf:form>
 
-</html>
+

@@ -12,7 +12,7 @@ Doctor's registration form
 <br/>
 
 <sf:form  
-	action="${pageContext.request.contextPath}/choose-schedule"
+	action="${pageContext.request.contextPath}/registration-completed"
 	commandName="doctor">
 	
 	

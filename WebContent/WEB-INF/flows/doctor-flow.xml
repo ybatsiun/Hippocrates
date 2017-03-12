@@ -16,7 +16,10 @@
 	<view-state id="doctors-schedule">
 	
 		<transition on="show-patients-info" to="patients-info"></transition>
-	
+
+		
+		
+		<transition on="show-edit-schedule" to="edit-schedule"></transition>
 	</view-state>
 
 
@@ -24,21 +27,23 @@
 
 	</view-state>
 
+	
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 </flow>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
