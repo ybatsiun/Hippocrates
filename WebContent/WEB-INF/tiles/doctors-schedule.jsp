@@ -13,19 +13,14 @@ Doctor's schedule
 <script type="text/javascript">
 <!--
 	function showSchedule(data) {
-
 		$("div#schedule").html("");
 for(var j=0;j<data.schedule.length;j++){
 		var doctor = data.schedule[j];
-
 		var scheduleDiv = document.createElement("div");
 		scheduleDiv.setAttribute("class", "doctor");
-
 		var timeSpan = document.createElement("span");
 		timeSpan.appendChild(document.createTextNode(doctor.username + ":"));
-
 		scheduleDiv.appendChild(timeSpan);
-
 		for (var i = 10; i < 13; i++) {
 			
 			const patientFirstName=['mn_'+i+"_firstname"];
@@ -40,7 +35,6 @@ for(var j=0;j<data.schedule.length;j++){
 				var a = document.createElement("span");
 				a.appendChild(document.createTextNode([ day ] + "/"));
 				scheduleDiv.appendChild(a);
-
 				var b = document.createElement("span");
 				if (doctor[isBusy] == false) {
 					
@@ -62,23 +56,16 @@ for(var j=0;j<data.schedule.length;j++){
 				}
 				scheduleDiv.appendChild(b);
 			} else {
-
 			}
 		}
-
 		$("div#schedule").append(scheduleDiv);
 	}}
-
 	function updatePage() {
 		$.getJSON("<c:url value="/getDoctors-schedule"/>", showSchedule);
 	}
-
 	function onLoad() {
-
 		updatePage();
-
 	}
-
 	$(document).ready(onLoad);
 //-->
 </script>

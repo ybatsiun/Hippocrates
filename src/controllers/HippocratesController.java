@@ -9,10 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.ParseException;
-import org.json.simple.parser.JSONParser;
+
 
 import dao.Doctor;
 import dao.DoctorDao;

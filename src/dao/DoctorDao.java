@@ -38,12 +38,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		session().save(doctor);
 
-		/*
-		 * for (LocalTime time : doctor.getMonday()) {
-		 * System.out.println("Monday time is "+ time);
-		 * 
-		 * }
-		 */
+		
 
 		System.out.println("Creating calendar table...");
 
@@ -95,7 +90,7 @@ public class DoctorDao extends UserDao implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String showSchedule(String username) {
+	public List<Doctor> showSchedule(String username) {
 	//	System.out.println("showSchedule in DAO");
 
 		// Finding the closest Monday
@@ -125,7 +120,7 @@ public class DoctorDao extends UserDao implements Serializable {
 		
 	
 		
-		return  crit.list().toString();
+		return  crit.list();
 	}
 
 	@SuppressWarnings("unchecked")
