@@ -4,62 +4,56 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <html>
-
+<%@ page buffer="10192kb" %>
 Doctor's schedule
 <div id="schedule"></div>
 <br />
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
-<!--
+
 	function showSchedule(data) {
 		$("div#schedule").html("");
-for(var j=0;j<data.schedule.length;j++){
-		var doctor = data.schedule[j];
-		var scheduleDiv = document.createElement("div");
+		
+	
+		
+		
+		
+		
+		  for(var j=0;j<data.schedule.length;j++){
+		
+    	 var doctor = data.schedule[j];
+    	 
+    	 
+		 var scheduleDiv = document.createElement("div");
+		
 		scheduleDiv.setAttribute("class", "doctor");
+		
 		var timeSpan = document.createElement("span");
-		timeSpan.appendChild(document.createTextNode(doctor.username + ":"));
+		
+		var date = new Date(doctor.dateTime);
+		timeSpan.appendChild(document.createTextNode(date.toDateString() + " : " + "Time: " + date.getHours()+":"+date.getMinutes()+ " "));
 		scheduleDiv.appendChild(timeSpan);
-		for (var i = 10; i < 13; i++) {
+		
+		
+		var patientNameSpan= document.createElement("span"); 
+		
+			if (doctor.busy== true){
 			
-			const patientFirstName=['mn_'+i+"_firstname"];
-			const patientLastName=['mn_'+i+"_lastname"];
-			const patientPhoneNumber=['mn_'+i+"_phonenumber"];
+			patientNameSpan.appendChild(document.createTextNode(doctor.patientFirstName + " " + doctor.patientLastName));
 			
-			const day = [ 'mn_' + i ];
-			const text = [ 'mn_' + i + '_text' ];
-			const isBusy= ['mn_'+i+'_isbusy'];
-			
-			if (doctor[day] == true) {
-				var a = document.createElement("span");
-				a.appendChild(document.createTextNode([ day ] + "/"));
-				scheduleDiv.appendChild(a);
-				var b = document.createElement("span");
-				if (doctor[isBusy] == false) {
-					
-					b.appendChild(document.createTextNode("There is no appointment for this time."));
-					
-					
-				} else {
-					b.appendChild(document.createTextNode(doctor[patientFirstName]
-									+ " "));
-					
-					b.appendChild(document.createTextNode(doctor[patientLastName]
-							+ " "));
-					
-					b.appendChild(document.createTextNode(doctor[patientPhoneNumber]
-							+ ";"));
-					
-					b.appendChild(document.createTextNode(doctor[text]
-					+ ";"));
-				}
-				scheduleDiv.appendChild(b);
-			} else {
-			}
+		} else {
+			patientNameSpan.appendChild(document.createTextNode("There is no appointment for this time "));
 		}
-		$("div#schedule").append(scheduleDiv);
-	}}
+			
+			scheduleDiv.appendChild(patientNameSpan);
+			$("div#schedule").append(scheduleDiv);
+    	 }
+     
+		
+		
+		
+		}
 	function updatePage() {
 		$.getJSON("<c:url value="/getDoctors-schedule"/>", showSchedule);
 	}
@@ -70,6 +64,7 @@ for(var j=0;j<data.schedule.length;j++){
 //-->
 </script>
 
+<% out.println("<p>bufferSize: " + out.getBufferSize() + " remaining: " + out.getRemaining() + " used: " + (out.getBufferSize() - out.getRemaining()) + " autoFlush: " + out.isAutoFlush() + "</p><br>"); %>
 <a href="${pageContext.request.contextPath}/edit-schedule"><input
 	type="submit" name="show-patients-info" value="edit your schedule" /></a>
 

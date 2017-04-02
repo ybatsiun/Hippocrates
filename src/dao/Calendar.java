@@ -27,7 +27,7 @@ public class Calendar implements Serializable {
 	public int Id;
 
 
-	/*@ManyToOne*/
+	@ManyToOne
 	@JoinColumn(name="username")
 	@Autowired
 	public Doctor doctor;
@@ -37,37 +37,47 @@ public class Calendar implements Serializable {
 	
 	public String day;
 	
-	public boolean isScheduled ;
-	public boolean isBusy = false;
+	@Column(name="isScheduled")
+	public boolean scheduled ;
+	public boolean busy = false;
 
 	public String patientFirstName = null;
 	public String patientLastName = null;
 	public int patientPhoneNumber;
 	public String patientEmail = null;
 	public String complain = null;
-	@Column(name="isScheduled")
+	
+	
+	
 	public boolean isScheduled() {
-		return isScheduled;
+		return scheduled;
 	}
-	/*public Calendar(Timestamp dateTime, String day) {
-		super();
-		this.dateTime = dateTime;
-		this.day = day;
-	}*/
+
+	
+
+	public void setScheduled(boolean scheduled) {
+		this.scheduled = scheduled;
+	}
+
+
+
 	public String showDateTimeAndDay() {
 		return "Calendar [dateTime=" + dateTime + ", day=" + day + "]";
 	}
-	public void setScheduled(boolean isScheduled) {
-		this.isScheduled = isScheduled;
-	}
-	@Column(name="isBusy")
+	
+	
+
 	public boolean isBusy() {
-		return isBusy;
+		return busy;
 	}
 
-	public void setBusy(boolean isBusy) {
-		this.isBusy = isBusy;
+
+
+	public void setBusy(boolean busy) {
+		this.busy = busy;
 	}
+
+
 
 	public String getPatientFirstName() {
 		return patientFirstName;

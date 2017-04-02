@@ -1,5 +1,8 @@
 package dao;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
@@ -7,14 +10,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -80,7 +84,7 @@ public class DoctorDao extends UserDao implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Timestamp> showSchedule(String username) {
+	public List<Timestamp> showScheduledTimeForClosestWeek(String username) {
 		// System.out.println("showSchedule in DAO");
 
 		// Finding the closest Monday
@@ -235,49 +239,87 @@ public class DoctorDao extends UserDao implements Serializable {
 			closestMonday = closestMonday.plusDays(i);
 		} while (closestMonday.getDayOfWeek().toString() != "SUNDAY");
 		System.out.println("date of closest monday  is " + closestMonday);
-		
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String formattedString = closestMonday.format(formatter);
-		
-		
-		
+
 		System.out.println("date of closest monday  is " + formattedString);
-	
 
 		// Deleting all scheduled appointments which are ahead of the closest
 		// monday
 		System.out.println("Before SQL update statement...");
 
-		Query crit = session()
-				.createSQLQuery(" update calendar " + "left outer join doctors on doctors.username=calendar.username "
-						+ "set isScheduled=false, isBusy=false where calendar.username= '" + username
-						+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString + "'"
-						);
-
-		
+		Query crit = session().createSQLQuery(" update calendar "
+				+ "left outer join doctors on doctors.username=calendar.username "
+				+ "set isScheduled=false, isBusy=false where calendar.username= '" + username
+				+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString + "'");
 
 		crit.executeUpdate();
 
 		System.out.println("After SQL update statement");
-		
+
 		// Applying edited schedule
-		
-		
+
 		for (LocalTime time : monday) {
 
 			// time = java.sql.Time.valueOf(time);
 
-			Query editSchedule = session().createSQLQuery(
-					" update calendar " + "left outer join doctors on doctors.username=calendar.username "
-							+ "set isScheduled=true where calendar.username= '" + username
-							+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
-							
-							+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
-							+ " and DATE_FORMAT(`dateTime`, '%i') = " + time.getMinute());
+			Query editSchedule = session().createSQLQuery(" update calendar "
+					+ "left outer join doctors on doctors.username=calendar.username "
+					+ "set isScheduled=true where calendar.username= '" + username
+					+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
+
+					+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
+					+ " and DATE_FORMAT(`dateTime`, '%i') = " + time.getMinute());
 
 			editSchedule.executeUpdate();
 		}
 
 		System.out.println("Finished 'editSchedule' method");
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> showDoctorsScheduleForNextMonth(String username) {
+		// Getting JSON of Calendar entity for current Doctor for the next month
+
+		LocalDate today = LocalDate.now();
+		java.sql.Date now = java.sql.Date.valueOf(today);
+		
+		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusMonths(1));
+		
+		
+		Criteria crit = session().createCriteria(Calendar.class)
+				.setProjection(Projections.projectionList().
+						add(Projections.property("dateTime"), "dateTime")
+						.add(Projections.property("scheduled"), "scheduled")
+						.add(Projections.property("day"), "day")
+						.add(Projections.property("busy"), "busy")
+						.add(Projections.property("patientFirstName"), "patientFirstName")
+						.add(Projections.property("patientLastName"), "patientLastName"))
+						.setResultTransformer(Transformers.aliasToBean(Calendar.class))
+						
+						
+				.add(Restrictions.eq("doctor.username", username))
+				.add(Restrictions.eq("scheduled", true))
+				.add(Restrictions.ge("dateTime", now))
+				.add(Restrictions.le("dateTime", plusAMonth))
+				;
+
+		String FILENAME = "K:\\filename.txt";
+
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
+
+			bw.write("Amount of enteties returned in showDoctorsScheduleForNextMonth is " + crit.list().size());
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return crit.list();
+	}
+
 }

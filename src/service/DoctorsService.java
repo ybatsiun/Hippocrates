@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import dao.Calendar;
 import dao.Doctor;
 import dao.DoctorDao;
 
@@ -31,9 +32,15 @@ public class DoctorsService implements Serializable {
 		doctorDao.createDoctor(doctor);
 	}
 
-	public List<Timestamp> showSchedule(String username) {
+	public List<Timestamp> showScheduledTimeForClosestWeek(String username) {
 		System.out.println("Service:redirecting to DAO... ");
-		List<Timestamp> schedule = doctorDao.showSchedule(username);
+		List<Timestamp> schedule = doctorDao.showScheduledTimeForClosestWeek(username);
+		return schedule;
+	}
+	
+	public List<Calendar> showDoctorsScheduleForNextMonth(String username) {
+		System.out.println("Service:redirecting to DAO... ");
+		List<Calendar> schedule = doctorDao.showDoctorsScheduleForNextMonth(username);
 		return schedule;
 	}
 

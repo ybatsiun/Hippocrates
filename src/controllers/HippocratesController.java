@@ -18,6 +18,7 @@ import dao.Doctor;
 import dao.DoctorDao;
 import dao.Patient;
 import dao.PatientDao;
+import service.DoctorsService;
 
 @Controller
 public class HippocratesController {
@@ -27,6 +28,9 @@ public class HippocratesController {
 
 	@Autowired
 	DoctorDao doctorDao;
+	
+	@Autowired
+	private DoctorsService doctorService;
 
 	@RequestMapping("/authenticated")
 	public String showAuthenticated() {
@@ -77,7 +81,7 @@ public class HippocratesController {
 
 		System.out.println("Introducing model");
 
-		List<Timestamp> input = doctorDao.showSchedule(principal.getName());
+		List<Timestamp> input = doctorService.showScheduledTimeForClosestWeek(principal.getName());
 
 		for (int i = 0; i < input.size(); i++) {
 			int minutes = input.get(i).getMinutes();
