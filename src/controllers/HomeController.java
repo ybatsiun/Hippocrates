@@ -1,8 +1,8 @@
 package controllers;
 
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import dao.Calendar;
 import dao.Doctor;
 import dao.Patient;
 import service.DoctorsService;
@@ -41,9 +40,9 @@ public class HomeController {
 	@ResponseBody
 	public Map<String, Object> ShowDoctorsSchedule(Principal principal, Authentication a) {
 
-		List<Doctor> schedule = null;
+		List<Timestamp> schedule = null;
 		if (principal == null) {
-			schedule = new ArrayList<Doctor>();
+			schedule = null;
 		}
 
 		else {
@@ -57,7 +56,7 @@ public class HomeController {
 				else {
 					String username = principal.getName();
 					System.out.println("Got username at controller:" + username);
-					schedule = doctorService.showSchedule(username);
+					schedule = doctorService.showSchedule(username);// temporary
 					System.out.println("Finished running doctorService.showSchedule(username)");
 
 				}

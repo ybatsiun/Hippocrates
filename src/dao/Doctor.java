@@ -24,6 +24,17 @@ public class Doctor implements Serializable {
 
 	public String firstName;
 
+	@Override
+	public String toString() {
+		return "Doctor [username=" + username + ", enabled=" + enabled + ", authority=" + authority + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber + ", email=" + email
+				+ ", field=" + field + ", password=" + password + ", monday=" + monday + "]";
+	}
+	public Doctor(ArrayList<LocalTime> monday) {
+		super();
+		this.monday = monday;
+	}
+
 	public String lastName;
 
 	public int phoneNumber;

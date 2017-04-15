@@ -105,5 +105,10 @@
 		<put-attribute name="content"
 			value="/WEB-INF/tiles/edit-schedule.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="edition-completed" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/edition-completed.jsp"></put-attribute>
+	</definition>
 
 </tiles-definitions>

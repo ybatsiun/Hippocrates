@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,11 +40,9 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		session().save(doctor);
 
-		
-
 		System.out.println("Creating calendar table...");
 
-		for (int i = 1; i < 30; i++) {
+		for (int i = 1; i < 100; i++) {
 			LocalDateTime localDateTime = LocalDateTime.now().plusDays(i);
 
 			if (localDateTime.getDayOfWeek().toString() == "SATURDAY"
@@ -62,22 +62,12 @@ public class DoctorDao extends UserDao implements Serializable {
 
 					calendar.setDay(localDateTime.getDayOfWeek().toString().toString());
 
-					// System.out.println("Checking timetable hits...");
 					if (calendar.getDay() == "MONDAY") {
 						for (LocalTime time : doctor.getMonday()) {
 							if (calendar.getDateTime().getHours() == time.getHour()
 									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
 								calendar.setScheduled(true);
-								/*
-								 * System.out.println("For date "+
-								 * calendar.getDateTime() );
-								 * System.out.println("Hours check: " +
-								 * calendar.getDateTime().getHours()+ " and "+
-								 * time.getHour());
-								 * System.out.println("Minutes check: " +
-								 * calendar.getDateTime().getMinutes()+ " and "+
-								 * time.getMinute());
-								 */
+
 							}
 						}
 					}
@@ -90,37 +80,27 @@ public class DoctorDao extends UserDao implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Doctor> showSchedule(String username) {
-	//	System.out.println("showSchedule in DAO");
+	public List<Timestamp> showSchedule(String username) {
+		// System.out.println("showSchedule in DAO");
 
 		// Finding the closest Monday
 
 		LocalDate today = LocalDate.now();
-	//	System.out.println("Today is: " + today);
-		
+
 		do {
 			int i = 1;
 			today = today.plusDays(i);
 		} while (today.getDayOfWeek().toString() != "MONDAY");
-	//	System.out.println("The closest monday is:" + today);
 
 		Date date = java.sql.Date.valueOf(today);
-		//Taking all scheduled time sets from the closest week
-		
-		
-		
-		Query crit = session().createSQLQuery(
-				"select dateTime,day,doctors.username from doctors  "
+		// Taking all scheduled time sets from the closest week
+
+		Query crit = session().createSQLQuery("select dateTime AS 'calendar.dateTime' from doctors  "
 				+ "left outer join calendar on doctors.username = calendar.username "
-				+ "where isScheduled=true and doctors.username='" +username
-				+ "' and DATE_FORMAT(`dateTime`, '%d')="+date.getDate()
- );
-				
-				
-		
-	
-		
-		return  crit.list();
+				+ "where isScheduled=true and doctors.username='" + username + "' and DATE_FORMAT(`dateTime`, '%d')="
+				+ date.getDate());
+
+		return crit.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -240,9 +220,64 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
-	
-
 	public Doctor getDoctorByUsername(String username) {
 		return (Doctor) session().get(Doctor.class, username);
+	}
+
+	public void editSchedule(ArrayList<LocalTime> monday, String username) {
+
+		// Getting the closest monday
+
+		LocalDateTime closestMonday = LocalDateTime.now();
+
+		do {
+			int i = 1;
+			closestMonday = closestMonday.plusDays(i);
+		} while (closestMonday.getDayOfWeek().toString() != "SUNDAY");
+		System.out.println("date of closest monday  is " + closestMonday);
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String formattedString = closestMonday.format(formatter);
+		
+		
+		
+		System.out.println("date of closest monday  is " + formattedString);
+	
+
+		// Deleting all scheduled appointments which are ahead of the closest
+		// monday
+		System.out.println("Before SQL update statement...");
+
+		Query crit = session()
+				.createSQLQuery(" update calendar " + "left outer join doctors on doctors.username=calendar.username "
+						+ "set isScheduled=false, isBusy=false where calendar.username= '" + username
+						+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString + "'"
+						);
+
+		
+
+		crit.executeUpdate();
+
+		System.out.println("After SQL update statement");
+		
+		// Applying edited schedule
+		
+		
+		for (LocalTime time : monday) {
+
+			// time = java.sql.Time.valueOf(time);
+
+			Query editSchedule = session().createSQLQuery(
+					" update calendar " + "left outer join doctors on doctors.username=calendar.username "
+							+ "set isScheduled=true where calendar.username= '" + username
+							+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
+							
+							+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
+							+ " and DATE_FORMAT(`dateTime`, '%i') = " + time.getMinute());
+
+			editSchedule.executeUpdate();
+		}
+
+		System.out.println("Finished 'editSchedule' method");
 	}
 }
