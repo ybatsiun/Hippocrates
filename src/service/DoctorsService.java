@@ -59,6 +59,11 @@ public class DoctorsService implements Serializable {
 		return doctorsListForAdmin;
 	}
 
+	public void bookAnAppointmentFor(String doctorUsername, long dateTime, String complain, String patientUsername) {
+
+		doctorDao.bookAnAppointmentFor ( doctorUsername,  dateTime,  complain,patientUsername);
+	}
+
 	/*public String showSchedules() {
 		List<Doctor> scheduleForAdmin = doctorDao.showSchedules();
 		return scheduleForAdmin;

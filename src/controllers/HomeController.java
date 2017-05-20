@@ -52,12 +52,15 @@ public class HomeController {
 					System.out.println("This is admin");
 				//	schedule = doctorService.showSchedules();//!!!
 				}
-
-				else {
+				else if (grantedAuthority.getAuthority().equals("ROLE_PATIENT")){
+					
+					
+				}
+				else if (grantedAuthority.getAuthority().equals("ROLE_DOCTOR")  ) {
+					
 					String username = principal.getName();
 					System.out.println("Got username at controller:" + username);
 					schedule = doctorService.showDoctorsScheduleForNextMonth(username);
-					System.out.println("Finished running doctorService.showSchedule(username)");
 
 				}
 			}
@@ -77,7 +80,7 @@ public class HomeController {
 
 		List<Doctor> doctorsList = null;
 
-		doctorsList = doctorService.showDoctorsList();
+		doctorsList = patientService.showDoctorsForPatient();
 
 		Map<String, Object> data = new HashMap<String, Object>();
 
@@ -131,14 +134,20 @@ public class HomeController {
 		return data;
 	}
 	
+	@RequestMapping(value = "/getDocScheduleForPatient", method = RequestMethod.GET,produces = "application/json")
 	@ResponseBody
-	@RequestMapping(value = "/testingJSON", method = RequestMethod.POST)
-	public void test(@RequestParam("input") String isScheduled,
-			@RequestParam("day") String day, @RequestParam("time") LocalTime time) {
+	public Map<String, Object> test(@RequestParam("doctorUsername") String docUsername
+			) {
 		
-System.out.println("Hello");		
-		
-		
+		List<Calendar> calendarsList = null;
+
+		calendarsList = doctorService.showDoctorsScheduleForNextMonth(docUsername);
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("calendarsList", calendarsList);
+
+		return data;
 	}
 
 }

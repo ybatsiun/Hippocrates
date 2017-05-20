@@ -41,10 +41,11 @@ public class Calendar implements Serializable {
 	public boolean scheduled ;
 	public boolean busy = false;
 
+	public String patientUserName = null;
 	public String patientFirstName = null;
 	public String patientLastName = null;
-	public int patientPhoneNumber;
 	public String patientEmail = null;
+	public Integer patientPhone;
 	public String complain = null;
 	
 	
@@ -79,37 +80,67 @@ public class Calendar implements Serializable {
 
 
 
+	
+
+	public String getPatientUserName() {
+		return patientUserName;
+	}
+
+
+
 	public String getPatientFirstName() {
 		return patientFirstName;
 	}
+
+
 
 	public void setPatientFirstName(String patientFirstName) {
 		this.patientFirstName = patientFirstName;
 	}
 
+
+
 	public String getPatientLastName() {
 		return patientLastName;
 	}
+
+
 
 	public void setPatientLastName(String patientLastName) {
 		this.patientLastName = patientLastName;
 	}
 
-	public int getPatientPhoneNumber() {
-		return patientPhoneNumber;
-	}
 
-	public void setPatientPhoneNumber(int patientPhoneNumber) {
-		this.patientPhoneNumber = patientPhoneNumber;
-	}
 
 	public String getPatientEmail() {
 		return patientEmail;
 	}
 
+
+
 	public void setPatientEmail(String patientEmail) {
 		this.patientEmail = patientEmail;
 	}
+
+
+
+	public Integer getPatientPhone() {
+		return patientPhone;
+	}
+
+
+
+	public void setPatientPhone(Integer patientPhone) {
+		this.patientPhone = patientPhone;
+	}
+
+
+
+	public void setPatientUserName(String patientUserName) {
+		this.patientUserName = patientUserName;
+	}
+
+
 
 	public String getComplain() {
 		return complain;

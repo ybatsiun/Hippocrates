@@ -7,7 +7,11 @@
 
 	<view-state id="doctorsPage">
 
-		<transition on="show-doctors-schedule" to="doctors-schedule"></transition>
+		<transition on="show-doctors-schedule" to="doctors-schedule">
+		
+		
+		
+		</transition>
 
 	</view-state>
 

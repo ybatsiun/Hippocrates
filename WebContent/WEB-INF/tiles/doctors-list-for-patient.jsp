@@ -22,99 +22,47 @@ I will put here a short info of doctor that is useful for a patient.
 	function showDoctorsList(data) {
 		$("div#doctor").html("");
 		for (n = 0; n < data.doctorsList.length; n++) {
+			
 			var doctor = data.doctorsList[n];
+			
 			var doctorDiv = document.createElement("div");
 			doctorDiv.setAttribute("class", "doctor");
 			doctorDiv.setAttribute("id", n);
-			var firstName = document.createElement("span");
-			firstName.appendChild(document.createTextNode("First name: "
-					+ doctor.firstName));
-			doctorDiv.appendChild(firstName);
+			var name = document.createElement("span");
+			name.appendChild(document.createTextNode("Name of a doctor: "
+					+ doctor.firstName + " " + doctor.lastName));
+			doctorDiv.appendChild(name);
 
-			var lastName = document.createElement("span");
-			lastName.appendChild(document.createTextNode(". Last name: "
-					+ doctor.lastName));
-			doctorDiv.appendChild(lastName);
+			
 
 			var field = document.createElement("span");
 			field.appendChild(document.createTextNode(". Field: "
-					+ doctor.field));
+					+ doctor.field+ " "));
 			doctorDiv.appendChild(field);
 
-			/*////////////////////////////////// Schedule module /////////////////////////////////////////////////// */
-
-			for (var i = 10; i < 13; i++) {
-
-				const
-				dayAndTime = [ 'mn_' + i ];
-				const
-				isbusy = [ 'mn_' + i + '_isbusy' ]
-				if (doctor[dayAndTime] == true) {
-
-					
-				
-					var linkToBook = document.createElement("a");
-					linkToBook.setAttribute("href", "#");
-					linkToBook.setAttribute("id", n);
-					linkToBook
-							.setAttribute("onclick", "showReply(" + i + ",this.id)");
-					linkToBook.appendChild(document
-							.createTextNode([ dayAndTime ] + "/"));
-
-					var a = document.createElement("span");
-
-					a.appendChild(linkToBook);
-					doctorDiv.appendChild(a);
-
-					var b = document.createElement("span");
-					if (doctor[isbusy] == false) {
-						b
-								.appendChild(document
-										.createTextNode("There is no appointment for this time."));
-					} else {
-						b
-								.appendChild(document
-										.createTextNode("This appointment is already booked"));
-					}
-					doctorDiv.appendChild(b);
-				} else {
-
-				}
-
-				var c = document.createElement("span");
-				var complainForm = document.createElement("form");
-				complainForm.setAttribute("class", "replyform");
-				complainForm.setAttribute("id", "form" + i+n);
-
-				var textarea = document.createElement("textarea");
-				textarea.setAttribute("id","area" + i+n);
-				var bookButton = document.createElement("input");
-				
-				bookButton.setAttribute("type", "button");
-				bookButton.setAttribute("value", "Book an appointment");
-				bookButton.setAttribute("data-textarea",textarea);
-				bookButton.setAttribute("data-i",i);
-				bookButton.setAttribute("data-n",n);
-				bookButton.setAttribute("data-docusername", doctor.username);
+			var viewTheScheduleButton = document.createElement("input");
 			
-				bookButton.setAttribute("data-dayandtime", dayAndTime);
-				bookButton
-						.setAttribute("onClick",
-								"BookAnAppointment(dataset.docusername,dataset.dayandtime,test(dataset.n,dataset.i))");		
-								
-
-				complainForm.appendChild(textarea);
-				complainForm.appendChild(bookButton);
-
-				c.appendChild(complainForm);
-				doctorDiv.appendChild(c);
-
-				/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
-			}
-
+			viewTheScheduleButton.setAttribute("type", "button");
+			viewTheScheduleButton.setAttribute("value", "Click to see a schedule of this doctor");
+			viewTheScheduleButton.setAttribute("data-docusername",doctor.username);
+			viewTheScheduleButton.setAttribute("data-firstname",doctor.firstName);
+			viewTheScheduleButton.setAttribute("data-lastname",doctor.lastName);
+			viewTheScheduleButton.setAttribute("data-field",doctor.field)
+			console.log(doctor.firstName);
+			viewTheScheduleButton.setAttribute("onClick",
+					"(window.location.href='${pageContext.request.contextPath}/showDocScheduleForPatient?doctorUsername='+dataset.docusername+'&field='+dataset.field+'&firstName='+dataset.firstname+'&lastName='+dataset.lastname)");
+			console.log(doctor.firstName);
+			doctorDiv.appendChild(viewTheScheduleButton);
+			
 			$("div#doctor").append(doctorDiv);
+		
 		}
-	}
+
+			
+		}
+	
+
+
 
 	function showReply(i, n) {
 		console.log("#form" + i +n);

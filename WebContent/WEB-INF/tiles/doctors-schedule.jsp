@@ -8,6 +8,8 @@
 Doctor's schedule
 <div id="schedule"></div>
 <br />
+
+
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
@@ -55,6 +57,8 @@ Doctor's schedule
 		
 		}
 	function updatePage() {
+		
+		
 		$.getJSON("<c:url value="/getDoctors-schedule"/>", showSchedule);
 	}
 	function onLoad() {

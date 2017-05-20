@@ -1,14 +1,13 @@
 package dao;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +44,8 @@ public class DoctorDao extends UserDao implements Serializable {
 		session().save(doctor);
 
 		System.out.println("Creating calendar table...");
-
+		// variable i determines on how much days ahead you create schedule in
+		// calendar table
 		for (int i = 1; i < 100; i++) {
 			LocalDateTime localDateTime = LocalDateTime.now().plusDays(i);
 
@@ -101,7 +101,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		Query crit = session().createSQLQuery("select dateTime AS 'calendar.dateTime' from doctors  "
 				+ "left outer join calendar on doctors.username = calendar.username "
-				+ "where isScheduled=true and doctors.username='" + username + "' and DATE_FORMAT(`dateTime`, '%d')="
+				+ "where scheduled=true and doctors.username='" + username + "' and DATE_FORMAT(`dateTime`, '%d')="
 				+ date.getDate());
 
 		return crit.list();
@@ -110,11 +110,12 @@ public class DoctorDao extends UserDao implements Serializable {
 	@SuppressWarnings("unchecked")
 	public List<Doctor> showDoctors() {
 		Criteria crit = session().createCriteria(Doctor.class);
-		crit.add(Restrictions.eq("enabled", 1));
-		/*
-		 * crit.setProjection(Projections.projectionList().
-		 * add(Projections.property("username"), "username")); it is working
-		 */
+
+		crit.add(Restrictions.eq("enabled", 1)).setProjection(Projections.projectionList()
+				.add(Projections.property("username"), "username").add(Projections.property("lastName"), "lastName")
+				.add(Projections.property("firstName"), "firstName").add(Projections.property("field"), "field"))
+				.setResultTransformer(Transformers.aliasToBean(Doctor.class));
+
 		return crit.list();
 	}
 
@@ -212,7 +213,9 @@ public class DoctorDao extends UserDao implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public List<Doctor> showDoctorsForAdmin() {
-		Criteria crit = session().createCriteria(Doctor.class);
+		Criteria crit = session().createCriteria(Doctor.class)
+
+		;
 
 		return crit.list();
 	}
@@ -251,7 +254,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		Query crit = session().createSQLQuery(" update calendar "
 				+ "left outer join doctors on doctors.username=calendar.username "
-				+ "set isScheduled=false, isBusy=false where calendar.username= '" + username
+				+ "set scheduled=false, busy=false where calendar.username= '" + username
 				+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString + "'");
 
 		crit.executeUpdate();
@@ -266,7 +269,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 			Query editSchedule = session().createSQLQuery(" update calendar "
 					+ "left outer join doctors on doctors.username=calendar.username "
-					+ "set isScheduled=true where calendar.username= '" + username
+					+ "set scheduled=true where calendar.username= '" + username
 					+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
 
 					+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
@@ -284,30 +287,23 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		LocalDate today = LocalDate.now();
 		java.sql.Date now = java.sql.Date.valueOf(today);
-		
+
 		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusMonths(1));
-		
-		
+
 		Criteria crit = session().createCriteria(Calendar.class)
-				.setProjection(Projections.projectionList().
-						add(Projections.property("dateTime"), "dateTime")
-						.add(Projections.property("scheduled"), "scheduled")
-						.add(Projections.property("day"), "day")
+				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
+						.add(Projections.property("scheduled"), "scheduled").add(Projections.property("day"), "day")
 						.add(Projections.property("busy"), "busy")
 						.add(Projections.property("patientFirstName"), "patientFirstName")
 						.add(Projections.property("patientLastName"), "patientLastName"))
-						.setResultTransformer(Transformers.aliasToBean(Calendar.class))
-						
-						
-				.add(Restrictions.eq("doctor.username", username))
-				.add(Restrictions.eq("scheduled", true))
-				.add(Restrictions.ge("dateTime", now))
-				.add(Restrictions.le("dateTime", plusAMonth))
-				;
+				.setResultTransformer(Transformers.aliasToBean(Calendar.class))
 
-		String FILENAME = "K:\\filename.txt";
+				.add(Restrictions.eq("doctor.username", username)).add(Restrictions.eq("scheduled", true))
+				.add(Restrictions.ge("dateTime", now)).add(Restrictions.le("dateTime", plusAMonth));
 
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
+		//String FILENAME = "K:\\filename.txt";
+
+		/*try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
 
 			bw.write("Amount of enteties returned in showDoctorsScheduleForNextMonth is " + crit.list().size());
 
@@ -317,9 +313,60 @@ public class DoctorDao extends UserDao implements Serializable {
 
 			e.printStackTrace();
 
-		}
+		}*/
 
 		return crit.list();
+	}
+
+	public void bookAnAppointmentFor(String doctorUsername, long dateTime, String complain, String patientUsername) {
+		
+		
+		//Getting details of logged in patient
+		Criteria queryForPatientLastName = session().createCriteria(Patient.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.property("lastName"), "lastName"))
+				.add(Restrictions.eq("username", patientUsername));
+		
+		
+		Criteria queryForPatientFirstName = session().createCriteria(Patient.class)
+					.setProjection(Projections.projectionList()
+					.add(Projections.property("firstName"), "firstName"))
+					.add(Restrictions.eq("username", patientUsername));
+			
+	
+		Criteria queryForPatientEmail = session().createCriteria(Patient.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.property("email"), "email"))
+				.add(Restrictions.eq("username", patientUsername));
+	
+	
+		Criteria queryForPatientPhone = session().createCriteria(Patient.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.property("phoneNumber"), "phoneNumber"))
+				.add(Restrictions.eq("username", patientUsername));
+	
+		String patientLastName = queryForPatientLastName.list().get(0).toString();
+		String patientFirstName = queryForPatientFirstName.list().get(0).toString();
+		String patientEmail = queryForPatientEmail.list().get(0).toString();
+		int patientPhone = (int) queryForPatientPhone.list().get(0);
+	
+		
+		LocalDateTime date =
+			    LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime), ZoneId.systemDefault());
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String formattedString = date.format(formatter);
+		
+		System.out.println("Date and time for an appointment is " + date.toString());
+		Query bookAnAppointment = session().createSQLQuery(" update calendar "
+				+ "left outer join doctors on doctors.username=calendar.username "
+				+ "set busy=true , patientFirstName= '"+patientFirstName+"' , patientLastName= '"+ patientLastName 
+				+ "' , patientUserName= '"+patientUsername +"' , patientPhone= '" + patientPhone 
+				+ "' , patientEmail= '"+patientEmail + "' , complain= '" + complain
+				+ "' where calendar.username= '" + doctorUsername
+				+ "' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') = '" + formattedString+"'");
+
+		bookAnAppointment.executeUpdate();
 	}
 
 }

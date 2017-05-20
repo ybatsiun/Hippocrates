@@ -110,5 +110,25 @@
 		<put-attribute name="content"
 			value="/WEB-INF/tiles/edition-completed.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="doctors-schedule-for-patient" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/doctors-schedule-for-patient.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="showBookAnAppointmentFor" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/showBookAnAppointmentFor.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="bookingSuccess" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/booking-success.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="showAppointmentsTable" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/appointmentsTable.jsp"></put-attribute>
+	</definition>
 
 </tiles-definitions>
