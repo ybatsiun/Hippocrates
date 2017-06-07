@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,6 +70,14 @@ public class HippocratesController {
 		model.addAttribute("monday", monday);
 
 		return "doctors-registration-form";
+	}
+	
+	@RequestMapping("/registration-completed-patient")
+	public String showRegistrationCompletedForPatient(Patient patient, BindingResult result) {
+
+		patientService.createPatient(patient);
+		
+		return "registration-completed";
 	}
 
 	@RequestMapping("/registration-completed")

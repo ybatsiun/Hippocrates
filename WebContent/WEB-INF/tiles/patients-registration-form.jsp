@@ -7,7 +7,7 @@ Patients's registration form
 <br/>
 
 <sf:form  
-	action="${flowExecutionUrl}&_eventId=submit-registration"
+	action="${pageContext.request.contextPath}/registration-completed-patient"
 	commandName="patient">
 	
 	

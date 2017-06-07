@@ -7,39 +7,67 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-
 @Entity
 @Table(name = "patients")
-public class Patient  implements Serializable {
+public class Patient implements Serializable {
 
-	@Id
 	public String username;
-	
+
 	public String password;
-	
-	public String authority="ROLE_PATIENT";
-	
-	public int enabled=1;
-	
+
+	public String authority = "ROLE_PATIENT";
+
+	public int enabled = 1;
+
 	@Column(name = "firstName")
-	public String firstName ;
+	public String firstName;
 
 	@Column(name = "lastName")
-	public String lastName ;
+	public String lastName;
 
 	@Column(name = "phoneNumber")
-	public int phoneNumber ;
+	public int phoneNumber;
 
 	@Column(name = "email")
-	public String email ;
+	public String email;
 
-	
 	private static final long serialVersionUID = 1L;
 
 	/*
 	 * @Id public String username;
 	 */
+	@Id
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+
+	public int getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(int enabled) {
+		this.enabled = enabled;
+	}
 
 	public String getEmail() {
 		return email;

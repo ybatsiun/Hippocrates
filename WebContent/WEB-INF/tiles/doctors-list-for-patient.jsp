@@ -20,7 +20,14 @@ I will put here a short info of doctor that is useful for a patient.
 <script type="text/javascript">
 <!--
 	function showDoctorsList(data) {
-		$("div#doctor").html("");
+		
+	
+   
+   
+
+	
+	
+	$("div#doctor").html("");
 		for (n = 0; n < data.doctorsList.length; n++) {
 			
 			var doctor = data.doctorsList[n];
