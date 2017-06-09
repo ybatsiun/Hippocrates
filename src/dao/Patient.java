@@ -6,28 +6,40 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "patients")
 public class Patient implements Serializable {
-
+	
+	@Size(min = 5, max = 30, message = "Username must be between 5 and 20 characters")
 	public String username;
-
+	
+	@Size(min = 10, max = 20, message = "Password must between 10 and 20 characters")
 	public String password;
 
 	public String authority = "ROLE_PATIENT";
 
 	public int enabled = 1;
-
+	
+	@Size(min = 3, max = 30, message = "First name  must be between 3 and 30 characters")
 	@Column(name = "firstName")
 	public String firstName;
-
+	
+	@Size(min = 3, max = 30, message = "Last name must be between 3 and 30 characters")
 	@Column(name = "lastName")
 	public String lastName;
 
+	@Pattern(regexp="0\\d{9}", message="please enter a valid phone number starting from '0' and following by 9 digits")
 	@Column(name = "phoneNumber")
-	public int phoneNumber;
-
+	public String phoneNumber;
+	
+	@NotEmpty(message="please enter your email")
+	@Email(message="email does not appear to be valid")
 	@Column(name = "email")
 	public String email;
 
@@ -77,7 +89,7 @@ public class Patient implements Serializable {
 		return lastName;
 	}
 
-	public int getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
@@ -89,7 +101,7 @@ public class Patient implements Serializable {
 	}
 
 	public Patient(String username, int enabled, String password, String authority, String firstName, String lastName,
-			int phoneNumber, String email) {
+			String phoneNumber, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
@@ -115,7 +127,7 @@ public class Patient implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

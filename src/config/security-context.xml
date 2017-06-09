@@ -94,9 +94,10 @@
 		<security:intercept-url pattern="/patients-registration-form" access="permitAll" />
 		<security:intercept-url pattern="/admins-registration-form" access="permitAll" />
 		<security:intercept-url pattern="/registration-completed" access="permitAll" />
-		<security:intercept-url pattern="/registration-completed-patient" access="permitAll" />
 		<security:intercept-url pattern="/denied" access="permitAll" />
 		<security:intercept-url pattern="/authenticated" access="permitAll" />
+		<security:intercept-url pattern="/creating-doctor" access="permitAll" />
+		<security:intercept-url pattern="/creating-patient" access="permitAll" />
 		
 		<security:intercept-url pattern="/**" access="denyAll" />
 

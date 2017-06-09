@@ -12,7 +12,7 @@ Doctor's registration form
 <br/>
 
 <sf:form  
-	action="${pageContext.request.contextPath}/registration-completed"
+	action="${pageContext.request.contextPath}/creating-doctor"
 	commandName="doctor">
 	
 	
@@ -20,53 +20,68 @@ Doctor's registration form
 	  <table class="formtable">
 	 	<tr>
 			<td class="label">Username:</td>
-			<td> <input class="control" path="username" name="username" type="text" /><br /> <!-- Removed sf tag  -->
+			<td> <sf:input class="control" path="username" name="username" type="text" /> <!-- Removed sf tag  -->
+				<br/>
+				<sf:errors path="username"></sf:errors>
+				
 				</td>
 		</tr>
 		 <tr>
 			<td class="label">firstName:</td>
-			<td><input class="control" path="firstName" name="firstName" type="text" /><br />
+			<td><sf:input class="control" path="firstName" name="firstName" type="text" /><br />
+				<sf:errors path="firstName"></sf:errors>
+				
 				</td>
 		</tr> 
 		
 		 <tr>
 			<td class="label">lastName:</td>
-			<td><input class="control" name="lastName" path="lastName" 
+			<td><sf:input class="control" name="lastName" path="lastName" 
 					type="text" /><br />
+								<sf:errors path="lastName"></sf:errors>
+				
 				</td>
 		</tr>
 		
 		<tr>
 			<td class="label">Email:</td>
-			<td><input class="control" name="email" path="email" 
-					type="text" />
+			<td><sf:input class="control" name="email" path="email" 
+					type="text" /> <br/>
+									<sf:errors path="email"></sf:errors>
+					
 				</td>
 		</tr>
 		
 	 <tr>
 			<td class="label">phoneNumber:</td>
-			<td><input  class="control" path="phoneNumber" name="phoneNumber"
-					 type="number" />
+			<td><sf:input  class="control" path="phoneNumber" name="phoneNumber"
+					 type="text" /><br/>
+									<sf:errors path="phoneNumber"></sf:errors>
 				</td>
 		</tr> 
 		
 		 <tr>
 			<td class="label">field:</td>
-			<td><input  class="control" path="field" name="field"
+			<td><sf:input  class="control" path="field" name="field"
 					 type="text" />
+					 <br/>
+									<form:errors path="field"></form:errors>
 				</td>
 		</tr> 
 		
 		 <tr>
 			<td class="label">password:</td>
-			<td><input  class="control" path="password" name="password"
-					 type="password" />
+			<td><sf:input  class="control" path="password" name="password"
+					 type="password" /><br/>
+									<sf:errors path="password"></sf:errors>
 				</td>
 		</tr>
 		
 		<tr>
 				<td>Pick up the time you want to work on Monday:</td>
-				<td><form:checkboxes path="monday" items="${monday}"  /> 
+				<td><form:checkboxes path="monday" items="${doctor.mondayBlank}"  /> 
+				<br/>
+									<sf:errors path="monday"></sf:errors>
 				</td>
 			</tr>
 		

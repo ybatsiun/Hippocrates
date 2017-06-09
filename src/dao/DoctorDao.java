@@ -125,7 +125,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		String firstName = patientDao.getPatientByUsername(patientUsername).get(0).firstName;
 		String lastName = patientDao.getPatientByUsername(patientUsername).get(0).lastName;
-		int phoneNumber = patientDao.getPatientByUsername(patientUsername).get(0).phoneNumber;
+		String phoneNumber = patientDao.getPatientByUsername(patientUsername).get(0).phoneNumber;
 
 		System.out.println("Current patient: " + firstName + " " + lastName + " " + phoneNumber);
 
