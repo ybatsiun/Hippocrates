@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import dao.Calendar;
 import dao.Doctor;
+import dao.DoctorDao;
 import dao.Patient;
 import service.DoctorsService;
 import service.PatientsService;
@@ -25,6 +26,9 @@ import service.PatientsService;
 public class HomeController {
 	@Autowired
 	private DoctorsService doctorService;
+	
+	@Autowired
+	DoctorDao doctorDao;
 	
 	@Autowired
 	private PatientsService patientService;
@@ -39,7 +43,7 @@ public class HomeController {
 	@RequestMapping(value = "/getDoctors-schedule", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Map<String, Object> ShowDoctorsSchedule(Principal principal, Authentication a) {
-
+		System.out.println(doctorDao.getDoctorByUsername(principal.getName()).toString());
 		List<Calendar> schedule = null;
 		if (principal == null) {
 			schedule = null;
@@ -60,7 +64,7 @@ public class HomeController {
 					
 					String username = principal.getName();
 					System.out.println("Got username at controller:" + username);
-					schedule = doctorService.showDoctorsScheduleForNextMonth(username);
+					schedule = doctorService.showScheduleForCurrent_Next_and_NextNext_Weeks(username);
 
 				}
 			}
@@ -101,7 +105,7 @@ public class HomeController {
 		String patientUsername = principal.getName();
 
 		System.out.println("Going to doctorService in bookAnAppointment");
-		doctorService.bookAnAppointment(doctorUsername, patientUsername, dayAndTime, complain);
+	//	doctorService.bookAnAppointment(doctorUsername, patientUsername, dayAndTime, complain);
 	}
 
 	@RequestMapping(value = "/getDoctors-list-for-admin", method = RequestMethod.GET, produces = "application/json")
@@ -136,12 +140,12 @@ public class HomeController {
 	
 	@RequestMapping(value = "/getDocScheduleForPatient", method = RequestMethod.GET,produces = "application/json")
 	@ResponseBody
-	public Map<String, Object> test(@RequestParam("doctorUsername") String docUsername
+	public Map<String, Object> getDoctorScheduleForPatient(@RequestParam("doctorUsername") String docUsername
 			) {
 		
 		List<Calendar> calendarsList = null;
 
-		calendarsList = doctorService.showDoctorsScheduleForNextMonth(docUsername);
+		calendarsList = doctorService.showScheduleTimeForNextWeek(docUsername);
 
 		Map<String, Object> data = new HashMap<String, Object>();
 

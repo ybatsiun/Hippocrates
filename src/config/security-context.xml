@@ -67,8 +67,10 @@
 	    <security:intercept-url pattern="/doctors-schedule" access="hasAnyRole('ROLE_DOCTOR','ROLE_ADMIN')" />
 	    <security:intercept-url pattern="/patients-info" access="hasRole('ROLE_DOCTOR')" />
 		<security:intercept-url pattern="/getDoctors-schedule" access="hasAnyRole('ROLE_DOCTOR','ROLE_ADMIN','ROLE_PATIENT')" />
-		<security:intercept-url pattern="/edit-schedule" access="hasAnyRole('ROLE_DOCTOR')" />
+		<security:intercept-url pattern="/edit-schedule" access="hasRole('ROLE_DOCTOR')" />
+		<security:intercept-url pattern="/editing" access="hasRole('ROLE_DOCTOR')" />
 		<security:intercept-url pattern="/edition-completed" access="hasRole('ROLE_DOCTOR')" />
+		<security:intercept-url pattern="/getDoctorDetails" access="hasRole('ROLE_DOCTOR')" />
 		
 		<security:intercept-url pattern="/patientsPage" access="hasRole('ROLE_PATIENT')" />
 		<security:intercept-url pattern="/getDocListForPatient" access="hasRole('ROLE_PATIENT')" />

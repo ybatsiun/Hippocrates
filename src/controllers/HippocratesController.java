@@ -43,8 +43,6 @@ public class HippocratesController {
 	@Autowired
 	private PatientsService patientService;
 
-
-
 	@RequestMapping("/authenticated")
 	public String showAuthenticated() {
 
@@ -66,35 +64,22 @@ public class HippocratesController {
 		return "patients-registration-form";
 	}
 
-	/*@RequestMapping("/registration-completed-patient")
-	public String showRegistrationCompletedForPatient(@Valid Patient patient, BindingResult result) {
-
-		if (result.hasErrors()) {
-			return "patients-registration-form";
-		}
-
-		else {
-
-			patientService.createPatient(patient);
-
-			return "registration-completed";
-		}
-	}*/
-
 	@RequestMapping("/creating-doctor")
 	public String creatingDoctor(@Valid Doctor doctor, BindingResult result) {
 
 		if (result.hasErrors()) {
-
+			System.out.println("errors while creating doctor" + result.toString());
 			return "doctors-registration-form";
 		}
 
 		else {
 			doctorService.createDoctor(doctor);
+			System.out.println("Doctor to create has a schedule for \n monday " + doctor.getMonday().toString()
+					+ "\n tuesday " + doctor.getTuesday().toString());
 			return "registration-completed";
 		}
 	}
-	
+
 	@RequestMapping("/creating-patient")
 	public String creatingPatient(@Valid Patient patient, BindingResult result) {
 
@@ -109,53 +94,69 @@ public class HippocratesController {
 		}
 	}
 
-	/*@RequestMapping("/registration-completed")
-	public String showRegistrationCompleted(@ Valid Doctor doctor, BindingResult result,Model model) {
-		if (result.hasErrors()) {
-
-			return "doctors-registration-form";
-		}
-		else{
-			doctorDao.createDoctor(doctor);
-		return "registration-completed";}
-	}*/
-
 	@RequestMapping(value = "/edit-schedule")
 	public String showEditSchedule(Model model, Principal principal) {
 
-		// Introducing model
-		Doctor doctor = new Doctor();
-		ArrayList<LocalTime> precheckedVal = new ArrayList<LocalTime>();
+		Doctor doctor = doctorDao.getDoctorByUsername(principal.getName());
 
-		System.out.println("Introducing model");
-
-		List<Timestamp> input = doctorService.showScheduledTimeForClosestWeek(principal.getName());
-
-		for (int i = 0; i < input.size(); i++) {
-			int minutes = input.get(i).getMinutes();
-			int hours = input.get(i).getHours();
-
-			precheckedVal.add(LocalTime.of(hours, minutes));
-
-		}
-
-		System.out.println("Values in the list " + precheckedVal.toString());
-
+		List<Timestamp> input = doctorDao.showScheduleTimeForNextNextWeek(principal.getName().toString());
 		ArrayList<LocalTime> monday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> tuesday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> wednesday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> thursday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> friday = new ArrayList<LocalTime>();
+		System.out.println("Input is " + input.toString());
+		for (Timestamp time : input) {
+			if (time.getDay() == 1) {
+				monday.add(LocalTime.of(time.getHours(), time.getMinutes()));
+			}
 
-		for (int c = 8; c < 18; c++) {
-			for (int b = 0; b < 60; b += 15) {
+			if (time.getDay() == 2) {
+				tuesday.add(LocalTime.of(time.getHours(), time.getMinutes()));
+			}
 
-				monday.add(LocalTime.of(c, b));
+			if (time.getDay() == 3) {
+				wednesday.add(LocalTime.of(time.getHours(), time.getMinutes()));
+			}
 
+			if (time.getDay() == 4) {
+				thursday.add(LocalTime.of(time.getHours(), time.getMinutes()));
+			}
+
+			if (time.getDay() == 5) {
+				friday.add(LocalTime.of(time.getHours(), time.getMinutes()));
 			}
 		}
-
-		doctor.setMonday(precheckedVal);
+		doctor.setMonday(monday);
+		doctor.setTuesday(tuesday);
+		doctor.setWednesday(wednesday);
+		doctor.setThursday(thursday);
+		doctor.setFriday(friday);
+		
 		model.addAttribute("doctor", doctor);
-		model.addAttribute("monday", monday);
 
 		return "edit-schedule";
+	}
+
+	@RequestMapping(value = "/editing")
+	public String editing(@Valid Doctor doctor,  BindingResult result,Principal principal) {
+		
+
+
+
+		if (result.hasErrors()) {
+			System.out.println("errors while editing doctor schedule" + result.toString());
+			return "edit-schedule";
+		}
+
+		else {
+		System.out.println("New list of time " + doctor.getMonday().toString());
+
+			doctorDao.editSchedule(doctor.getMonday(), doctor.getTuesday(), doctor.getWednesday(), doctor.getThursday(),
+					doctor.getFriday(), principal.getName());
+
+			return "edition-completed";
+		}
 	}
 
 	@RequestMapping(value = "/edition-completed")
@@ -163,7 +164,8 @@ public class HippocratesController {
 
 		System.out.println("New list of time " + doctor.getMonday().toString());
 
-		doctorDao.editSchedule(doctor.getMonday(), principal.getName());
+		doctorDao.editSchedule(doctor.getMonday(), doctor.getTuesday(), doctor.getWednesday(), doctor.getThursday(),
+				doctor.getFriday(), principal.getName());
 
 		return "edition-completed";
 	}
@@ -172,7 +174,7 @@ public class HippocratesController {
 	public String showDocScheduleForPatient(@RequestParam("doctorUsername") String doctorUsername, Doctor doctor,
 			Principal principal) {
 
-		System.out.println("showDocScheduleForPatient mapping");
+		System.out.println("showDocScheduleForPatient mapping ???");
 
 		return "doctors-schedule-for-patient";
 	}
@@ -239,6 +241,20 @@ public class HippocratesController {
 		patientService.cancelAnAppointment(id);
 
 		return "showAppointmentsTable";
+
+	}
+	
+	@RequestMapping(value = "/getDoctorDetails", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List <Doctor> getDoctorDetails(Principal principal) {
+		String doctorUserName = principal.getName();
+		List<Doctor> doctorDetailsList = null;
+		doctorDetailsList = doctorService.getDoctorDetails(doctorUserName);
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("doctorDetailsList", doctorDetailsList);
+
+		return doctorDetailsList;
 
 	}
 

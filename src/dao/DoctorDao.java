@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+//TODO do showschedule for the next week method and rename showScheduledTimeForClosestWeek(String) method to show schedule 
+// for the next week after next week
 @Repository
 @Transactional
 @Component("doctorDao")
@@ -33,15 +35,16 @@ public class DoctorDao extends UserDao implements Serializable {
 
 	@Autowired
 	private PatientDao patientDao;
-	/*
-	 * @Autowired private Calendar calendar;
-	 */
 
 	private static final long serialVersionUID = 1L;
 
 	public void createDoctor(Doctor doctor) {
+		System.out.println("In Doctor DAO creating a doctor with monday " + doctor.getMonday().toString());
 
 		session().save(doctor);
+
+		System.out.println("In Doctor Dao after saving using getByUsername"
+				+ this.getDoctorByUsername(doctor.getUsername()).toString());
 
 		System.out.println("Creating calendar table...");
 		// variable i determines on how much days ahead you create schedule in
@@ -75,35 +78,106 @@ public class DoctorDao extends UserDao implements Serializable {
 							}
 						}
 					}
+
+					if (calendar.getDay() == "TUESDAY") {
+						for (LocalTime time : doctor.getTuesday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+
+							}
+						}
+					}
+
+					if (calendar.getDay() == "WEDNESDAY") {
+						for (LocalTime time : doctor.getWednesday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+
+							}
+						}
+					}
+
+					if (calendar.getDay() == "THURSDAY") {
+						for (LocalTime time : doctor.getThursday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+
+							}
+						}
+					}
+
+					if (calendar.getDay() == "FRIDAY") {
+						for (LocalTime time : doctor.getFriday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+
+							}
+						}
+					}
+
 					session().save(calendar);
 				}
 			}
 		}
 
 		System.out.println("Doctor registered");
+		System.out.println("In Doctor Dao after full registration using getByUsername"
+				+ this.getDoctorByUsername(doctor.getUsername()).toString());
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Timestamp> showScheduledTimeForClosestWeek(String username) {
-		// System.out.println("showSchedule in DAO");
+	public List<Timestamp> showScheduleTimeForNextNextWeek(String username) {
 
 		// Finding the closest Monday
 
-		LocalDate today = LocalDate.now();
+		LocalDateTime closestSunday = LocalDateTime.now().plusWeeks(1);
+		if (closestSunday.getDayOfWeek().toString() != "SUNDAY") {
+			do {
+				int i = 1;
+				closestSunday = closestSunday.plusDays(i);
+			} while (closestSunday.getDayOfWeek().toString() != "SUNDAY");
+		}
 
-		do {
-			int i = 1;
-			today = today.plusDays(i);
-		} while (today.getDayOfWeek().toString() != "MONDAY");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String formattedClosestSunday = closestSunday.format(formatter);
 
-		Date date = java.sql.Date.valueOf(today);
+		LocalDateTime closestSaturdayToClosestSunday = closestSunday.plusDays(7);
+		String formattedclosestSaturdayToClosestSunday = closestSaturdayToClosestSunday.format(formatter);
+
 		// Taking all scheduled time sets from the closest week
 
 		Query crit = session().createSQLQuery("select dateTime AS 'calendar.dateTime' from doctors  "
 				+ "left outer join calendar on doctors.username = calendar.username "
-				+ "where scheduled=true and doctors.username='" + username + "' and DATE_FORMAT(`dateTime`, '%d')="
-				+ date.getDate());
+				+ "where scheduled=true and doctors.username='" + username
+				+ "' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') " + " between '" + formattedClosestSunday
+				+ "' and '" + formattedclosestSaturdayToClosestSunday + "'");
+		System.out.println("showScheduledTimeForClosestWeek in DoctorDao returns" + crit.list().toString());
+		return crit.list();
+	}
 
+	@SuppressWarnings("unchecked")
+	public List<Calendar> showScheduleForCurrent_Next_and_NextNext_Weeks(String username) {
+
+		LocalDate now = LocalDate.now();
+		java.sql.Date nowDate = java.sql.Date.valueOf(now);
+
+		java.sql.Date twoWeeksAfterNowDate = java.sql.Date.valueOf(now.plusWeeks(3));
+
+		Criteria crit = session().createCriteria(Calendar.class)
+				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
+						.add(Projections.property("scheduled"), "scheduled").add(Projections.property("day"), "day")
+						.add(Projections.property("busy"), "busy")
+						.add(Projections.property("patientFirstName"), "patientFirstName")
+						.add(Projections.property("patientLastName"), "patientLastName"))
+				.setResultTransformer(Transformers.aliasToBean(Calendar.class))
+
+				.add(Restrictions.eq("doctor.username", username)).add(Restrictions.eq("scheduled", true))
+				.add(Restrictions.ge("dateTime", nowDate)).add(Restrictions.le("dateTime", twoWeeksAfterNowDate));
+		System.out.println("In show schedule in DoctorDao" + crit.list().toString());
 		return crit.list();
 	}
 
@@ -117,98 +191,6 @@ public class DoctorDao extends UserDao implements Serializable {
 				.setResultTransformer(Transformers.aliasToBean(Doctor.class));
 
 		return crit.list();
-	}
-
-	public void bookAnAppointment(String doctorUsername, String patientUsername, String dayAndTime, String complain) {
-		System.out.println("bookAnApp in DAO");
-		Doctor doctor = (Doctor) session().get(Doctor.class, doctorUsername);
-
-		String firstName = patientDao.getPatientByUsername(patientUsername).get(0).firstName;
-		String lastName = patientDao.getPatientByUsername(patientUsername).get(0).lastName;
-		String phoneNumber = patientDao.getPatientByUsername(patientUsername).get(0).phoneNumber;
-
-		System.out.println("Current patient: " + firstName + " " + lastName + " " + phoneNumber);
-
-		java.lang.reflect.Method method = null;
-
-		try {
-			method = doctor.getClass().getMethod("set" + dayAndTime + "_isbusy", boolean.class);
-		} catch (SecurityException e) {
-		} catch (NoSuchMethodException e) {
-		}
-		try {
-			method.invoke(doctor, true);
-		} catch (IllegalArgumentException e) {
-		} catch (IllegalAccessException e) {
-		} catch (InvocationTargetException e) {
-		}
-		;
-
-		try {
-			method = doctor.getClass().getMethod("set" + dayAndTime + "_text", String.class);
-		} catch (SecurityException e) {
-		} catch (NoSuchMethodException e) {
-		}
-		try {
-			method.invoke(doctor, complain);
-		} catch (IllegalArgumentException e) {
-		} catch (IllegalAccessException e) {
-		} catch (InvocationTargetException e) {
-		}
-		;
-
-		try {
-			method = doctor.getClass().getMethod("set" + dayAndTime + "_username", String.class);
-		} catch (SecurityException e) {
-		} catch (NoSuchMethodException e) {
-		}
-		try {
-			method.invoke(doctor, patientUsername);
-		} catch (IllegalArgumentException e) {
-		} catch (IllegalAccessException e) {
-		} catch (InvocationTargetException e) {
-		}
-
-		try {
-			method = doctor.getClass().getMethod("set" + dayAndTime + "_phonenumber", int.class);
-		} catch (SecurityException e) {
-			System.out.println("security exception");
-		} catch (NoSuchMethodException e) {
-			System.out.println("No such method for phone number");
-		}
-		try {
-			method.invoke(doctor, phoneNumber);
-		} catch (IllegalArgumentException e) {
-		} catch (IllegalAccessException e) {
-		} catch (InvocationTargetException e) {
-		}
-
-		try {
-			method = doctor.getClass().getMethod("set" + dayAndTime + "_firstname", String.class);
-		} catch (SecurityException e) {
-		} catch (NoSuchMethodException e) {
-		}
-		try {
-			method.invoke(doctor, firstName);
-		} catch (IllegalArgumentException e) {
-		} catch (IllegalAccessException e) {
-		} catch (InvocationTargetException e) {
-		}
-
-		try {
-			method = doctor.getClass().getMethod("set" + dayAndTime + "_lastname", String.class);
-		} catch (SecurityException e) {
-		} catch (NoSuchMethodException e) {
-		}
-		try {
-			method.invoke(doctor, lastName);
-		} catch (IllegalArgumentException e) {
-		} catch (IllegalAccessException e) {
-		} catch (InvocationTargetException e) {
-		}
-
-		System.out.println("bookAnAppointment: " + doctorUsername + " and " + patientUsername + " and " + dayAndTime
-				+ " and " + complain);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -231,41 +213,38 @@ public class DoctorDao extends UserDao implements Serializable {
 		return (Doctor) session().get(Doctor.class, username);
 	}
 
-	public void editSchedule(ArrayList<LocalTime> monday, String username) {
 
-		// Getting the closest monday
+	public void editSchedule(ArrayList<LocalTime> monday, ArrayList<LocalTime> tuesday, ArrayList<LocalTime> wednesday,
+			ArrayList<LocalTime> thursday, ArrayList<LocalTime> friday, String username) {
 
-		LocalDateTime closestMonday = LocalDateTime.now();
 
-		do {
-			int i = 1;
-			closestMonday = closestMonday.plusDays(i);
-		} while (closestMonday.getDayOfWeek().toString() != "SUNDAY");
-		System.out.println("date of closest monday  is " + closestMonday);
+		LocalDateTime theMondayAfterClosestMonday = LocalDateTime.now().plusWeeks(1);
+		if (theMondayAfterClosestMonday.getDayOfWeek().toString() != "SUNDAY") {
+			do {
+				int i = 1;
+				theMondayAfterClosestMonday = theMondayAfterClosestMonday.plusDays(i);
+			} while (theMondayAfterClosestMonday.getDayOfWeek().toString() != "SUNDAY");
+		}
+
+		System.out.println("date of the next sunday after next sunday  is " + theMondayAfterClosestMonday);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String formattedString = closestMonday.format(formatter);
+		String formattedString = theMondayAfterClosestMonday.format(formatter);
 
-		System.out.println("date of closest monday  is " + formattedString);
-
-		// Deleting all scheduled appointments which are ahead of the closest
+		// Deleting all scheduled appointments which are ahead of monday after
+		// the closest
 		// monday
-		System.out.println("Before SQL update statement...");
 
-		Query crit = session().createSQLQuery(" update calendar "
-				+ "left outer join doctors on doctors.username=calendar.username "
-				+ "set scheduled=false, busy=false where calendar.username= '" + username
-				+ "' and day= 'MONDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString + "'");
+		Query crit = session()
+				.createSQLQuery(" update calendar " + "left outer join doctors on doctors.username=calendar.username "
+						+ "set scheduled=false, busy=false where calendar.username= '" + username
+						+ "' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString + "'");
 
 		crit.executeUpdate();
-
-		System.out.println("After SQL update statement");
 
 		// Applying edited schedule
 
 		for (LocalTime time : monday) {
-
-			// time = java.sql.Time.valueOf(time);
 
 			Query editSchedule = session().createSQLQuery(" update calendar "
 					+ "left outer join doctors on doctors.username=calendar.username "
@@ -278,17 +257,117 @@ public class DoctorDao extends UserDao implements Serializable {
 			editSchedule.executeUpdate();
 		}
 
+		for (LocalTime time : tuesday) {
+
+			// time = java.sql.Time.valueOf(time);
+
+			Query editSchedule = session().createSQLQuery(" update calendar "
+					+ "left outer join doctors on doctors.username=calendar.username "
+					+ "set scheduled=true where calendar.username= '" + username
+					+ "' and day= 'TUESDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
+
+					+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
+					+ " and DATE_FORMAT(`dateTime`, '%i') = " + time.getMinute());
+
+			editSchedule.executeUpdate();
+		}
+
+		for (LocalTime time : wednesday) {
+
+			// time = java.sql.Time.valueOf(time);
+
+			Query editSchedule = session().createSQLQuery(" update calendar "
+					+ "left outer join doctors on doctors.username=calendar.username "
+					+ "set scheduled=true where calendar.username= '" + username
+					+ "' and day= 'WEDNESDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
+
+					+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
+					+ " and DATE_FORMAT(`dateTime`, '%i') = " + time.getMinute());
+
+			editSchedule.executeUpdate();
+		}
+
+		for (LocalTime time : thursday) {
+
+			// time = java.sql.Time.valueOf(time);
+
+			Query editSchedule = session().createSQLQuery(" update calendar "
+					+ "left outer join doctors on doctors.username=calendar.username "
+					+ "set scheduled=true where calendar.username= '" + username
+					+ "' and day= 'THURSDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
+
+					+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
+					+ " and DATE_FORMAT(`dateTime`, '%i') = " + time.getMinute());
+
+			editSchedule.executeUpdate();
+		}
+
+		for (LocalTime time : friday) {
+
+			// time = java.sql.Time.valueOf(time);
+
+			Query editSchedule = session().createSQLQuery(" update calendar "
+					+ "left outer join doctors on doctors.username=calendar.username "
+					+ "set scheduled=true where calendar.username= '" + username
+					+ "' and day= 'FRIDAY' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') >= '" + formattedString
+
+					+ "' and DATE_FORMAT(`dateTime`, '%H') = " + time.getHour()
+					+ " and DATE_FORMAT(`dateTime`, '%i') = " + time.getMinute());
+
+			editSchedule.executeUpdate();
+		}
+
 		System.out.println("Finished 'editSchedule' method");
 	}
 
+	public void bookAnAppointmentFor(String doctorUsername, long dateTime, String complain, String patientUsername) {
+
+		// Getting details of logged in patient
+		Criteria queryForPatientLastName = session().createCriteria(Patient.class)
+				.setProjection(Projections.projectionList().add(Projections.property("lastName"), "lastName"))
+				.add(Restrictions.eq("username", patientUsername));
+
+		Criteria queryForPatientFirstName = session().createCriteria(Patient.class)
+				.setProjection(Projections.projectionList().add(Projections.property("firstName"), "firstName"))
+				.add(Restrictions.eq("username", patientUsername));
+
+		Criteria queryForPatientEmail = session().createCriteria(Patient.class)
+				.setProjection(Projections.projectionList().add(Projections.property("email"), "email"))
+				.add(Restrictions.eq("username", patientUsername));
+
+		Criteria queryForPatientPhone = session().createCriteria(Patient.class)
+				.setProjection(Projections.projectionList().add(Projections.property("phoneNumber"), "phoneNumber"))
+				.add(Restrictions.eq("username", patientUsername));
+
+		String patientLastName = queryForPatientLastName.list().get(0).toString();
+		String patientFirstName = queryForPatientFirstName.list().get(0).toString();
+		String patientEmail = queryForPatientEmail.list().get(0).toString();
+		String patientPhone = queryForPatientPhone.list().get(0).toString();
+
+		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime), ZoneId.systemDefault());
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String formattedString = date.format(formatter);
+
+		System.out.println("Date and time for an appointment is " + date.toString());
+		Query bookAnAppointment = session().createSQLQuery(" update calendar "
+				+ "left outer join doctors on doctors.username=calendar.username "
+				+ "set busy=true , patientFirstName= '" + patientFirstName + "' , patientLastName= '" + patientLastName
+				+ "' , patientUserName= '" + patientUsername + "' , patientPhone= '" + patientPhone
+				+ "' , patientEmail= '" + patientEmail + "' , complain= '" + complain + "' where calendar.username= '"
+				+ doctorUsername + "' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') = '" + formattedString + "'");
+
+		bookAnAppointment.executeUpdate();
+	}
+
 	@SuppressWarnings("unchecked")
-	public List<Calendar> showDoctorsScheduleForNextMonth(String username) {
+	public List<Calendar> showDoctorsScheduleForNextWeek(String username) {
 		// Getting JSON of Calendar entity for current Doctor for the next month
 
 		LocalDate today = LocalDate.now();
 		java.sql.Date now = java.sql.Date.valueOf(today);
 
-		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusMonths(1));
+		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusWeeks(1));
 
 		Criteria crit = session().createCriteria(Calendar.class)
 				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
@@ -301,72 +380,25 @@ public class DoctorDao extends UserDao implements Serializable {
 				.add(Restrictions.eq("doctor.username", username)).add(Restrictions.eq("scheduled", true))
 				.add(Restrictions.ge("dateTime", now)).add(Restrictions.le("dateTime", plusAMonth));
 
-		//String FILENAME = "K:\\filename.txt";
-
-		/*try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
-
-			bw.write("Amount of enteties returned in showDoctorsScheduleForNextMonth is " + crit.list().size());
-
-			System.out.println("Done");
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-
-		}*/
+		
 
 		return crit.list();
 	}
 
-	public void bookAnAppointmentFor(String doctorUsername, long dateTime, String complain, String patientUsername) {
+	@SuppressWarnings("unchecked")
+	public List<Doctor> getDoctorDetails(String doctorUserName) {
+		Criteria crit = session().createCriteria(Doctor.class).setProjection(Projections.projectionList()
+				.add(Projections.property("email"), "email")
+				.add(Projections.property("field"), "field")
+				.add(Projections.property("firstName"), "firstName")
+				.add(Projections.property("lastName"), "lastName")
+				.add(Projections.property("phoneNumber"), "phoneNumber")
+				.add(Projections.property("password"), "password"))
+				
 		
+		.add(Restrictions.eq("username", doctorUserName));
 		
-		//Getting details of logged in patient
-		Criteria queryForPatientLastName = session().createCriteria(Patient.class)
-				.setProjection(Projections.projectionList()
-				.add(Projections.property("lastName"), "lastName"))
-				.add(Restrictions.eq("username", patientUsername));
-		
-		
-		Criteria queryForPatientFirstName = session().createCriteria(Patient.class)
-					.setProjection(Projections.projectionList()
-					.add(Projections.property("firstName"), "firstName"))
-					.add(Restrictions.eq("username", patientUsername));
-			
-	
-		Criteria queryForPatientEmail = session().createCriteria(Patient.class)
-				.setProjection(Projections.projectionList()
-				.add(Projections.property("email"), "email"))
-				.add(Restrictions.eq("username", patientUsername));
-	
-	
-		Criteria queryForPatientPhone = session().createCriteria(Patient.class)
-				.setProjection(Projections.projectionList()
-				.add(Projections.property("phoneNumber"), "phoneNumber"))
-				.add(Restrictions.eq("username", patientUsername));
-	
-		String patientLastName = queryForPatientLastName.list().get(0).toString();
-		String patientFirstName = queryForPatientFirstName.list().get(0).toString();
-		String patientEmail = queryForPatientEmail.list().get(0).toString();
-		int patientPhone = (int) queryForPatientPhone.list().get(0);
-	
-		
-		LocalDateTime date =
-			    LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime), ZoneId.systemDefault());
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String formattedString = date.format(formatter);
-		
-		System.out.println("Date and time for an appointment is " + date.toString());
-		Query bookAnAppointment = session().createSQLQuery(" update calendar "
-				+ "left outer join doctors on doctors.username=calendar.username "
-				+ "set busy=true , patientFirstName= '"+patientFirstName+"' , patientLastName= '"+ patientLastName 
-				+ "' , patientUserName= '"+patientUsername +"' , patientPhone= '" + patientPhone 
-				+ "' , patientEmail= '"+patientEmail + "' , complain= '" + complain
-				+ "' where calendar.username= '" + doctorUsername
-				+ "' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') = '" + formattedString+"'");
-
-		bookAnAppointment.executeUpdate();
+		return crit.list();
 	}
 
 }

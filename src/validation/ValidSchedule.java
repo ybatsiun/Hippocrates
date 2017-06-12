@@ -18,7 +18,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = validation.ValidScheduleImpl.class)
 public @interface ValidSchedule {
 
-	String message() default "Please chose at least two time spots";
+	String message() default "Please chose at least threes time spots";
 
 	Class<?>[] groups() default { };
 

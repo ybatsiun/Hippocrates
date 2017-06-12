@@ -32,15 +32,21 @@ public class DoctorsService implements Serializable {
 		doctorDao.createDoctor(doctor);
 	}
 
-	public List<Timestamp> showScheduledTimeForClosestWeek(String username) {
+	public List<Timestamp> showScheduleTimeForNextNextWeek(String username) {
 		System.out.println("Service:redirecting to DAO... ");
-		List<Timestamp> schedule = doctorDao.showScheduledTimeForClosestWeek(username);
+		List<Timestamp> schedule = doctorDao.showScheduleTimeForNextNextWeek(username);
 		return schedule;
 	}
 	
-	public List<Calendar> showDoctorsScheduleForNextMonth(String username) {
+	public List<Calendar> showScheduleTimeForNextWeek(String username) {
 		System.out.println("Service:redirecting to DAO... ");
-		List<Calendar> schedule = doctorDao.showDoctorsScheduleForNextMonth(username);
+		List<Calendar> schedule = doctorDao.showDoctorsScheduleForNextWeek(username);
+		return schedule;
+	}
+
+	public List<Calendar> showScheduleForCurrent_Next_and_NextNext_Weeks(String username) {
+		System.out.println("Service:redirecting to DAO... ");
+		List<Calendar> schedule = doctorDao.showScheduleForCurrent_Next_and_NextNext_Weeks(username);
 		return schedule;
 	}
 
@@ -49,10 +55,7 @@ public class DoctorsService implements Serializable {
 		return doctorsList;
 	}
 
-	public void bookAnAppointment(String doctorsUsername, String patientUsername, String dayAndTime,String complain) {
-		doctorDao.bookAnAppointment(doctorsUsername, patientUsername, dayAndTime,complain);
-		
-	}
+	
 
 	public List<Doctor> showDoctorsListForAdmin() {
 		List<Doctor> doctorsListForAdmin = doctorDao.showDoctorsForAdmin();
@@ -64,10 +67,14 @@ public class DoctorsService implements Serializable {
 		doctorDao.bookAnAppointmentFor ( doctorUsername,  dateTime,  complain,patientUsername);
 	}
 
-	/*public String showSchedules() {
-		List<Doctor> scheduleForAdmin = doctorDao.showSchedules();
-		return scheduleForAdmin;
-	}*/
+	public List<Doctor> getDoctorDetails(String doctorUserName) {
+
+		List<Doctor> doctorsDetailsList=doctorDao.getDoctorDetails(doctorUserName);
+		
+		return doctorsDetailsList;
+	}
+
+	
 
 	
 }

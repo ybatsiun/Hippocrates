@@ -9,90 +9,98 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 Doctor's registration form
-<br/>
+<br />
 
-<sf:form  
-	action="${pageContext.request.contextPath}/creating-doctor"
+<sf:form action="${pageContext.request.contextPath}/creating-doctor"
 	commandName="doctor">
-	
-	
 
-	  <table class="formtable">
-	 	<tr>
+
+
+	<table class="formtable">
+		<tr>
 			<td class="label">Username:</td>
-			<td> <sf:input class="control" path="username" name="username" type="text" /> <!-- Removed sf tag  -->
-				<br/>
-				<sf:errors path="username"></sf:errors>
-				
-				</td>
+			<td><sf:input class="control" path="username" name="username"
+					type="text" /> <!-- Removed sf tag  --> <br /> <sf:errors
+					path="username"></sf:errors></td>
 		</tr>
-		 <tr>
+		<tr>
 			<td class="label">firstName:</td>
-			<td><sf:input class="control" path="firstName" name="firstName" type="text" /><br />
-				<sf:errors path="firstName"></sf:errors>
-				
-				</td>
-		</tr> 
-		
-		 <tr>
-			<td class="label">lastName:</td>
-			<td><sf:input class="control" name="lastName" path="lastName" 
-					type="text" /><br />
-								<sf:errors path="lastName"></sf:errors>
-				
-				</td>
+			<td><sf:input class="control" path="firstName" name="firstName"
+					type="text" /><br /> <sf:errors path="firstName"></sf:errors></td>
 		</tr>
-		
+
+		<tr>
+			<td class="label">lastName:</td>
+			<td><sf:input class="control" name="lastName" path="lastName"
+					type="text" /><br /> <sf:errors path="lastName"></sf:errors></td>
+		</tr>
+
 		<tr>
 			<td class="label">Email:</td>
-			<td><sf:input class="control" name="email" path="email" 
-					type="text" /> <br/>
-									<sf:errors path="email"></sf:errors>
-					
-				</td>
+			<td><sf:input class="control" name="email" path="email"
+					type="text" /> <br /> <sf:errors path="email"></sf:errors></td>
 		</tr>
-		
-	 <tr>
+
+		<tr>
 			<td class="label">phoneNumber:</td>
-			<td><sf:input  class="control" path="phoneNumber" name="phoneNumber"
-					 type="text" /><br/>
-									<sf:errors path="phoneNumber"></sf:errors>
-				</td>
-		</tr> 
-		
-		 <tr>
+			<td><sf:input class="control" path="phoneNumber"
+					name="phoneNumber" type="text" /><br /> <sf:errors
+					path="phoneNumber"></sf:errors></td>
+		</tr>
+
+		<tr>
 			<td class="label">field:</td>
-			<td><sf:input  class="control" path="field" name="field"
-					 type="text" />
-					 <br/>
-									<form:errors path="field"></form:errors>
-				</td>
-		</tr> 
-		
-		 <tr>
+			<td><sf:input class="control" path="field" name="field"
+					type="text" /> <br /> <form:errors path="field"></form:errors></td>
+		</tr>
+
+		<tr>
 			<td class="label">password:</td>
-			<td><sf:input  class="control" path="password" name="password"
-					 type="password" /><br/>
-									<sf:errors path="password"></sf:errors>
-				</td>
+			<td><sf:input class="control" path="password" name="password"
+					type="password" /><br /> <sf:errors path="password"></sf:errors></td>
+		</tr>
+
+		<tr>
+			<td>Pick up the time you want to work on Monday:</td>
+			<td><form:checkboxes path="monday"
+					items="${doctor.mondayBlank}" /> <br /> <sf:errors
+					path="monday"></sf:errors></td>
+		</tr>
+
+		<tr>
+			<td>Pick up the time you want to work on Tuesday:</td>
+			<td><form:checkboxes path="tuesday"
+					items="${doctor.tuesdayBlank}" /> <br /> <sf:errors
+					path="tuesday"></sf:errors></td>
 		</tr>
 		
 		<tr>
-				<td>Pick up the time you want to work on Monday:</td>
-				<td><form:checkboxes path="monday" items="${doctor.mondayBlank}"  /> 
-				<br/>
-									<sf:errors path="monday"></sf:errors>
-				</td>
-			</tr>
+			<td>Pick up the time you want to work on Wednesday:</td>
+			<td><form:checkboxes path="wednesday"
+					items="${doctor.wednesdayBlank}" /> <br /> <sf:errors
+					path="wednesday"></sf:errors></td>
+		</tr>
 		
+		<tr>
+			<td>Pick up the time you want to work on Thursday:</td>
+			<td><form:checkboxes path="thursday"
+					items="${doctor.thursdayBlank}" /> <br /> <sf:errors
+					path="thursday"></sf:errors></td>
+		</tr>
 		
-	 <tr>
-		
-		
-	 <tr>
+		<tr>
+			<td>Pick up the time you want to work on Friday:</td>
+			<td><form:checkboxes path="friday"
+					items="${doctor.fridayBlank}" /> <br /> <sf:errors
+					path="friday"></sf:errors></td>
+		</tr>
+
+
+		<tr>
+		<tr>
 			<td class="label"></td>
 			<td><input class="control" value="Create account" type="submit" /></td>
-		</tr> 
+		</tr>
 	</table>
 
 </sf:form>
