@@ -83,11 +83,11 @@ public class Doctor implements Serializable {
 
 		ArrayList<LocalTime> constructor = new ArrayList<LocalTime>();
 		for (int a = 8; a < 18; a++) {
-			for (int b = 0; b < 60; b += 15) {
+			
 	
-				constructor.add(LocalTime.of(a, b));
+				constructor.add(LocalTime.of(a,0));
 	
-			}
+			
 		}
 		this.setMondayBlank(constructor);
 		this.setTuesdayBlank(constructor);

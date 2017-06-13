@@ -130,5 +130,10 @@
 		<put-attribute name="content"
 			value="/WEB-INF/tiles/appointmentsTable.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="error" extends="hippocrates.base">
+		<put-attribute name="content"
+			value="/WEB-INF/tiles/error.jsp"></put-attribute>
+	</definition>
 
 </tiles-definitions>

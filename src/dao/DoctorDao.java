@@ -1,7 +1,6 @@
 package dao;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -10,7 +9,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -42,10 +41,14 @@ public class DoctorDao extends UserDao implements Serializable {
 		System.out.println("In Doctor DAO creating a doctor with monday " + doctor.getMonday().toString());
 
 		session().save(doctor);
+		doctor = this.transferHoursListToIntervalsList(doctor, doctor.getMonday(), doctor.getTuesday(),
+				doctor.getWednesday(), doctor.getThursday(), doctor.getFriday());
+		// Making 15 min interval lists from 1 hour list and passing these list
+		// to current doctor object
 
-		System.out.println("In Doctor Dao after saving using getByUsername"
-				+ this.getDoctorByUsername(doctor.getUsername()).toString());
+		System.out.println("Doctor list for monday before transfer " + doctor.getMonday().toString());
 
+		// _______________________________________________________________________________
 		System.out.println("Creating calendar table...");
 		// variable i determines on how much days ahead you create schedule in
 		// calendar table
@@ -181,6 +184,30 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
+	
+
+	@SuppressWarnings("unchecked")
+	public List<Calendar> showScheduleForCurrent_and_NextWeek(String username) {
+		// Getting JSON of Calendar entity for current Doctor for the next month
+	
+		LocalDate today = LocalDate.now();
+		java.sql.Date now = java.sql.Date.valueOf(today);
+	
+		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusWeeks(2));
+		Criteria crit = session().createCriteria(Calendar.class)
+				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
+						.add(Projections.property("scheduled"), "scheduled").add(Projections.property("day"), "day")
+						.add(Projections.property("busy"), "busy")
+						.add(Projections.property("patientFirstName"), "patientFirstName")
+						.add(Projections.property("patientLastName"), "patientLastName"))
+				.setResultTransformer(Transformers.aliasToBean(Calendar.class))
+	
+				.add(Restrictions.eq("doctor.username", username)).add(Restrictions.eq("scheduled", true))
+				.add(Restrictions.ge("dateTime", now)).add(Restrictions.le("dateTime", plusAMonth));
+	
+		return crit.list();
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Doctor> showDoctors() {
 		Criteria crit = session().createCriteria(Doctor.class);
@@ -213,10 +240,11 @@ public class DoctorDao extends UserDao implements Serializable {
 		return (Doctor) session().get(Doctor.class, username);
 	}
 
-
 	public void editSchedule(ArrayList<LocalTime> monday, ArrayList<LocalTime> tuesday, ArrayList<LocalTime> wednesday,
 			ArrayList<LocalTime> thursday, ArrayList<LocalTime> friday, String username) {
-
+		// Transfering from hour to 15 min lists of time
+		Doctor doctor = new Doctor();
+		doctor = this.transferHoursListToIntervalsList(doctor, monday, tuesday, wednesday, thursday, friday);
 
 		LocalDateTime theMondayAfterClosestMonday = LocalDateTime.now().plusWeeks(1);
 		if (theMondayAfterClosestMonday.getDayOfWeek().toString() != "SUNDAY") {
@@ -244,7 +272,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		// Applying edited schedule
 
-		for (LocalTime time : monday) {
+		for (LocalTime time : doctor.getMonday()) {
 
 			Query editSchedule = session().createSQLQuery(" update calendar "
 					+ "left outer join doctors on doctors.username=calendar.username "
@@ -257,7 +285,7 @@ public class DoctorDao extends UserDao implements Serializable {
 			editSchedule.executeUpdate();
 		}
 
-		for (LocalTime time : tuesday) {
+		for (LocalTime time : doctor.getTuesday()) {
 
 			// time = java.sql.Time.valueOf(time);
 
@@ -272,7 +300,7 @@ public class DoctorDao extends UserDao implements Serializable {
 			editSchedule.executeUpdate();
 		}
 
-		for (LocalTime time : wednesday) {
+		for (LocalTime time : doctor.getWednesday()) {
 
 			// time = java.sql.Time.valueOf(time);
 
@@ -287,7 +315,7 @@ public class DoctorDao extends UserDao implements Serializable {
 			editSchedule.executeUpdate();
 		}
 
-		for (LocalTime time : thursday) {
+		for (LocalTime time : doctor.getThursday()) {
 
 			// time = java.sql.Time.valueOf(time);
 
@@ -302,7 +330,7 @@ public class DoctorDao extends UserDao implements Serializable {
 			editSchedule.executeUpdate();
 		}
 
-		for (LocalTime time : friday) {
+		for (LocalTime time : doctor.getFriday()) {
 
 			// time = java.sql.Time.valueOf(time);
 
@@ -361,44 +389,72 @@ public class DoctorDao extends UserDao implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Calendar> showDoctorsScheduleForNextWeek(String username) {
-		// Getting JSON of Calendar entity for current Doctor for the next month
-
-		LocalDate today = LocalDate.now();
-		java.sql.Date now = java.sql.Date.valueOf(today);
-
-		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusWeeks(1));
-
-		Criteria crit = session().createCriteria(Calendar.class)
-				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
-						.add(Projections.property("scheduled"), "scheduled").add(Projections.property("day"), "day")
-						.add(Projections.property("busy"), "busy")
-						.add(Projections.property("patientFirstName"), "patientFirstName")
-						.add(Projections.property("patientLastName"), "patientLastName"))
-				.setResultTransformer(Transformers.aliasToBean(Calendar.class))
-
-				.add(Restrictions.eq("doctor.username", username)).add(Restrictions.eq("scheduled", true))
-				.add(Restrictions.ge("dateTime", now)).add(Restrictions.le("dateTime", plusAMonth));
-
-		
-
-		return crit.list();
-	}
-
-	@SuppressWarnings("unchecked")
 	public List<Doctor> getDoctorDetails(String doctorUserName) {
-		Criteria crit = session().createCriteria(Doctor.class).setProjection(Projections.projectionList()
-				.add(Projections.property("email"), "email")
-				.add(Projections.property("field"), "field")
-				.add(Projections.property("firstName"), "firstName")
-				.add(Projections.property("lastName"), "lastName")
-				.add(Projections.property("phoneNumber"), "phoneNumber")
-				.add(Projections.property("password"), "password"))
-				
-		
-		.add(Restrictions.eq("username", doctorUserName));
-		
+		Criteria crit = session().createCriteria(Doctor.class)
+				.setProjection(Projections.projectionList().add(Projections.property("email"), "email")
+						.add(Projections.property("field"), "field").add(Projections.property("firstName"), "firstName")
+						.add(Projections.property("lastName"), "lastName")
+						.add(Projections.property("phoneNumber"), "phoneNumber")
+						.add(Projections.property("password"), "password"))
+
+				.add(Restrictions.eq("username", doctorUserName));
+
 		return crit.list();
 	}
 
+	public Doctor transferHoursListToIntervalsList(Doctor doctor, List<LocalTime> monday, List<LocalTime> tuesday,
+			List<LocalTime> wednesday, List<LocalTime> thursday, List<LocalTime> friday) {
+
+		ArrayList<LocalTime> intervalsMonday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> intervalsTuesday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> intervalsWednesday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> intervalsThursday = new ArrayList<LocalTime>();
+		ArrayList<LocalTime> intervalsFriday = new ArrayList<LocalTime>();
+
+		for (LocalTime time : monday) {
+
+			for (int i = 0; i < 60; i += 15) {
+				intervalsMonday.add(LocalTime.of(time.getHour(), i));
+			}
+		}
+		doctor.setMonday(intervalsMonday);
+		System.out.println("Monday after transfer" + doctor.getMonday().toString());
+		System.out.println("Monday after clearing intervals list" + doctor.getMonday().toString());
+
+		for (LocalTime time : tuesday) {
+
+			for (int i = 0; i < 60; i += 15) {
+				intervalsTuesday.add(LocalTime.of(time.getHour(), i));
+			}
+		}
+		doctor.setTuesday(intervalsTuesday);
+
+		for (LocalTime time : wednesday) {
+
+			for (int i = 0; i < 60; i += 15) {
+				intervalsWednesday.add(LocalTime.of(time.getHour(), i));
+			}
+		}
+		doctor.setWednesday(intervalsWednesday);
+
+		for (LocalTime time : thursday) {
+
+			for (int i = 0; i < 60; i += 15) {
+				intervalsThursday.add(LocalTime.of(time.getHour(), i));
+			}
+		}
+		doctor.setThursday(intervalsThursday);
+
+		for (LocalTime time : friday) {
+
+			for (int i = 0; i < 60; i += 15) {
+				intervalsFriday.add(LocalTime.of(time.getHour(), i));
+			}
+		}
+		doctor.setFriday(intervalsFriday);
+
+		System.out.println("Doctor to be saved : " + doctor.toString());
+
+		return doctor;
+	}
 }

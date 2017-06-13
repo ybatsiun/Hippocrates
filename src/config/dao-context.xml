@@ -53,6 +53,9 @@
 		<bean id="patientService" class="service.PatientsService"></bean>
 		<bean id="calendar" class="dao.Calendar"></bean>
 		<bean id="doctor" class="dao.Doctor"></bean>
+		<bean id="exceptionHandler" class="controllers.ErrorHandler"></bean>
+		
+		
 	</beans>
 
 

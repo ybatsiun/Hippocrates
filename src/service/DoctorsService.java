@@ -32,15 +32,15 @@ public class DoctorsService implements Serializable {
 		doctorDao.createDoctor(doctor);
 	}
 
-	public List<Timestamp> showScheduleTimeForNextNextWeek(String username) {
+	public List<Timestamp> showScheduleForNextNextWeek(String username) {
 		System.out.println("Service:redirecting to DAO... ");
 		List<Timestamp> schedule = doctorDao.showScheduleTimeForNextNextWeek(username);
 		return schedule;
 	}
 	
-	public List<Calendar> showScheduleTimeForNextWeek(String username) {
+	public List<Calendar> showScheduleForCurrent_and_NextWeek(String username) {
 		System.out.println("Service:redirecting to DAO... ");
-		List<Calendar> schedule = doctorDao.showDoctorsScheduleForNextWeek(username);
+		List<Calendar> schedule = doctorDao.showScheduleForCurrent_and_NextWeek(username);
 		return schedule;
 	}
 
@@ -73,6 +73,8 @@ public class DoctorsService implements Serializable {
 		
 		return doctorsDetailsList;
 	}
+
+	
 
 	
 

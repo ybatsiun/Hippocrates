@@ -234,8 +234,6 @@ public class HippocratesController {
 
 	}
 
-	// try to write this as an action in flow to redirect to
-	// /getAppointmentTable after having canceled an appointment
 	@RequestMapping(value = "/cancelAnAppointment")
 	public String showCancelAnAppointment(@RequestParam("id") int id) {
 		patientService.cancelAnAppointment(id);

@@ -100,7 +100,7 @@
 		<security:intercept-url pattern="/authenticated" access="permitAll" />
 		<security:intercept-url pattern="/creating-doctor" access="permitAll" />
 		<security:intercept-url pattern="/creating-patient" access="permitAll" />
-		
+		<security:intercept-url pattern="/error" access="permitAll" />
 		<security:intercept-url pattern="/**" access="denyAll" />
 
 		<security:form-login login-page="/login" authentication-failure-url="/login?error=true" 
