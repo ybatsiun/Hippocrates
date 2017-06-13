@@ -100,7 +100,7 @@ public class Patient implements Serializable {
 	public Patient() {
 	}
 
-	public Patient(String username, int enabled, String password, String authority, String firstName, String lastName,
+	public Patient(String username, String password, String firstName, String lastName,
 			String phoneNumber, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -108,17 +108,7 @@ public class Patient implements Serializable {
 		this.email = email;
 	}
 
-	/*
-	 * public Patient(String username,int enabled,String password,String
-	 * authority) { super(username, enabled, password, authority); }
-	 */
-
-	/*
-	 * @Override public String toString() { return "Patient [username" +
-	 * username + ",firstName=" + firstName + ", lastName=" + lastName +
-	 * ", phoneNumber=" + phoneNumber + ", email=" + email + "]"; }
-	 */
-
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}

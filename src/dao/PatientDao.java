@@ -5,15 +5,13 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import dao.Patient;
 
 @Repository
 @Transactional
@@ -24,12 +22,18 @@ public class PatientDao extends UserDao implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public List<Patient> getAllPatients() {
-		return session().createQuery("from Patient").list();
+		System.out.println("PatientDao.getAllPatients started");
+		Criteria crit = session().createCriteria(Patient.class);
+		System.out.println("PatientDao.getAllPatients finished");
+		return crit.list();
 
 	}
 
 	public void createPatient(Patient patient) {
+		
 		session().save(patient);
+		
+		
 		System.out.println("Patient registered");
 	}
 

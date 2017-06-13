@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 
 
-@EnableWebMvc
 @ControllerAdvice
 public class ErrorHandler extends ResponseEntityExceptionHandler {
 /*Application runs this method when errors is thrown. This can be controlled by "Exception Handler" written

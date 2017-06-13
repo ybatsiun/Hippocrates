@@ -10,6 +10,7 @@
 		<config>src/config/dao-context.xml</config>
 		<config>WebContent/WEB-INF/hippocrates-servlet.xml</config>
 		<config>src/config/security-context.xml</config>
+		<config>test/config/datasource.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

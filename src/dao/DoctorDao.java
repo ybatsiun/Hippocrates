@@ -376,8 +376,9 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String formattedString = date.format(formatter);
-
-		System.out.println("Date and time for an appointment is " + date.toString());
+		/*System.out.println("Date and time for an appointment is " + date.toString());
+		System.out.println("Patient details are "  + patientLastName + " " + patientFirstName + " "+ 
+				patientEmail+" "+patientPhone + " " + complain + " "  + formattedString + " " );*/
 		Query bookAnAppointment = session().createSQLQuery(" update calendar "
 				+ "left outer join doctors on doctors.username=calendar.username "
 				+ "set busy=true , patientFirstName= '" + patientFirstName + "' , patientLastName= '" + patientLastName
@@ -385,6 +386,10 @@ public class DoctorDao extends UserDao implements Serializable {
 				+ "' , patientEmail= '" + patientEmail + "' , complain= '" + complain + "' where calendar.username= '"
 				+ doctorUsername + "' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') = '" + formattedString + "'");
 
+		
+		/*System.out.println("Parameters from SQL statement are \n patient First Name " + patientFirstName+"\n p Last Name "
+		+ patientLastName+ "\n p UN " + patientUsername+ "\n phone "  + patientPhone  + "\n email " + patientEmail
+		+ "\n complain " + complain +  " \n d UN " + doctorUsername + "\n date "  + formattedString);*/
 		bookAnAppointment.executeUpdate();
 	}
 
@@ -456,5 +461,112 @@ public class DoctorDao extends UserDao implements Serializable {
 		System.out.println("Doctor to be saved : " + doctor.toString());
 
 		return doctor;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Doctor> getAllDoctors() {
+		Criteria crit = session().createCriteria(Doctor.class);
+		
+		crit.add(Restrictions.eq("enabled", 1))
+		.setProjection(Projections.projectionList().add(Projections.property("username"), "username"))
+		.setResultTransformer(Transformers.aliasToBean(Doctor.class));
+		
+		return crit.list();
+
+	}
+
+	public void createDoctorForTest(Doctor doctor) {
+		System.out.println("In Doctor DAO creating a doctor with monday " + doctor.getMonday().toString());
+	
+		session().save(doctor);
+		doctor = this.transferHoursListToIntervalsList(doctor, doctor.getMonday(), doctor.getTuesday(),
+				doctor.getWednesday(), doctor.getThursday(), doctor.getFriday());
+		// Making 15 min interval lists from 1 hour list and passing these list
+		// to current doctor object
+	
+		System.out.println("Doctor list for monday before transfer " + doctor.getMonday().toString());
+	
+		// _______________________________________________________________________________
+		System.out.println("Creating calendar table...");
+		// variable i determines on how much days ahead you create schedule in
+		// calendar table
+		for (int i = 1; i < 30; i++) {
+			LocalDateTime localDateTime = LocalDateTime.now().plusDays(i);
+	
+			if (localDateTime.getDayOfWeek().toString() == "SATURDAY"
+					|| localDateTime.getDayOfWeek().toString() == "SUNDAY") {
+				continue;
+			}
+	
+			for (int a = 8; a < 18; a++) {
+	
+				for (int b = 0; b < 60; b += 15) {
+	
+					localDateTime = LocalDateTime.now().plusDays(i).withHour(a).withMinute(b).withSecond(0);
+					Calendar calendar = new Calendar(doctor);
+					calendar.setDateTime(Timestamp.valueOf(localDateTime));
+	
+					calendar.doctor.setUsername(doctor.getUsername());
+	
+					calendar.setDay(localDateTime.getDayOfWeek().toString().toString());
+	
+					if (calendar.getDay() == "MONDAY") {
+						for (LocalTime time : doctor.getMonday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+	
+							}
+						}
+					}
+	
+					if (calendar.getDay() == "TUESDAY") {
+						for (LocalTime time : doctor.getTuesday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+	
+							}
+						}
+					}
+	
+					if (calendar.getDay() == "WEDNESDAY") {
+						for (LocalTime time : doctor.getWednesday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+	
+							}
+						}
+					}
+	
+					if (calendar.getDay() == "THURSDAY") {
+						for (LocalTime time : doctor.getThursday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+	
+							}
+						}
+					}
+	
+					if (calendar.getDay() == "FRIDAY") {
+						for (LocalTime time : doctor.getFriday()) {
+							if (calendar.getDateTime().getHours() == time.getHour()
+									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
+								calendar.setScheduled(true);
+	
+							}
+						}
+					}
+	
+					session().save(calendar);
+				}
+			}
+		}
+	
+		System.out.println("Doctor registered");
+		System.out.println("In Doctor Dao after full registration using getByUsername"
+				+ this.getDoctorByUsername(doctor.getUsername()).toString());
 	}
 }

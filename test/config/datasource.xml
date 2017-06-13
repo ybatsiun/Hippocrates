@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+
+
+
+
+	<context:annotation-config></context:annotation-config>
+	 <context:component-scan base-package="test"></context:component-scan> 
+
+	<beans profile="dev">
+	<context:property-placeholder
+			location="/config/jdbc.properties" />
+
+		<bean id="datasource" class="org.apache.commons.dbcp.BasicDataSource"
+			destroy-method="close">
+
+			<property name="driverClassName" value="${jdbc.driver}"></property>
+			<property name="url" value="${jdbc.url}"></property>
+			<property name="password" value="${jdbc.password}"></property>
+			<property name="username" value="${jdbc.username}"></property>
+		</bean>
+		
+
+		<bean id="sessionFactory"
+			class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+			<property name="dataSource" ref="datasource"></property>
+			<property name="hibernateProperties">
+				<props>
+					<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+					
+					
+				</props>
+			</property>
+
+			  <property name="packagesToScan">
+				<list>
+					<value>dao</value>
+				</list>
+			</property>  
+		</bean>
+
+
+		<bean id="transactionManager"
+			class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+			<property name="dataSource" ref="datasource"></property>
+			<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
+		<tx:annotation-driven />
+		<bean id="doctorsService" class="service.DoctorsService"></bean>
+		<bean id="patientDao" class="dao.PatientDao"></bean>
+		<bean id="doctorDao" class="dao.DoctorDao"></bean>
+		<bean id="patientService" class="service.PatientsService"></bean>
+		<bean id="calendar" class="dao.Calendar"></bean>
+		<bean id="doctor" class="dao.Doctor"></bean>
+		<bean id="exceptionHandler" class="controllers.ErrorHandler"></bean>
+		
+		
+	</beans>
+
+
+
+	
+	
+</beans>
