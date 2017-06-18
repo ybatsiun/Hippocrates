@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- Flow is designed in representative purposes, makes a redirection only from one to another page,
+see flow-graph -->
 <flow xmlns="http://www.springframework.org/schema/webflow"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow
@@ -8,30 +9,15 @@
 	<view-state id="doctorsPage">
 
 		<transition on="show-doctors-schedule" to="doctors-schedule">
-		
-		
-		
+
 		</transition>
 
 	</view-state>
 
-
-
 	<view-state id="doctors-schedule">
-	
-		<transition on="show-patients-info" to="patients-info"></transition>
-		<transition on="show-edit-schedule" to="edit-schedule"></transition>
-	
+
+
 	</view-state>
 
 
-	
-
-	
-
-
-
-	<view-state id="patients-info">
-
-	</view-state>
 </flow>

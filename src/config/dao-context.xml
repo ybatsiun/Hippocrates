@@ -16,8 +16,9 @@
 
 	<context:annotation-config></context:annotation-config>
 	 <context:component-scan base-package="dao"></context:component-scan> 
-
-	<beans profile="production">
+<!-- Defining data source
+ -->	
+ <beans profile="production">
 		<jee:jndi-lookup jndi-name="jdbc/hippocrates" id="datasource"
 			expected-type="javax.sql.DataSource">
 		</jee:jndi-lookup>
@@ -47,6 +48,8 @@
 			<property name="sessionFactory" ref="sessionFactory" />
 		</bean>
 		<tx:annotation-driven />
+		
+		<!-- Beans which are needed in the process -->
 		<bean id="doctorsService" class="service.DoctorsService"></bean>
 		<bean id="patientDao" class="dao.PatientDao"></bean>
 		<bean id="doctorDao" class="dao.DoctorDao"></bean>

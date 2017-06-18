@@ -11,7 +11,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-
+/*Doctor is a class that corresponds to an entity patient in the database.
+ * Patient is a user role. Fields represent a personal information of a user*/
 @Entity
 @Table(name = "patients")
 public class Patient implements Serializable {

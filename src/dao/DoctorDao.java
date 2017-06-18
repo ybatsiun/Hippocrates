@@ -22,21 +22,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-//TODO do showschedule for the next week method and rename showScheduledTimeForClosestWeek(String) method to show schedule 
-// for the next week after next week
+/*This class contains methods to work with data of doctor object. Each of this methods is duplicated in the service layer (DoctorService)*/
 @Repository
 @Transactional
 @Component("doctorDao")
 public class DoctorDao extends UserDao implements Serializable {
-	/**
-	 * 
-	 */
 
 	@Autowired
 	private PatientDao patientDao;
 
 	private static final long serialVersionUID = 1L;
 
+	/*
+	 * First creates doctor object in DB. Fields of doctor object like
+	 * monday,tuesday etc. contain a chosen by a user 1 hour intervals - the
+	 * schedule. This intervals are transfered to a 15 min intervals. Afterwards
+	 * the method creates time spots (calendar objects) for this doctor object .
+	 * Each time spot is a 15 min interval from 08:00 to 18:00 - time interval
+	 * during which a doctor can chose a schedule. When each spot is being
+	 * created, method checks what day of the week it is and ,depending on the
+	 * day it checks whether the corresponding field in doctor object (monday,
+	 * tuesday etc.) contains this time spot. If yes this time spot is marked
+	 * with scheduled=true.
+	 */
 	public void createDoctor(Doctor doctor) {
 		System.out.println("In Doctor DAO creating a doctor with monday " + doctor.getMonday().toString());
 
@@ -132,6 +140,16 @@ public class DoctorDao extends UserDao implements Serializable {
 				+ this.getDoctorByUsername(doctor.getUsername()).toString());
 	}
 
+	/*
+	 * !!! TODO Please debug these three methods. Make sure you name the
+	 * variables properly and comment on these methods !
+	 */
+
+	/*
+	 * First the method finds XXX The method returns a list of timestamp objects
+	 * which is a for scheduled time the next week after next week after current
+	 * week.
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Timestamp> showScheduleTimeForNextNextWeek(String username) {
 
@@ -162,6 +180,11 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
+	/*
+	 * First the method finds XXX The method returns a list of timestamp objects
+	 * which is a for scheduled time the next week after next week after current
+	 * week.
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Calendar> showScheduleForCurrent_Next_and_NextNext_Weeks(String username) {
 
@@ -173,7 +196,7 @@ public class DoctorDao extends UserDao implements Serializable {
 		Criteria crit = session().createCriteria(Calendar.class)
 				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
 						.add(Projections.property("scheduled"), "scheduled").add(Projections.property("day"), "day")
-						.add(Projections.property("busy"), "busy")
+						.add(Projections.property("busy"), "busy").add(Projections.property("complain"), "complain")
 						.add(Projections.property("patientFirstName"), "patientFirstName")
 						.add(Projections.property("patientLastName"), "patientLastName"))
 				.setResultTransformer(Transformers.aliasToBean(Calendar.class))
@@ -184,30 +207,37 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
-	
-
+	/*
+	 * First the method finds XXX The method returns a list of timestamp objects
+	 * which is a for scheduled time the next week after next week after current
+	 * week.
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Calendar> showScheduleForCurrent_and_NextWeek(String username) {
 		// Getting JSON of Calendar entity for current Doctor for the next month
-	
+
 		LocalDate today = LocalDate.now();
 		java.sql.Date now = java.sql.Date.valueOf(today);
-	
+
 		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusWeeks(2));
 		Criteria crit = session().createCriteria(Calendar.class)
 				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
 						.add(Projections.property("scheduled"), "scheduled").add(Projections.property("day"), "day")
 						.add(Projections.property("busy"), "busy")
+
 						.add(Projections.property("patientFirstName"), "patientFirstName")
 						.add(Projections.property("patientLastName"), "patientLastName"))
 				.setResultTransformer(Transformers.aliasToBean(Calendar.class))
-	
+
 				.add(Restrictions.eq("doctor.username", username)).add(Restrictions.eq("scheduled", true))
 				.add(Restrictions.ge("dateTime", now)).add(Restrictions.le("dateTime", plusAMonth));
-	
+
 		return crit.list();
 	}
 
+	/*
+	 * The method returns a list of all doctors which have enabled=1 in the DB
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Doctor> showDoctors() {
 		Criteria crit = session().createCriteria(Doctor.class);
@@ -220,15 +250,7 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Doctor> showDoctorsForAdmin() {
-		Criteria crit = session().createCriteria(Doctor.class)
-
-		;
-
-		return crit.list();
-	}
-
+	/* TODO do we use it ? */
 	@SuppressWarnings("unchecked")
 	public List<Doctor> showSchedules() {
 		Criteria crit = session().createCriteria(Doctor.class);
@@ -236,10 +258,17 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
+	/* The method returns a doctor with username passed to a method*/
 	public Doctor getDoctorByUsername(String username) {
 		return (Doctor) session().get(Doctor.class, username);
 	}
-
+	
+	
+/* The method is designed to rewrite the part of the schedule of a doctor. Method's parameters are username of a doctor and 5 ArrayLists which define 
+ * new (edited) schedule. First the method finds a day after a new schedule must be implemented XXX . Then a schedule after this day is deleted be passing false to 
+ * a parameters busy and scheduled. Afterwards, for every time spot in each List which is responsible for a particular day of the week and sql update query finds a 
+ * a calendar object entity with a proper day of the week and the same time spot and passes true to scheduled parameter. These updates are implemented only for timespots
+ * after XXX */
 	public void editSchedule(ArrayList<LocalTime> monday, ArrayList<LocalTime> tuesday, ArrayList<LocalTime> wednesday,
 			ArrayList<LocalTime> thursday, ArrayList<LocalTime> friday, String username) {
 		// Transfering from hour to 15 min lists of time
@@ -287,7 +316,6 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		for (LocalTime time : doctor.getTuesday()) {
 
-			// time = java.sql.Time.valueOf(time);
 
 			Query editSchedule = session().createSQLQuery(" update calendar "
 					+ "left outer join doctors on doctors.username=calendar.username "
@@ -302,7 +330,6 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		for (LocalTime time : doctor.getWednesday()) {
 
-			// time = java.sql.Time.valueOf(time);
 
 			Query editSchedule = session().createSQLQuery(" update calendar "
 					+ "left outer join doctors on doctors.username=calendar.username "
@@ -317,7 +344,6 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		for (LocalTime time : doctor.getThursday()) {
 
-			// time = java.sql.Time.valueOf(time);
 
 			Query editSchedule = session().createSQLQuery(" update calendar "
 					+ "left outer join doctors on doctors.username=calendar.username "
@@ -332,7 +358,6 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		for (LocalTime time : doctor.getFriday()) {
 
-			// time = java.sql.Time.valueOf(time);
 
 			Query editSchedule = session().createSQLQuery(" update calendar "
 					+ "left outer join doctors on doctors.username=calendar.username "
@@ -347,7 +372,8 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		System.out.println("Finished 'editSchedule' method");
 	}
-
+/*The method first gets the details of a patient who is logged in. After it finds a calendar object which has a defined in parameters doctors username, dateTime
+ * and passes patients info, busy=true to this calendar object.*/
 	public void bookAnAppointmentFor(String doctorUsername, long dateTime, String complain, String patientUsername) {
 
 		// Getting details of logged in patient
@@ -376,9 +402,7 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String formattedString = date.format(formatter);
-		/*System.out.println("Date and time for an appointment is " + date.toString());
-		System.out.println("Patient details are "  + patientLastName + " " + patientFirstName + " "+ 
-				patientEmail+" "+patientPhone + " " + complain + " "  + formattedString + " " );*/
+		
 		Query bookAnAppointment = session().createSQLQuery(" update calendar "
 				+ "left outer join doctors on doctors.username=calendar.username "
 				+ "set busy=true , patientFirstName= '" + patientFirstName + "' , patientLastName= '" + patientLastName
@@ -387,12 +411,9 @@ public class DoctorDao extends UserDao implements Serializable {
 				+ doctorUsername + "' and DATE_FORMAT(`dateTime`, '%Y-%m-%d %H:%i:%s') = '" + formattedString + "'");
 
 		
-		/*System.out.println("Parameters from SQL statement are \n patient First Name " + patientFirstName+"\n p Last Name "
-		+ patientLastName+ "\n p UN " + patientUsername+ "\n phone "  + patientPhone  + "\n email " + patientEmail
-		+ "\n complain " + complain +  " \n d UN " + doctorUsername + "\n date "  + formattedString);*/
 		bookAnAppointment.executeUpdate();
 	}
-
+/*The method returns a doctor info with a username defined in the parameter to a method*/
 	@SuppressWarnings("unchecked")
 	public List<Doctor> getDoctorDetails(String doctorUserName) {
 		Criteria crit = session().createCriteria(Doctor.class)
@@ -406,7 +427,9 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		return crit.list();
 	}
-
+/*The method takes 5 lists of a doctor object and LocalTime objects . Each contains an hour interval ( general formula is XX:00, where XX is an hour between 08 and 18).
+ * Then a method transfers these 1 hour intervals to a 15 min intervals and passes the to a doctor object. After all a doctor object with the 15 min intervals as a 
+ * monday,tuesday etc. fields is returned. */
 	public Doctor transferHoursListToIntervalsList(Doctor doctor, List<LocalTime> monday, List<LocalTime> tuesday,
 			List<LocalTime> wednesday, List<LocalTime> thursday, List<LocalTime> friday) {
 
@@ -462,109 +485,110 @@ public class DoctorDao extends UserDao implements Serializable {
 
 		return doctor;
 	}
-	
+
 	@SuppressWarnings("unchecked")
+	/*TODO do we use it  ?*/
 	public List<Doctor> getAllDoctors() {
 		Criteria crit = session().createCriteria(Doctor.class);
-		
+
 		crit.add(Restrictions.eq("enabled", 1))
-		.setProjection(Projections.projectionList().add(Projections.property("username"), "username"))
-		.setResultTransformer(Transformers.aliasToBean(Doctor.class));
-		
+				.setProjection(Projections.projectionList().add(Projections.property("username"), "username"))
+				.setResultTransformer(Transformers.aliasToBean(Doctor.class));
+
 		return crit.list();
 
 	}
-
+/*The same a create doctor method but created much less calendar object. Designed in testing purposes.*/
 	public void createDoctorForTest(Doctor doctor) {
 		System.out.println("In Doctor DAO creating a doctor with monday " + doctor.getMonday().toString());
-	
+
 		session().save(doctor);
 		doctor = this.transferHoursListToIntervalsList(doctor, doctor.getMonday(), doctor.getTuesday(),
 				doctor.getWednesday(), doctor.getThursday(), doctor.getFriday());
 		// Making 15 min interval lists from 1 hour list and passing these list
 		// to current doctor object
-	
+
 		System.out.println("Doctor list for monday before transfer " + doctor.getMonday().toString());
-	
+
 		// _______________________________________________________________________________
 		System.out.println("Creating calendar table...");
 		// variable i determines on how much days ahead you create schedule in
 		// calendar table
 		for (int i = 1; i < 30; i++) {
 			LocalDateTime localDateTime = LocalDateTime.now().plusDays(i);
-	
+
 			if (localDateTime.getDayOfWeek().toString() == "SATURDAY"
 					|| localDateTime.getDayOfWeek().toString() == "SUNDAY") {
 				continue;
 			}
-	
+
 			for (int a = 8; a < 18; a++) {
-	
+
 				for (int b = 0; b < 60; b += 15) {
-	
+
 					localDateTime = LocalDateTime.now().plusDays(i).withHour(a).withMinute(b).withSecond(0);
 					Calendar calendar = new Calendar(doctor);
 					calendar.setDateTime(Timestamp.valueOf(localDateTime));
-	
+
 					calendar.doctor.setUsername(doctor.getUsername());
-	
+
 					calendar.setDay(localDateTime.getDayOfWeek().toString().toString());
-	
+
 					if (calendar.getDay() == "MONDAY") {
 						for (LocalTime time : doctor.getMonday()) {
 							if (calendar.getDateTime().getHours() == time.getHour()
 									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
 								calendar.setScheduled(true);
-	
+
 							}
 						}
 					}
-	
+
 					if (calendar.getDay() == "TUESDAY") {
 						for (LocalTime time : doctor.getTuesday()) {
 							if (calendar.getDateTime().getHours() == time.getHour()
 									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
 								calendar.setScheduled(true);
-	
+
 							}
 						}
 					}
-	
+
 					if (calendar.getDay() == "WEDNESDAY") {
 						for (LocalTime time : doctor.getWednesday()) {
 							if (calendar.getDateTime().getHours() == time.getHour()
 									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
 								calendar.setScheduled(true);
-	
+
 							}
 						}
 					}
-	
+
 					if (calendar.getDay() == "THURSDAY") {
 						for (LocalTime time : doctor.getThursday()) {
 							if (calendar.getDateTime().getHours() == time.getHour()
 									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
 								calendar.setScheduled(true);
-	
+
 							}
 						}
 					}
-	
+
 					if (calendar.getDay() == "FRIDAY") {
 						for (LocalTime time : doctor.getFriday()) {
 							if (calendar.getDateTime().getHours() == time.getHour()
 									&& calendar.getDateTime().getMinutes() == time.getMinute()) {
 								calendar.setScheduled(true);
-	
+
 							}
 						}
 					}
-	
+
 					session().save(calendar);
 				}
 			}
 		}
-	
+
 		System.out.println("Doctor registered");
 		System.out.println("In Doctor Dao after full registration using getByUsername"
 				+ this.getDoctorByUsername(doctor.getUsername()).toString());

@@ -96,11 +96,6 @@ function getURLParameter(name) {
 
 
 
-<a href="${flowExecutionUrl}&_eventId=show-list-of-doctors"><input
-	type="submit" name="show-list-of-doctors" value="list of doctors" /></a>
-
-<a href="${flowExecutionUrl}&_eventId=show-list-of-patients"><input
-	type="submit" name="show-list-of-patients" value="list of patients" /></a>
 
 
 

@@ -14,7 +14,7 @@
 	</p>
 		<table class="formtable">
 		 <tr>
-			<td class="label">Please enter your complain</td>
+			<td class="label">Here you can enter your complain</td>
 			<td><input class="control" name="complain"  
 					type="text" /><br />
 				</td>

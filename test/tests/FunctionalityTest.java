@@ -25,6 +25,8 @@ import dao.Doctor;
 import dao.DoctorDao;
 import dao.Patient;
 import dao.PatientDao;
+import service.DoctorsService;
+import service.PatientsService;
 
 @ActiveProfiles("dev")
 @ContextConfiguration(locations = { "classpath:/config/dao-context.xml", "classpath:/config/security-context.xml",
@@ -32,11 +34,13 @@ import dao.PatientDao;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class FunctionalityTest {
 
+	
+	
 	@Autowired
-	PatientDao patientDao;
+	private DoctorsService doctorService;
 
 	@Autowired
-	DoctorDao doctorDao;
+	private PatientsService patientService;
 
 	@Autowired
 	private DataSource dataSource;
@@ -105,29 +109,29 @@ public class FunctionalityTest {
 	@Test
 	public void createPatient() {
 		try {
-			patientDao.createPatient(patient1);
-			patientDao.createPatient(patient2);
-			patientDao.createPatient(patient3);
+			patientService.createPatient(patient1);
+			patientService.createPatient(patient2);
+			patientService.createPatient(patient3);
 		} catch (Exception ex) {
 
 		}
 
-		List<Patient> patients = patientDao.getAllPatients();
+		List<Patient> patients = patientService.getAllPatients();
 
 		assertEquals("One patient should have been created and retrieved", 1, patients.size());
 	}
 
 	@Test
 	public void patientFunctionality() {
-		patientDao.createPatient(patient1);
-		doctorDao.createDoctorForTest(doctor);
+		patientService.createPatient(patient1);
+		doctorService.createDoctorForTest(doctor);
 
-		List<Doctor> doctors = doctorDao.getAllDoctors();
+		List<Doctor> doctors = doctorService.getAllDoctors();
 		System.out.println(doctors.toString());
 
 		assertEquals("One doctor should have been created and retrieved", 1, doctors.size());
 
-		List<Doctor> tableOfDoctorsForPatient = patientDao.showDoctorsForPatient();
+		List<Doctor> tableOfDoctorsForPatient = patientService.showDoctorsForPatient();
 
 		assertEquals("table of doctors for patient contains only one doctor", 1, tableOfDoctorsForPatient.size());
 
@@ -135,7 +139,7 @@ public class FunctionalityTest {
 				doctor.getUsername(), tableOfDoctorsForPatient.get(0).getUsername());
 
 		List<Calendar> schedule = new ArrayList<Calendar>();
-		schedule = doctorDao.showScheduleForCurrent_and_NextWeek(doctor.getUsername());
+		schedule = doctorService.showScheduleForCurrent_and_NextWeek(doctor.getUsername());
 
 		assertEquals("second spot in schedule table must be 08:15", LocalTime.of(8, 15),
 				LocalTime.of(schedule.get(1).getDateTime().getHours(), schedule.get(1).getDateTime().getMinutes()));
@@ -169,9 +173,9 @@ public class FunctionalityTest {
 	@Test
 	public void doctorFunctionality() {
 
-		doctorDao.createDoctorForTest(doctor);
+		doctorService.createDoctorForTest(doctor);
 
-		List<Calendar> schedule = doctorDao.showScheduleForCurrent_Next_and_NextNext_Weeks(doctor.getUsername());
+		List<Calendar> schedule = doctorService.showScheduleForCurrent_Next_and_NextNext_Weeks(doctor.getUsername());
 
 		LocalDate date = LocalDate.now().plusDays(1);
 		if (date.getDayOfWeek().toString() == "SATURDAY") {
@@ -210,11 +214,11 @@ public class FunctionalityTest {
 		daySchedule.add(LocalTime.of(16, 0));
 		daySchedule.add(LocalTime.of(17, 0));
 
-		doctorDao.editSchedule(daySchedule, daySchedule, daySchedule, daySchedule, daySchedule, doctor.getUsername());
+		doctorService.editSchedule(daySchedule, daySchedule, daySchedule, daySchedule, daySchedule, doctor.getUsername());
 		LocalDateTime timeEdited;
 		timeEdited = LocalDateTime.of(date, LocalTime.of(15, 0));
 
-		List<Calendar> scheduleEdited = doctorDao.showScheduleForCurrent_Next_and_NextNext_Weeks(doctor.getUsername());
+		List<Calendar> scheduleEdited = doctorService.showScheduleForCurrent_Next_and_NextNext_Weeks(doctor.getUsername());
 
 		LocalDateTime dateTimeFromScheduleEdited;
 		dateTimeFromScheduleEdited = scheduleEdited.get(0).getDateTime().toLocalDateTime();

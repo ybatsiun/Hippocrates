@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,13 +31,11 @@ import service.DoctorsService;
 import service.PatientsService;
 
 @Controller
-public class HippocratesController {
+public class DoctorController {
 
-	@Autowired
-	PatientDao patientDao;
+	
 
-	@Autowired
-	DoctorDao doctorDao;
+	
 
 	@Autowired
 	private DoctorsService doctorService;
@@ -43,26 +43,13 @@ public class HippocratesController {
 	@Autowired
 	private PatientsService patientService;
 
-	@RequestMapping("/authenticated")
-	public String showAuthenticated() {
-
-		for (Patient patient : patientDao.getAllPatients()) {
-			System.out.println(patient.toString());
-		}
-		return "authenticated";
-	}
-
 	@RequestMapping("/doctors-registration-form")
 	public String showDoctorsRegistrationForm(Doctor doctor) {
 
 		return "doctors-registration-form";
 	}
 
-	@RequestMapping("/patients-registration-form")
-	public String showRegistrationFormForPatient(Patient patient) {
-
-		return "patients-registration-form";
-	}
+	
 
 	@RequestMapping("/creating-doctor")
 	public String creatingDoctor(@Valid Doctor doctor, BindingResult result) {
@@ -80,26 +67,17 @@ public class HippocratesController {
 		}
 	}
 
-	@RequestMapping("/creating-patient")
-	public String creatingPatient(@Valid Patient patient, BindingResult result) {
-
-		if (result.hasErrors()) {
-
-			return "patients-registration-form";
-		}
-
-		else {
-			patientService.createPatient(patient);
-			return "registration-completed";
-		}
-	}
-
+	
+/*shows a schedule for nextnext week (checked checkboxes) . Gets list of time stamps from the 
+ * showScheduleTimeForNextNextWeek method and the depending on the week day distributes it among
+ * 5 Local time lists for each day. Each of this lists is passed to the doctor object and this object is then
+ * added to a model. This model is shown in the JSP*/
 	@RequestMapping(value = "/edit-schedule")
 	public String showEditSchedule(Model model, Principal principal) {
 
-		Doctor doctor = doctorDao.getDoctorByUsername(principal.getName());
+		Doctor doctor = doctorService.getDoctorByUsername(principal.getName());
 
-		List<Timestamp> input = doctorDao.showScheduleTimeForNextNextWeek(principal.getName().toString());
+		List<Timestamp> input = doctorService.showScheduleTimeForNextNextWeek(principal.getName().toString());
 		ArrayList<LocalTime> monday = new ArrayList<LocalTime>();
 		ArrayList<LocalTime> tuesday = new ArrayList<LocalTime>();
 		ArrayList<LocalTime> wednesday = new ArrayList<LocalTime>();
@@ -152,7 +130,7 @@ public class HippocratesController {
 		else {
 		System.out.println("New list of time " + doctor.getMonday().toString());
 
-			doctorDao.editSchedule(doctor.getMonday(), doctor.getTuesday(), doctor.getWednesday(), doctor.getThursday(),
+			doctorService.editSchedule(doctor.getMonday(), doctor.getTuesday(), doctor.getWednesday(), doctor.getThursday(),
 					doctor.getFriday(), principal.getName());
 
 			return "edition-completed";
@@ -164,83 +142,17 @@ public class HippocratesController {
 
 		System.out.println("New list of time " + doctor.getMonday().toString());
 
-		doctorDao.editSchedule(doctor.getMonday(), doctor.getTuesday(), doctor.getWednesday(), doctor.getThursday(),
+		doctorService.editSchedule(doctor.getMonday(), doctor.getTuesday(), doctor.getWednesday(), doctor.getThursday(),
 				doctor.getFriday(), principal.getName());
 
 		return "edition-completed";
 	}
 
-	@RequestMapping(value = "/showDocScheduleForPatient")
-	public String showDocScheduleForPatient(@RequestParam("doctorUsername") String doctorUsername, Doctor doctor,
-			Principal principal) {
+	
 
-		System.out.println("showDocScheduleForPatient mapping ???");
+	
 
-		return "doctors-schedule-for-patient";
-	}
-
-	@RequestMapping(value = "/showBookAnAppointmentFor")
-	public String showBookAnAppointmentFor() {
-
-		return "showBookAnAppointmentFor";
-	}
-
-	@RequestMapping(value = "/bookAnAppointmentFor")
-	public String bookAnAppointmentFor(@RequestParam("doctorUsername") String doctorUsername,
-			@RequestParam("dateTime") long dateTime, @RequestParam("complain") String complain, Principal principal) {
-
-		System.out.println("Booking an appointment for " + doctorUsername + " on " + dateTime + " with complain:"
-				+ complain + " Patient: " + principal.getName().toString());
-		doctorService.bookAnAppointmentFor(doctorUsername, dateTime, complain, principal.getName().toString());
-
-		return "bookingSuccess";
-
-	}
-
-	@RequestMapping(value = "/getDocListForPatient", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public Map<String, Object> getDocListForPatient() {
-
-		List<Doctor> doctorsList = null;
-
-		doctorsList = patientDao.showDoctorsForPatient();
-
-		Map<String, Object> data = new HashMap<String, Object>();
-
-		data.put("doctorsList", doctorsList);
-
-		return data;
-	}
-
-	@RequestMapping(value = "/showAppointmentsTable")
-	public String showBookingSuccess() {
-
-		return "showAppointmentsTable";
-
-	}
-
-	@RequestMapping(value = "/getAppointmentTable", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public Map<String, Object> getAppointmentTable(Principal principal) {
-		String patientUserName = principal.getName();
-		List<Calendar> calendarList = null;
-		calendarList = patientService.getAppointmentsTable(patientUserName);
-
-		Map<String, Object> data = new HashMap<String, Object>();
-
-		data.put("calendarList", calendarList);
-
-		return data;
-
-	}
-
-	@RequestMapping(value = "/cancelAnAppointment")
-	public String showCancelAnAppointment(@RequestParam("id") int id) {
-		patientService.cancelAnAppointment(id);
-
-		return "showAppointmentsTable";
-
-	}
+	
 	
 	@RequestMapping(value = "/getDoctorDetails", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -253,6 +165,74 @@ public class HippocratesController {
 		data.put("doctorDetailsList", doctorDetailsList);
 
 		return doctorDetailsList;
+
+	}
+	
+	@RequestMapping(value = "/getDoctors-list", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> ShowDoctors() {
+
+		List<Doctor> doctorsList = null;
+
+		doctorsList = patientService.showDoctorsForPatient();
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("doctorsList", doctorsList);
+
+		return data;
+	}
+	
+	@RequestMapping(value = "/getDoctors-schedule", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> getDoctorsSchedule(Principal principal, Authentication a) {
+		System.out.println(doctorService.getDoctorByUsername(principal.getName()).toString());
+		List<Calendar> schedule = null;
+		if (principal == null) {
+			schedule = null;
+		}
+
+		else {
+			
+					
+					String username = principal.getName();
+					System.out.println("Got username at controller:" + username);
+					schedule = doctorService.showScheduleForCurrent_Next_and_NextNext_Weeks(username);
+
+		}
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("schedule", schedule);
+		System.out.println("Placed list schedule list in Map");
+
+		return data;
+	}
+	
+	@RequestMapping(value = "/getDocScheduleForPatient", method = RequestMethod.GET,produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> getDoctorScheduleForPatient(@RequestParam("doctorUsername") String docUsername
+			) {
+		
+		List<Calendar> calendarsList = null;
+
+		calendarsList = doctorService.showScheduleForCurrent_and_NextWeek(docUsername);
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("calendarsList", calendarsList);
+
+		return data;
+	}
+	
+	@RequestMapping(value = "/doctorsPage")
+	public String showDoctorsPage() {
+		return "doctorsPage";
+
+	}
+	
+	@RequestMapping(value = "/doctors-schedule")
+	public String showDocSchedule() {
+		return "doctors-schedule";
 
 	}
 

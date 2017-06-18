@@ -20,6 +20,21 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import validation.ValidSchedule;
 
+/*Doctor is a class that corresponds to an entity doctor (role) in the database. It has certain fields for 
+a personal info and fields to define a schedule of a user. 
+
+Blank fields like mondayBlank, tuesdayBlank etc. are created immediately when the object 
+is created (see the constructor without parameters). These blank fields are then used to generated 
+items in a web-page (/createDoctor,/editSchedule) when creating doctor or editing a schedule. 
+
+Fields like monday, tuesday etc. after creating or editing schedule/doctor contain a chosen schedule.
+By schedule it is meant intervals of an hour-size,during which a doctor works,which are then transfered to
+a 15-min interval (DoctorDao.transferHoursListToIntervalsList method).
+
+Doctor object has a filed called calendar. This is a list of Calendar objects. This implements a 
+one (Doctor) to many (Calendar) database relationship. For more info about Calendar object please see
+Calendar class file.
+*/
 @Entity
 @Table(name = "doctors")
 public class Doctor implements Serializable {
@@ -83,11 +98,9 @@ public class Doctor implements Serializable {
 
 		ArrayList<LocalTime> constructor = new ArrayList<LocalTime>();
 		for (int a = 8; a < 18; a++) {
-			
-	
-				constructor.add(LocalTime.of(a,0));
-	
-			
+
+			constructor.add(LocalTime.of(a, 0));
+
 		}
 		this.setMondayBlank(constructor);
 		this.setTuesdayBlank(constructor);
@@ -215,6 +228,7 @@ public class Doctor implements Serializable {
 	public void setField(String field) {
 		this.field = field;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getTuesday() {
 		return tuesday;
@@ -223,6 +237,7 @@ public class Doctor implements Serializable {
 	public void setTuesday(ArrayList<LocalTime> tuesday) {
 		this.tuesday = tuesday;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getTuesdayBlank() {
 		return tuesdayBlank;
@@ -231,6 +246,7 @@ public class Doctor implements Serializable {
 	public void setTuesdayBlank(ArrayList<LocalTime> tuesdayBlank) {
 		this.tuesdayBlank = tuesdayBlank;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getWednesday() {
 		return wednesday;
@@ -239,6 +255,7 @@ public class Doctor implements Serializable {
 	public void setWednesday(ArrayList<LocalTime> wednesday) {
 		this.wednesday = wednesday;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getWednesdayBlank() {
 		return wednesdayBlank;
@@ -247,6 +264,7 @@ public class Doctor implements Serializable {
 	public void setWednesdayBlank(ArrayList<LocalTime> wednesdayBlank) {
 		this.wednesdayBlank = wednesdayBlank;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getThursday() {
 		return thursday;
@@ -255,6 +273,7 @@ public class Doctor implements Serializable {
 	public void setThursday(ArrayList<LocalTime> thursday) {
 		this.thursday = thursday;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getThursdayBlank() {
 		return thursdayBlank;
@@ -263,6 +282,7 @@ public class Doctor implements Serializable {
 	public void setThursdayBlank(ArrayList<LocalTime> thursdayBlank) {
 		this.thursdayBlank = thursdayBlank;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getFriday() {
 		return friday;
@@ -271,6 +291,7 @@ public class Doctor implements Serializable {
 	public void setFriday(ArrayList<LocalTime> friday) {
 		this.friday = friday;
 	}
+
 	@Transient
 	public ArrayList<LocalTime> getFridayBlank() {
 		return fridayBlank;
@@ -349,6 +370,5 @@ public class Doctor implements Serializable {
 			return false;
 		return true;
 	}
-	
 
 }

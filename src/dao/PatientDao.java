@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PatientDao extends UserDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+/*Returns all patients which are in DB*/
 	@SuppressWarnings("unchecked")
 	public List<Patient> getAllPatients() {
 		System.out.println("PatientDao.getAllPatients started");
@@ -28,7 +28,7 @@ public class PatientDao extends UserDao implements Serializable {
 		return crit.list();
 
 	}
-
+/*Creates a patient*/
 	public void createPatient(Patient patient) {
 		
 		session().save(patient);
@@ -36,7 +36,7 @@ public class PatientDao extends UserDao implements Serializable {
 		
 		System.out.println("Patient registered");
 	}
-
+/*Returns a list of patients ( one patient in the list) with a username defined in the method parameters.*/
 	@SuppressWarnings("unchecked")
 	public List<Patient> getPatientByUsername(String username) {
 		Criteria crit = session().createCriteria(Patient.class);
@@ -45,14 +45,8 @@ public class PatientDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Patient> showDoctorsForAdmin() {
-		Criteria crit = session().createCriteria(Patient.class);
-
-		return crit.list();
-
-	}
-
+	
+/*Returns a list of doctors with enabled=1 with an info for a patient.*/
 	@SuppressWarnings("unchecked")
 	public List<Doctor> showDoctorsForPatient() {
 		Criteria crit = session().createCriteria(Doctor.class);
@@ -66,7 +60,7 @@ public class PatientDao extends UserDao implements Serializable {
 		return crit.list();
 
 	}
-
+/*Finds all appointments booked by a current user*/
 	@SuppressWarnings("unchecked")
 	public List<Calendar> getAppointmentsTable(String patientUserName) {
 		
@@ -79,7 +73,7 @@ public class PatientDao extends UserDao implements Serializable {
 		
 		return crit.list();
 	}
-
+/*Cancels an appointment with an id*/
 	public void cancelAnAppointment(int id) {
 		Query crit = session().createSQLQuery(" update calendar set busy=false,patientFirstName=null,patientLastName=null,"
 				+ "patientUserName=null,patientPhone=null,patientEmail=null,complain=null where id= '"+id+"'"

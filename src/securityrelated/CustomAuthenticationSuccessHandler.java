@@ -34,12 +34,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		for (GrantedAuthority grantedAuthority : authorities) {
 			System.out.println("Authority:" + grantedAuthority);
 
-			if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-				System.out.println("Redirecting to adminsPage... ");
-				httpServletResponse.sendRedirect("adminsPage");
-				
-
-			} else if (grantedAuthority.getAuthority().equals("ROLE_DOCTOR")) {
+			  if (grantedAuthority.getAuthority().equals("ROLE_DOCTOR")) {
 				httpServletResponse.sendRedirect("doctorsPage");
 
 			} else if (grantedAuthority.getAuthority().equals("ROLE_PATIENT")) {

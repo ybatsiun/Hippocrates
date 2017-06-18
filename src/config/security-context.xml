@@ -38,14 +38,13 @@
 
 	</security:authentication-manager>
 	
-	
+ <!-- Bean provides a function to redirect to a specific page after logging in depending on a role of a user -->
 	<bean id="delegateUds"
 		class="securityrelated.DelegatingUserDetailsService">
      <constructor-arg>
          <list>
              <ref bean="doctorsUserService"/>
              <ref bean="patientsUserService"/>
-             <ref bean="adminsUserService"/>
          </list>
      </constructor-arg>
 </bean>
@@ -55,17 +54,12 @@
 
 	<security:http use-expressions="true">
 		
-		<security:intercept-url pattern="/adminsPage" access="hasRole('ROLE_ADMIN')" />
-		<security:intercept-url pattern="/list-of-doctors" access="hasRole('ROLE_ADMIN')" />
-		<security:intercept-url pattern="/list-of-patients" access="hasRole('ROLE_ADMIN')" />
-		<security:intercept-url pattern="/getDoctors-list-for-admin" access="hasRole('ROLE_ADMIN')" />
-		<security:intercept-url pattern="/getPatients-list-for-admin" access="hasRole('ROLE_ADMIN')" />
+		
 		
 		<security:intercept-url pattern="/choose-schedule" access="hasRole('ROLE_DOCTOR')" />
 		<security:intercept-url pattern="/doctors-registration-form" access="hasRole('ROLE_DOCTOR')" />
 		<security:intercept-url pattern="/doctorsPage" access="hasRole('ROLE_DOCTOR')" />
 	    <security:intercept-url pattern="/doctors-schedule" access="hasAnyRole('ROLE_DOCTOR','ROLE_ADMIN')" />
-	    <security:intercept-url pattern="/patients-info" access="hasRole('ROLE_DOCTOR')" />
 		<security:intercept-url pattern="/getDoctors-schedule" access="hasAnyRole('ROLE_DOCTOR','ROLE_ADMIN','ROLE_PATIENT')" />
 		<security:intercept-url pattern="/edit-schedule" access="hasRole('ROLE_DOCTOR')" />
 		<security:intercept-url pattern="/editing" access="hasRole('ROLE_DOCTOR')" />
@@ -75,7 +69,6 @@
 		<security:intercept-url pattern="/patientsPage" access="hasRole('ROLE_PATIENT')" />
 		<security:intercept-url pattern="/getDocListForPatient" access="hasRole('ROLE_PATIENT')" />
 		<security:intercept-url pattern="/doctors-list-for-patient" access="hasRole('ROLE_PATIENT')" />
-		<security:intercept-url pattern="/complaint-form" access="hasRole('ROLE_PATIENT')" />
 	    <security:intercept-url pattern="/getDoctors-list" access="hasRole('ROLE_PATIENT')" />
 	    <security:intercept-url pattern="/bookingAppointment" access="hasRole('ROLE_PATIENT')" />
 	    <security:intercept-url pattern="/showDocScheduleForPatient" access="hasRole('ROLE_PATIENT')" />
@@ -92,12 +85,9 @@
 		<security:intercept-url pattern="/logout" access="permitAll" />
 		<security:intercept-url pattern="/create-new-account" access="permitAll" />
 		<security:intercept-url pattern="/doctors-registration-form" access="permitAll" />
-		<security:intercept-url pattern="/choose-schedule" access="permitAll" />
 		<security:intercept-url pattern="/patients-registration-form" access="permitAll" />
-		<security:intercept-url pattern="/admins-registration-form" access="permitAll" />
 		<security:intercept-url pattern="/registration-completed" access="permitAll" />
 		<security:intercept-url pattern="/denied" access="permitAll" />
-		<security:intercept-url pattern="/authenticated" access="permitAll" />
 		<security:intercept-url pattern="/creating-doctor" access="permitAll" />
 		<security:intercept-url pattern="/creating-patient" access="permitAll" />
 		<security:intercept-url pattern="/error" access="permitAll" />

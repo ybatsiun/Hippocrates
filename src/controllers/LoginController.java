@@ -28,4 +28,11 @@ public class LoginController {
 		
 		return "denied";
 	}
+	
+	@RequestMapping("/create-new-account")
+	public String ShowCreateNewAccount() {
+		
+		
+		return "create-new-account";
+	}
 }

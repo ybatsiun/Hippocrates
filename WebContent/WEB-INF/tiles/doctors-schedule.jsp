@@ -4,7 +4,7 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <html>
-<%@ page buffer="10192kb" %>
+
 Doctor's schedule
 <div id="schedule"></div>
 <br />
@@ -39,16 +39,18 @@ Doctor's schedule
 		
 		
 		var patientNameSpan= document.createElement("span"); 
+		var complainSpan= document.createElement("span"); 
 		
 			if (doctor.busy== true){
 			
 			patientNameSpan.appendChild(document.createTextNode(doctor.patientFirstName + " " + doctor.patientLastName));
-			
+			complainSpan.appendChild(document.createTextNode(" Complain: "+ doctor.complain));
 		} else {
 			patientNameSpan.appendChild(document.createTextNode("There is no appointment for this time "));
 		}
 			
 			scheduleDiv.appendChild(patientNameSpan);
+			scheduleDiv.appendChild(complainSpan);
 			$("div#schedule").append(scheduleDiv);
     	 }
      
@@ -68,14 +70,11 @@ Doctor's schedule
 //-->
 </script>
 
-<% out.println("<p>bufferSize: " + out.getBufferSize() + " remaining: " + out.getRemaining() + " used: " + (out.getBufferSize() - out.getRemaining()) + " autoFlush: " + out.isAutoFlush() + "</p><br>"); %>
 <a href="${pageContext.request.contextPath}/edit-schedule"><input
 	type="submit" name="show-patients-info" value="edit your schedule" /></a>
 
-<a href="${flowExecutionUrl}&_eventId=show-patients-info"><input
-	type="submit" name="show-patients-info" value="patient's info" /></a>
 
-<a href="${flowExecutionUrl}&_eventId=enter-complaint"><input
-	type="submit" name="enter-complaint" value="enter your complaint" /></a>
+
+
 
 </html>

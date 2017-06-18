@@ -2,6 +2,8 @@ package service;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +59,7 @@ public class DoctorsService implements Serializable {
 
 	
 
-	public List<Doctor> showDoctorsListForAdmin() {
-		List<Doctor> doctorsListForAdmin = doctorDao.showDoctorsForAdmin();
-		return doctorsListForAdmin;
-	}
-
+	
 	public void bookAnAppointmentFor(String doctorUsername, long dateTime, String complain, String patientUsername) {
 
 		doctorDao.bookAnAppointmentFor ( doctorUsername,  dateTime,  complain,patientUsername);
@@ -72,6 +70,31 @@ public class DoctorsService implements Serializable {
 		List<Doctor> doctorsDetailsList=doctorDao.getDoctorDetails(doctorUserName);
 		
 		return doctorsDetailsList;
+	}
+
+	public Doctor getDoctorByUsername(String doctorUserNameme) {
+
+		
+		return doctorDao.getDoctorByUsername(doctorUserNameme);
+	}
+
+	public List<Timestamp> showScheduleTimeForNextNextWeek(String doctorUserNameme) {
+	
+		return doctorDao.showScheduleTimeForNextNextWeek(doctorUserNameme);
+	}
+
+	public void editSchedule(ArrayList<LocalTime> monday, ArrayList<LocalTime> tuesday, ArrayList<LocalTime> wednesday,
+			ArrayList<LocalTime> thursday, ArrayList<LocalTime> friday, String name) {
+
+		doctorDao.editSchedule(monday, tuesday, wednesday, thursday, friday, name);
+	}
+
+	public void createDoctorForTest(Doctor doctor) {
+		doctorDao.createDoctorForTest(doctor);		
+	}
+
+	public List<Doctor> getAllDoctors() {
+		return doctorDao.getAllDoctors();
 	}
 
 	

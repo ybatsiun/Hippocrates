@@ -5,8 +5,6 @@
 
 Welcome! You are logged in as a doctor.
 
-<a href="${flowExecutionUrl}&_eventId=show-doctors-schedule"><input
+<a href="${pageContext.request.contextPath}/doctors-schedule"><input
 	type="submit" name="show-doctors-schedule" value="view your schedule" /></a>
 
-<a href="${pageContext.request.contextPath}/doctors-schedule"><input
-	type="submit" name="show-doctors-schedule" value="view your schedule with controller" /></a>

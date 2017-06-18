@@ -5,15 +5,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-
+<p>List of available doctors </p>
 <div id="doctor"></div>
 <br />
 
 <br />
-I will put here a short info of doctor that is useful for a patient.
 
-<a href="${flowExecutionUrl}&_eventId=choosen-doctor"><input
-	type="submit" name="choosen-doctor" value="choose a doctor" /></a>
 
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

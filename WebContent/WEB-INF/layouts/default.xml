@@ -21,9 +21,7 @@
 		<put-attribute name="content" value="/WEB-INF/tiles/login.jsp"></put-attribute>
 	</definition>
 
-	<definition name="authenticated" extends="hippocrates.base">
-		<put-attribute name="content" value="/WEB-INF/tiles/authenticated.jsp"></put-attribute>
-	</definition>
+	
 
 	<definition name="logout" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/logout.jsp"></put-attribute>
@@ -33,9 +31,7 @@
 		<put-attribute name="content" value="/WEB-INF/tiles/denied.jsp"></put-attribute>
 	</definition>
 
-	<definition name="adminsPage" extends="hippocrates.base">
-		<put-attribute name="content" value="/WEB-INF/tiles/adminsPage.jsp"></put-attribute>
-	</definition>
+	
 
 	<definition name="doctorsPage" extends="hippocrates.base">
 		<put-attribute name="content" value="/WEB-INF/tiles/doctorsPage.jsp"></put-attribute>
@@ -59,18 +55,14 @@
 			value="/WEB-INF/tiles/doctors-schedule.jsp"></put-attribute>
 	</definition>
 
-	<definition name="patients-info" extends="hippocrates.base">
-		<put-attribute name="content" value="/WEB-INF/tiles/patients-info.jsp"></put-attribute>
-	</definition>
+	
 
 	<definition name="doctors-list-for-patient" extends="hippocrates.base">
 		<put-attribute name="content"
 			value="/WEB-INF/tiles/doctors-list-for-patient.jsp"></put-attribute>
 	</definition>
 
-	<definition name="complaint-form" extends="hippocrates.base">
-		<put-attribute name="content" value="/WEB-INF/tiles/complaint-form.jsp"></put-attribute>
-	</definition>
+	
 
 	<definition name="create-new-account" extends="hippocrates.base">
 		<put-attribute name="content"
@@ -80,15 +72,6 @@
 	<definition name="doctors-registration-form" extends="hippocrates.base">
 		<put-attribute name="content"
 			value="/WEB-INF/tiles/doctors-registration-form.jsp"></put-attribute>
-	</definition>
-	
-	<definition name="admins-registration-form" extends="hippocrates.base">
-		<put-attribute name="content"
-			value="/WEB-INF/tiles/admins-registration-form.jsp"></put-attribute>
-	</definition>
-
-	<definition name="choose-schedule" extends="hippocrates.base">
-		<put-attribute name="content" value="/WEB-INF/tiles/choose-schedule.jsp"></put-attribute>
 	</definition>
 
 	<definition name="patients-registration-form" extends="hippocrates.base">

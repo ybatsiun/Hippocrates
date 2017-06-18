@@ -11,7 +11,6 @@ import dao.Calendar;
 import dao.Doctor;
 import dao.Patient;
 import dao.PatientDao;
-import dao.User;
 
 @Transactional
 @Service("PatientsService")
@@ -30,10 +29,7 @@ public class PatientsService implements Serializable {
 		patientDao.createPatient(patient);
 	}
 
-	public List<Patient> showPatientsListForAdmin() {
-		List<Patient> patientsListForAdmin = patientDao.showDoctorsForAdmin();
-		return patientsListForAdmin;
-	}
+	
 
 	public List<Doctor> showDoctorsForPatient() {
 		List<Doctor> patientsListForAdmin = patientDao.showDoctorsForPatient();
@@ -47,5 +43,9 @@ public class PatientsService implements Serializable {
 
 	public void cancelAnAppointment(int id) {
 		patientDao.cancelAnAppointment(id);
+	}
+
+	public List<Patient> getAllPatients() {
+		return patientDao.getAllPatients();
 	}
 }

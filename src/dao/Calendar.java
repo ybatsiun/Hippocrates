@@ -14,13 +14,15 @@ import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+/*Calendar class is a class that corresponds to an entity calendar in the database. As there is a one to many relation ship between doctor and calendar classes,
+ * a certain amount of calendar objects are created when a doctor object is created. Each calendar object contains an information about the time spot (15 min interval).
+ * By information it is meant whether it is scheduled, whether it is booked and info about a patient who booked a time spot (appointment)*/
+
 @Entity
 @Table(name="calendar")
 public class Calendar implements Serializable {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 
