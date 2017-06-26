@@ -3,8 +3,20 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-AppointmentsTable
 <div id="appointment"></div>
+
+<table id="appointments">
+	<caption>Table of booked appointments</caption>
+
+
+	<tr>
+		<th>Time and date</th>
+		<th>Name of a doctor</th>
+		<th>Field</th>
+	</tr>
+
+</table>
+
 <br />
 
 <script
@@ -13,22 +25,21 @@ AppointmentsTable
 <script type="text/javascript">
 <!--
 	function showAppointmentTable(data){
-	console.log ('hello')
 	for (i=0;i<data.calendarList.length;i++){
 		
 		
 		var appointment = data.calendarList[i];
 		
-		var appointmentDiv = document.createElement("div");
 		
 		var time = document.createElement("span");
 		var date = new Date(data.calendarList[i][0]);
 		time.appendChild(document.createTextNode(date.toDateString() + " : " + "Time: " + date.getHours()+":"+date.getMinutes()+ " "));
-		appointmentDiv.appendChild(time);
 		
 		var doctorInfo = document.createElement("span");
-		doctorInfo.appendChild(document.createTextNode(data.calendarList[i][3]+" "+data.calendarList[i][4]+" Field: "+data.calendarList[i][2]));
-		appointmentDiv.appendChild(doctorInfo);
+		doctorInfo.appendChild(document.createTextNode(data.calendarList[i][3]+" "+data.calendarList[i][4]));
+		
+		var field = document.createElement("span");
+		field.appendChild(document.createTextNode(data.calendarList[i][2]));
 		
 		var cancelButton = document.createElement("input");
 		
@@ -36,10 +47,18 @@ AppointmentsTable
 		cancelButton.setAttribute("value", "Click to see cancel the appointment");
 		cancelButton.setAttribute("data-id",data.calendarList[i][1]);
 	 	cancelButton.setAttribute("onClick", "(window.location.href = '${pageContext.request.contextPath}/cancelAnAppointment?id='+this.dataset.id)");   
-		appointmentDiv.appendChild(cancelButton);
 		
-		$("div#appointment").append(appointmentDiv);
 		
+		var table = document.getElementById("appointments");
+		
+		 var rowCount = table.rows.length;
+		 var row = table.insertRow(rowCount);
+
+		row.insertCell(0).innerHTML = time.innerHTML;
+		row.insertCell(1).innerHTML = doctorInfo.innerHTML;
+		row.insertCell(2).innerHTML = field.innerHTML;
+		row.appendChild(td = document.createElement("td"));
+	    td.appendChild(cancelButton);
 		
 	}
 }

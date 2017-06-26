@@ -93,9 +93,7 @@ public class DoctorsService implements Serializable {
 		doctorDao.createDoctorForTest(doctor);		
 	}
 
-	public List<Doctor> getAllDoctors() {
-		return doctorDao.getAllDoctors();
-	}
+	
 
 	
 

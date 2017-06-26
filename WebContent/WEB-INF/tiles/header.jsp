@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<p>Header goes hear...</p>
+<p></p>
 <style>
 body {
 	background-color: linen;

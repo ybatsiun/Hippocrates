@@ -1,1 +1,2 @@
-<p> Footer goes hear...</p> 
+<p> Created by Yevhen Batsiun ybatsiun@gmail.com</p> 
+

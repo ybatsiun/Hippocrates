@@ -4,8 +4,18 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<div id="calendar"></div>
-<br />
+
+
+<table id="docSchedule">
+	<caption>Doctor schedule for the closest week</caption>
+
+
+	<tr>
+		<th>Time and date</th>
+		
+	</tr>
+
+</table>
 
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -16,28 +26,30 @@
 <!--
 	function showcalendarsList(data) {
 		
-	$("div#calendar").html("");
+	
 	for (n = 0; n < data.calendarsList.length; n++) {
 		
 		var calendar = data.calendarsList[n];
 		
-		var calendarDiv = document.createElement("div");
-		calendarDiv.setAttribute("class", "calendar");
-		calendarDiv.setAttribute("id", n);
 	
 
 		var date = new Date(calendar.dateTime);
 		var timeSpan = document.createElement("span");
 		timeSpan.appendChild(document.createTextNode(date.toDateString() + " : " + "Time: " + date.getHours()+":"+date.getMinutes()+ " "));
-		calendarDiv.appendChild(timeSpan);
-		console.log('Date is ' + calendar.dateTime);
 		
 		var patientNameSpan= document.createElement("span"); 
+		
+		 var table = document.getElementById("docSchedule");
+			
+		 var rowCount = table.rows.length;
+		 var row = table.insertRow(rowCount);
+
+		row.insertCell(0).innerHTML = timeSpan.innerHTML;
 		
 		if (calendar.busy== true){
 		
 		patientNameSpan.appendChild(document.createTextNode("The appointment is already booked"));
-		calendarDiv.appendChild(patientNameSpan);
+		row.insertCell(1).innerHTML = patientNameSpan.innerHTML;
 	} else {
         var BookAnAppointmentButton = document.createElement("input");
 		
@@ -52,17 +64,21 @@
 		BookAnAppointmentButton.setAttribute("onClick", 
 				"(window.location.href='${pageContext.request.contextPath}/showBookAnAppointmentFor?doctorUsername='+getURLParameter('doctorUsername')+'&dateTime='+dataset.datetime+'&firstName='+getURLParameter('firstName')+'&lastName='+getURLParameter('lastName')+'&field='+getURLParameter('field'))");
 		
-		calendarDiv.appendChild(BookAnAppointmentButton);
+		row.appendChild(td = document.createElement("td"));
+	    td.appendChild(BookAnAppointmentButton);
+		
+	
 	}
 		
 		
-
+		
+		
+	
 		
 		
 		
 		
-		
-		$("div#calendar").append(calendarDiv);
+	
 		}
 
 		

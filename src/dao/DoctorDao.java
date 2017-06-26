@@ -140,34 +140,35 @@ public class DoctorDao extends UserDao implements Serializable {
 				+ this.getDoctorByUsername(doctor.getUsername()).toString());
 	}
 
-	/*
-	 * !!! TODO Please debug these three methods. Make sure you name the
-	 * variables properly and comment on these methods !
-	 */
 
 	/*
-	 * First the method finds XXX The method returns a list of timestamp objects
+	 * First the method finds the closest sunday to the moment and adds one week.
+	 *  The method returns a list of timestamp objects
 	 * which is a for scheduled time the next week after next week after current
-	 * week.
+	 * week. This method shows the whole week (from monday to friday)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Timestamp> showScheduleTimeForNextNextWeek(String username) {
+		System.out.println("____________________________________________");
 
-		// Finding the closest Monday
+		System.out.println("I am showScheduleTimeForNextNextWeek");
 
-		LocalDateTime closestSunday = LocalDateTime.now().plusWeeks(1);
-		if (closestSunday.getDayOfWeek().toString() != "SUNDAY") {
+		LocalDateTime sundayAfterclosestSunday = LocalDateTime.now().plusWeeks(1);
+		if (sundayAfterclosestSunday.getDayOfWeek().toString() != "SUNDAY") {
 			do {
 				int i = 1;
-				closestSunday = closestSunday.plusDays(i);
-			} while (closestSunday.getDayOfWeek().toString() != "SUNDAY");
+				sundayAfterclosestSunday = sundayAfterclosestSunday.plusDays(i);
+			} while (sundayAfterclosestSunday.getDayOfWeek().toString() != "SUNDAY");
 		}
+		System.out.println("Start : " +  sundayAfterclosestSunday);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String formattedClosestSunday = closestSunday.format(formatter);
+		String formattedClosestSunday = sundayAfterclosestSunday.format(formatter);
 
-		LocalDateTime closestSaturdayToClosestSunday = closestSunday.plusDays(7);
+		LocalDateTime closestSaturdayToClosestSunday = sundayAfterclosestSunday.plusDays(7);
 		String formattedclosestSaturdayToClosestSunday = closestSaturdayToClosestSunday.format(formatter);
+		System.out.println("Finish : " +  closestSaturdayToClosestSunday);
+		System.out.println("____________________________________________");
 
 		// Taking all scheduled time sets from the closest week
 
@@ -181,17 +182,25 @@ public class DoctorDao extends UserDao implements Serializable {
 	}
 
 	/*
-	 * First the method finds XXX The method returns a list of timestamp objects
+	 * First the method finds date for now-moment. The method returns a list of timestamp objects
 	 * which is a for scheduled time the next week after next week after current
-	 * week.
+	 * week. This method does not show the full week. If today if wednesday by current week it means the week till
+	 * the next wednesday and next and next-next weeks the same.
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Calendar> showScheduleForCurrent_Next_and_NextNext_Weeks(String username) {
+		System.out.println("____________________________________________");
+
+		System.out.println("showScheduleForCurrent_Next_and_NextNext_Weeks");
 
 		LocalDate now = LocalDate.now();
 		java.sql.Date nowDate = java.sql.Date.valueOf(now);
+		System.out.println("Start: " + now);
 
-		java.sql.Date twoWeeksAfterNowDate = java.sql.Date.valueOf(now.plusWeeks(3));
+
+		java.sql.Date threeWeeksAfterNowDate = java.sql.Date.valueOf(now.plusWeeks(3));
+		System.out.println("Finish: " + threeWeeksAfterNowDate);
+		System.out.println("____________________________________________");
 
 		Criteria crit = session().createCriteria(Calendar.class)
 				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
@@ -202,24 +211,32 @@ public class DoctorDao extends UserDao implements Serializable {
 				.setResultTransformer(Transformers.aliasToBean(Calendar.class))
 
 				.add(Restrictions.eq("doctor.username", username)).add(Restrictions.eq("scheduled", true))
-				.add(Restrictions.ge("dateTime", nowDate)).add(Restrictions.le("dateTime", twoWeeksAfterNowDate));
+				.add(Restrictions.ge("dateTime", nowDate)).add(Restrictions.le("dateTime", threeWeeksAfterNowDate));
 		System.out.println("In show schedule in DoctorDao" + crit.list().toString());
 		return crit.list();
 	}
 
 	/*
-	 * First the method finds XXX The method returns a list of timestamp objects
+	 * First the method finds now-date and adds two weeks to it. The method returns a list of timestamp objects
 	 * which is a for scheduled time the next week after next week after current
-	 * week.
+	 * week.This method does not show the full week. If today if wednesday by current week it means the week till
+	 * the next wednesday and next and next-next weeks the same.
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Calendar> showScheduleForCurrent_and_NextWeek(String username) {
 		// Getting JSON of Calendar entity for current Doctor for the next month
+		System.out.println("____________________________________________");
+		System.out.println("showScheduleForCurrent_and_NextWeek");
 
 		LocalDate today = LocalDate.now();
 		java.sql.Date now = java.sql.Date.valueOf(today);
+		System.out.println("Start: " + now);
 
 		java.sql.Date plusAMonth = java.sql.Date.valueOf(today.plusWeeks(2));
+		System.out.println("Finish: " + plusAMonth);
+
+		System.out.println("____________________________________________");
+
 		Criteria crit = session().createCriteria(Calendar.class)
 				.setProjection(Projections.projectionList().add(Projections.property("dateTime"), "dateTime")
 						.add(Projections.property("scheduled"), "scheduled").add(Projections.property("day"), "day")
@@ -250,13 +267,7 @@ public class DoctorDao extends UserDao implements Serializable {
 		return crit.list();
 	}
 
-	/* TODO do we use it ? */
-	@SuppressWarnings("unchecked")
-	public List<Doctor> showSchedules() {
-		Criteria crit = session().createCriteria(Doctor.class);
-
-		return crit.list();
-	}
+	
 
 	/* The method returns a doctor with username passed to a method*/
 	public Doctor getDoctorByUsername(String username) {
@@ -265,10 +276,10 @@ public class DoctorDao extends UserDao implements Serializable {
 	
 	
 /* The method is designed to rewrite the part of the schedule of a doctor. Method's parameters are username of a doctor and 5 ArrayLists which define 
- * new (edited) schedule. First the method finds a day after a new schedule must be implemented XXX . Then a schedule after this day is deleted be passing false to 
+ * new (edited) schedule. First the method finds a day after a new schedule must be implemented (monday of the next-next week) . Then a schedule after this day is deleted be passing false to 
  * a parameters busy and scheduled. Afterwards, for every time spot in each List which is responsible for a particular day of the week and sql update query finds a 
  * a calendar object entity with a proper day of the week and the same time spot and passes true to scheduled parameter. These updates are implemented only for timespots
- * after XXX */
+ * starting from the monday of next-next week */
 	public void editSchedule(ArrayList<LocalTime> monday, ArrayList<LocalTime> tuesday, ArrayList<LocalTime> wednesday,
 			ArrayList<LocalTime> thursday, ArrayList<LocalTime> friday, String username) {
 		// Transfering from hour to 15 min lists of time
@@ -486,18 +497,7 @@ public class DoctorDao extends UserDao implements Serializable {
 		return doctor;
 	}
 
-	@SuppressWarnings("unchecked")
-	/*TODO do we use it  ?*/
-	public List<Doctor> getAllDoctors() {
-		Criteria crit = session().createCriteria(Doctor.class);
-
-		crit.add(Restrictions.eq("enabled", 1))
-				.setProjection(Projections.projectionList().add(Projections.property("username"), "username"))
-				.setResultTransformer(Transformers.aliasToBean(Doctor.class));
-
-		return crit.list();
-
-	}
+	
 /*The same a create doctor method but created much less calendar object. Designed in testing purposes.*/
 	public void createDoctorForTest(Doctor doctor) {
 		System.out.println("In Doctor DAO creating a doctor with monday " + doctor.getMonday().toString());

@@ -126,7 +126,7 @@ public class FunctionalityTest {
 		patientService.createPatient(patient1);
 		doctorService.createDoctorForTest(doctor);
 
-		List<Doctor> doctors = doctorService.getAllDoctors();
+		List<Doctor> doctors = patientService.showDoctorsForPatient();
 		System.out.println(doctors.toString());
 
 		assertEquals("One doctor should have been created and retrieved", 1, doctors.size());
